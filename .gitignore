@@ -3,3 +3,39 @@ node_modules
 dist
 dist-ssr
 *.local
+
+# Capacitor generated Android and iOS build output
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+
+ios/App/App.xcworkspace/
+ios/App/Pods/
+ios/App/Podfile.lock
+ios/App/build/
+ios/App/DerivedData/
+ios/App/*.xcuserstate
+
+# macOS / Xcode
+*.xcuserdata
+*.DS_Store
+
+# Capacitor web output sync folder
+www/
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment files
+.env
+.env.*.local
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Capacitor Android/iOS cache
+android/capacitor.settings.gradle
