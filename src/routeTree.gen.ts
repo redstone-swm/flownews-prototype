@@ -12,7 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as TopicsTopicIdImport } from './routes/topics/$topicId'
+import { Route as TopicsTopicIdEventsIndexImport } from './routes/topics/$topicId.events/index'
+import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topicId.events/$eventId'
 
 // Create/Update Routes
 
@@ -22,11 +23,19 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TopicsTopicIdRoute = TopicsTopicIdImport.update({
-  id: '/topics/$topicId',
-  path: '/topics/$topicId',
+const TopicsTopicIdEventsIndexRoute = TopicsTopicIdEventsIndexImport.update({
+  id: '/topics/$topicId/events/',
+  path: '/topics/$topicId/events/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const TopicsTopicIdEventsEventIdRoute = TopicsTopicIdEventsEventIdImport.update(
+  {
+    id: '/topics/$topicId/events/$eventId',
+    path: '/topics/$topicId/events/$eventId',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -39,11 +48,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/topics/$topicId': {
-      id: '/topics/$topicId'
-      path: '/topics/$topicId'
-      fullPath: '/topics/$topicId'
-      preLoaderRoute: typeof TopicsTopicIdImport
+    '/topics/$topicId/events/$eventId': {
+      id: '/topics/$topicId/events/$eventId'
+      path: '/topics/$topicId/events/$eventId'
+      fullPath: '/topics/$topicId/events/$eventId'
+      preLoaderRoute: typeof TopicsTopicIdEventsEventIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/topics/$topicId/events/': {
+      id: '/topics/$topicId/events/'
+      path: '/topics/$topicId/events'
+      fullPath: '/topics/$topicId/events'
+      preLoaderRoute: typeof TopicsTopicIdEventsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -53,37 +69,49 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/topics/$topicId': typeof TopicsTopicIdRoute
+  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
+  '/topics/$topicId/events': typeof TopicsTopicIdEventsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/topics/$topicId': typeof TopicsTopicIdRoute
+  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
+  '/topics/$topicId/events': typeof TopicsTopicIdEventsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/topics/$topicId': typeof TopicsTopicIdRoute
+  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
+  '/topics/$topicId/events/': typeof TopicsTopicIdEventsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/topics/$topicId'
+  fullPaths:
+    | '/'
+    | '/topics/$topicId/events/$eventId'
+    | '/topics/$topicId/events'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/topics/$topicId'
-  id: '__root__' | '/' | '/topics/$topicId'
+  to: '/' | '/topics/$topicId/events/$eventId' | '/topics/$topicId/events'
+  id:
+    | '__root__'
+    | '/'
+    | '/topics/$topicId/events/$eventId'
+    | '/topics/$topicId/events/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TopicsTopicIdRoute: typeof TopicsTopicIdRoute
+  TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
+  TopicsTopicIdEventsIndexRoute: typeof TopicsTopicIdEventsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TopicsTopicIdRoute: TopicsTopicIdRoute,
+  TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
+  TopicsTopicIdEventsIndexRoute: TopicsTopicIdEventsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,14 +125,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/topics/$topicId"
+        "/topics/$topicId/events/$eventId",
+        "/topics/$topicId/events/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/topics/$topicId": {
-      "filePath": "topics/$topicId.tsx"
+    "/topics/$topicId/events/$eventId": {
+      "filePath": "topics/$topicId.events/$eventId.tsx"
+    },
+    "/topics/$topicId/events/": {
+      "filePath": "topics/$topicId.events/index.tsx"
     }
   }
 }

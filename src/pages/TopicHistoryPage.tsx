@@ -1,12 +1,15 @@
 import {Clock} from 'lucide-react';
-import { data } from '../data/historyData'
+import {data} from '../data/historyData'
 import Breadcrumbs from "@/components/ui/breadcrumb.tsx";
+import {useNavigate, useParams} from "@tanstack/react-router";
 
 interface TopicHistoryItemProps {
+    eventId: number;
     title: string;
     datetime: string;
     description: string;
     thumbnail?: string;
+    onClick?: () => void;
 }
 
 interface TopicHistoryHeaderProps {
@@ -14,8 +17,8 @@ interface TopicHistoryHeaderProps {
     description: string;
 }
 
-const TopicHistoryItem = ({title, datetime, description, thumbnail}: TopicHistoryItemProps) => (
-    <div className="relative group">
+const TopicHistoryItem = ({title, datetime, description, thumbnail, onClick}: TopicHistoryItemProps) => (
+    <div className="relative group" onClick={onClick}>
         <div className="absolute left-6 top-0 h-full w-0.5 bg-gradient-to-b from-primary/50 to-muted-foreground/30"/>
         <div
             className="absolute left-4 top-6 h-4 w-4 rounded-full bg-primary shadow-lg border-4 border-background group-hover:scale-110 transition-transform duration-200"/>
@@ -68,17 +71,21 @@ function TopicHeader({title, description}: TopicHistoryHeaderProps) {
 
 export default function TopicHistoryPage() {
     const {header, category, subcategory, items} = data;
+    const navigate = useNavigate();
+    const {topicId} = useParams({from: "/topics/$topicId/events/"});
+
+    const goEventPage = (topicId: number, eventId: number) => navigate({to: `/topics/${topicId}/events/${eventId}`})
 
     return (
         <div className="max-w-4xl mx-auto p-6">
             <div className="mb-8">
-                <Breadcrumbs category={category} subcategory={subcategory} />
-                <TopicHeader title={header.title} description={header.description} />
+                <Breadcrumbs category={category} subcategory={subcategory}/>
+                <TopicHeader title={header.title} description={header.description}/>
             </div>
 
             <div className="relative">
                 {items.map((item, index) => (
-                    <TopicHistoryItem key={index} {...item} />
+                    <TopicHistoryItem key={index} {...item} onClick={() => goEventPage(topicId, item.eventId)}/>
                 ))}
             </div>
         </div>

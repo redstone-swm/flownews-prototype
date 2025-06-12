@@ -32,7 +32,7 @@ const newsItems = [
 export default function NewsCarousel() {
     const navigate = useNavigate();
 
-    const goToTopic = (topicId: number) => navigate({to: `/topics/${topicId}`});
+    const goToTopic = (topicId: number) => navigate({to: `/topics/${topicId}/events`});
 
     return (
         <Carousel>
