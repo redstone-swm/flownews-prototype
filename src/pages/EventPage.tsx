@@ -1,11 +1,11 @@
 import {item} from "@/data/eventData.ts";
-import Breadcrumbs from "@/components/ui/breadcrumb.tsx";
+import {TopicBreadcrumb} from "@/components/topic/TopicBreadcrumb.tsx";
 
 export default function EventPage() {
 
     return (
         <div className="max-w-3xl mx-auto px-4 md:px-6 lg:px-8 py-6">
-            <Breadcrumbs category={item.category} subcategory={item.subcategory}/>
+            <TopicBreadcrumb category={item.category} subcategory={item.subcategory}/>
             <h2 className="text-2xl font-bold leading-snug mb-4">{item.title}</h2>
 
             <div className="flex justify-end mb-4">

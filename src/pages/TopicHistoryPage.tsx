@@ -1,7 +1,7 @@
 import {Clock} from 'lucide-react';
 import {data} from '../data/historyData'
-import Breadcrumbs from "@/components/ui/breadcrumb.tsx";
 import {useNavigate, useParams} from "@tanstack/react-router";
+import {TopicBreadcrumb} from "@/components/topic/TopicBreadcrumb.tsx";
 
 interface TopicHistoryItemProps {
     eventId: number;
@@ -79,7 +79,7 @@ export default function TopicHistoryPage() {
     return (
         <div className="max-w-4xl mx-auto p-6">
             <div className="mb-8">
-                <Breadcrumbs category={category} subcategory={subcategory}/>
+                <TopicBreadcrumb category={category} subcategory={subcategory}/>
                 <TopicHeader title={header.title} description={header.description}/>
             </div>
 
