@@ -14,13 +14,14 @@ interface NewsCarouselProps {
     className?: string;
 }
 
-export default function NewsCarousel({items, className}: NewsCarouselProps) {
+export default function NewsMainCarousel({items, className}: NewsCarouselProps) {
     return (
         <Carousel>
             <CarouselContent className={cn("gap-1 -ml-1", className)}>
                 {items.map((item, index) => (
-                    <CarouselItem key={index} className="basis-[42%] lg:basis-[30%] pl-1">
+                    <CarouselItem key={index} className="pl-1">
                         <NewsCard
+                            overlay={"bottom-right"}
                             topicId={item.topicId}
                             title={item.title}
                             subtitle={item.subtitle}

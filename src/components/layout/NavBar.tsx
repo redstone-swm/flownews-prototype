@@ -1,13 +1,16 @@
 import {Search} from "lucide-react";
+import {Link} from "@tanstack/react-router";
 
 export default function NavBar() {
     return (
         <header className="w-full bg-white sticky top-0 z-50 shadow-sm">
-            <div className="max-w-screen-lg mx-auto px-4 py-3 flex items-center justify-between">
-                <div className="w-1/3">
-                    <h1 className="text-2xl font-extralight">FlowNews</h1>
-                </div>
-                <div className="flex justify-center w-2/3 lg:w-1/2 lg:justify-center">
+            <div className="max-w-screen-lg mx-auto px-4 py-3 flex gap-2 items-center justify-between">
+                <Link to={"/"}>
+                    <div className="w-1/3">
+                        <h1 className="text-2xl font-extralight">FlowNews</h1>
+                    </div>
+                </Link>
+                <div className="flex flex-grow lg:w-2/3 lg:justify-center justify-center">
                     <div className="relative w-full max-w-sm">
                         <input
                             type="text"
@@ -17,7 +20,8 @@ export default function NavBar() {
                         <Search className="absolute left-3 top-2 h-5 w-5 text-gray-500"/>
                     </div>
                 </div>
-                <div className="hidden lg:flex w-1/3 justify-end"/>
+
+                <div className="hidden lg:flex  justify-end"/>
             </div>
         </header>
     );
