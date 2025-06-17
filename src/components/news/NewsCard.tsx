@@ -18,7 +18,7 @@ export default function NewsCard({
                                  }: NewsCardProps) {
 
     return (
-        <Link to="/topics/$topicId" params={{topicId: String(topicId)}}>
+        <Link to="/topics/$topicId/events" params={{topicId: String(topicId)}}>
             <div className="relative w-full cursor-pointer">
                 <img src={imageUrl} alt={title} className="rounded-sm w-full"/>
                 {overlay !== 'none' ? (
