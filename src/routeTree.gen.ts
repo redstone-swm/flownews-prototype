@@ -12,8 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as TopicsTopicIdEventsIndexImport } from './routes/topics/$topicId.events/index'
-import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topicId.events/$eventId'
+import { Route as TopicsTopicIdIndexImport } from './routes/topics/$topicId/index'
+import { Route as TopicsTopicIdEventIdImport } from './routes/topics/$topicId/$eventId'
 
 // Create/Update Routes
 
@@ -23,19 +23,17 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TopicsTopicIdEventsIndexRoute = TopicsTopicIdEventsIndexImport.update({
-  id: '/topics/$topicId/events/',
-  path: '/topics/$topicId/events/',
+const TopicsTopicIdIndexRoute = TopicsTopicIdIndexImport.update({
+  id: '/topics/$topicId/',
+  path: '/topics/$topicId/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const TopicsTopicIdEventsEventIdRoute = TopicsTopicIdEventsEventIdImport.update(
-  {
-    id: '/topics/$topicId/events/$eventId',
-    path: '/topics/$topicId/events/$eventId',
-    getParentRoute: () => rootRoute,
-  } as any,
-)
+const TopicsTopicIdEventIdRoute = TopicsTopicIdEventIdImport.update({
+  id: '/topics/$topicId/$eventId',
+  path: '/topics/$topicId/$eventId',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -48,18 +46,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/topics/$topicId/events/$eventId': {
-      id: '/topics/$topicId/events/$eventId'
-      path: '/topics/$topicId/events/$eventId'
-      fullPath: '/topics/$topicId/events/$eventId'
-      preLoaderRoute: typeof TopicsTopicIdEventsEventIdImport
+    '/topics/$topicId/$eventId': {
+      id: '/topics/$topicId/$eventId'
+      path: '/topics/$topicId/$eventId'
+      fullPath: '/topics/$topicId/$eventId'
+      preLoaderRoute: typeof TopicsTopicIdEventIdImport
       parentRoute: typeof rootRoute
     }
-    '/topics/$topicId/events/': {
-      id: '/topics/$topicId/events/'
-      path: '/topics/$topicId/events'
-      fullPath: '/topics/$topicId/events'
-      preLoaderRoute: typeof TopicsTopicIdEventsIndexImport
+    '/topics/$topicId/': {
+      id: '/topics/$topicId/'
+      path: '/topics/$topicId'
+      fullPath: '/topics/$topicId'
+      preLoaderRoute: typeof TopicsTopicIdIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -69,49 +67,42 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
-  '/topics/$topicId/events': typeof TopicsTopicIdEventsIndexRoute
+  '/topics/$topicId/$eventId': typeof TopicsTopicIdEventIdRoute
+  '/topics/$topicId': typeof TopicsTopicIdIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
-  '/topics/$topicId/events': typeof TopicsTopicIdEventsIndexRoute
+  '/topics/$topicId/$eventId': typeof TopicsTopicIdEventIdRoute
+  '/topics/$topicId': typeof TopicsTopicIdIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
-  '/topics/$topicId/events/': typeof TopicsTopicIdEventsIndexRoute
+  '/topics/$topicId/$eventId': typeof TopicsTopicIdEventIdRoute
+  '/topics/$topicId/': typeof TopicsTopicIdIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/topics/$topicId/events/$eventId'
-    | '/topics/$topicId/events'
+  fullPaths: '/' | '/topics/$topicId/$eventId' | '/topics/$topicId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/topics/$topicId/events/$eventId' | '/topics/$topicId/events'
-  id:
-    | '__root__'
-    | '/'
-    | '/topics/$topicId/events/$eventId'
-    | '/topics/$topicId/events/'
+  to: '/' | '/topics/$topicId/$eventId' | '/topics/$topicId'
+  id: '__root__' | '/' | '/topics/$topicId/$eventId' | '/topics/$topicId/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
-  TopicsTopicIdEventsIndexRoute: typeof TopicsTopicIdEventsIndexRoute
+  TopicsTopicIdEventIdRoute: typeof TopicsTopicIdEventIdRoute
+  TopicsTopicIdIndexRoute: typeof TopicsTopicIdIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
-  TopicsTopicIdEventsIndexRoute: TopicsTopicIdEventsIndexRoute,
+  TopicsTopicIdEventIdRoute: TopicsTopicIdEventIdRoute,
+  TopicsTopicIdIndexRoute: TopicsTopicIdIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -125,18 +116,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/topics/$topicId/events/$eventId",
-        "/topics/$topicId/events/"
+        "/topics/$topicId/$eventId",
+        "/topics/$topicId/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/topics/$topicId/events/$eventId": {
-      "filePath": "topics/$topicId.events/$eventId.tsx"
+    "/topics/$topicId/$eventId": {
+      "filePath": "topics/$topicId/$eventId.tsx"
     },
-    "/topics/$topicId/events/": {
-      "filePath": "topics/$topicId.events/index.tsx"
+    "/topics/$topicId/": {
+      "filePath": "topics/$topicId/index.tsx"
     }
   }
 }
