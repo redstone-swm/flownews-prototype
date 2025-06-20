@@ -1,26 +1,26 @@
 import {Carousel, CarouselContent, CarouselItem} from "@/components/ui/carousel.tsx";
-import NewsCard from "@/components/news/NewsCard.tsx";
+import TopicCard from "@/components/news/TopicCard.tsx";
 import {cn} from "@/lib/utils";
 
-interface NewsItem {
+interface TopicItem {
     topicId: number;
     title: string;
     subtitle: string;
     imageUrl: string;
 }
 
-interface NewsCarouselProps {
-    items: NewsItem[];
+interface TopicCarouselProps {
+    items: TopicItem[];
     className?: string;
 }
 
-export default function NewsCarousel({items, className}: NewsCarouselProps) {
+export default function TopicCarousel({items, className}: TopicCarouselProps) {
     return (
         <Carousel>
             <CarouselContent className={cn("gap-1 -ml-1", className)}>
                 {items.map((item, index) => (
                     <CarouselItem key={index} className="basis-[42%] lg:basis-[30%] pl-1">
-                        <NewsCard
+                        <TopicCard
                             topicId={item.topicId}
                             title={item.title}
                             subtitle={item.subtitle}
