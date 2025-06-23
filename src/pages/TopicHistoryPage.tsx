@@ -1,4 +1,4 @@
-import {Clock, Calendar, ArrowRight, Image as ImageIcon} from 'lucide-react';
+import {Clock, Calendar, Image as ImageIcon} from 'lucide-react';
 import {useNavigate, useParams} from "@tanstack/react-router";
 import {TopicBreadcrumb} from "@/components/topic/TopicBreadcrumb.tsx";
 import {Skeleton} from "@/components/ui/skeleton.tsx";
@@ -174,7 +174,7 @@ export default function TopicHistoryPage() {
 
     if (isLoading) return <LoadingSkeleton/>;
 
-    if (error) {
+    if (!data || error) {
         return (
             <div className="max-w-4xl mx-auto p-6">
                 <Card className="p-8 text-center border-destructive/20">
