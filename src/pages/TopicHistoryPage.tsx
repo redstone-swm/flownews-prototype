@@ -6,6 +6,13 @@ import {Badge} from "@/components/ui/badge.tsx";
 import {Card, CardContent} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useTopicDetails} from "@/hooks/useTopicDetails.tsx";
+import {type ReactNode, useState} from "react";
+import {
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+} from "@/components/ui/popover";
+import {useSubscribeTopicMutation} from "@/hooks/useSubscribeTopicMutation.ts";
 
 interface TopicHistoryItemProps {
     eventId: number;
@@ -22,6 +29,48 @@ interface TopicHistoryHeaderProps {
     title: string;
     description?: string;
     eventCount?: number;
+}
+
+interface GuidePopoverProps {
+    button: ReactNode;
+    message: string;
+}
+
+function GuidePopover({button, message}: GuidePopoverProps) {
+    const [isGuideShown, setIsGuideShown] = useState(localStorage.getItem('isGuideShown') === 'true');
+    const popoverOpen = !isGuideShown;
+
+    const handleClose = () => {
+        localStorage.setItem('isGuideShown', 'true');
+        setIsGuideShown(true);
+    };
+
+    return (
+        <div className="flex justify-end w-full">
+            {popoverOpen && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-60 z-40"
+                    onClick={() => setIsGuideShown(true)}
+                />
+            )}
+
+            <Popover
+                open={popoverOpen}
+                onOpenChange={() => handleClose()}
+            >
+                <PopoverTrigger asChild>
+                    {button}
+                </PopoverTrigger>
+                <PopoverContent
+                    side="right"
+                    align="center"
+                    className="bg-white text-black rounded-lg shadow-lg p-4 w-80"
+                >
+                    {message}
+                </PopoverContent>
+            </Popover>
+        </div>
+    );
 }
 
 const TopicHistoryItem = ({title, datetime, description, thumbnail, onClick, index, isLast}: TopicHistoryItemProps) => (
@@ -168,9 +217,32 @@ export default function TopicHistoryPage() {
     const navigate = useNavigate();
 
     const {data, isLoading, error} = useTopicDetails(topicIdNum);
+    const {mutate} = useSubscribeTopicMutation();
 
     const goEventPage = (topicId: number, eventId: number) =>
         navigate({to: `/topics/${topicId}/events/${eventId}`});
+
+    const handleSubscribe = () => {
+        const storedUser = localStorage.getItem('user');
+        const user = storedUser ? JSON.parse(storedUser) : {visitorId: null, token: null};
+
+        mutate({
+            topicId: topicIdNum,
+            userAgent: window.navigator.userAgent,
+            visitorId: user?.id ?? null,
+            token: user?.token ?? null
+        }, {
+            onSuccess: ({code, data, message}) => {
+                if (code !== "200") {
+                    alert(message);
+                    return;
+                }
+
+                alert("후속기사가 나오면 알림드릴게요")
+                localStorage.setItem('user', JSON.stringify(data));
+            }
+        });
+    };
 
     if (isLoading) return <LoadingSkeleton/>;
 
@@ -209,6 +281,20 @@ export default function TopicHistoryPage() {
                         description={data.description}
                         eventCount={data.events?.length}
                     />
+                </div>
+
+                {/* Popover */}
+                <div className="relative space-y-0">
+                    <GuidePopover
+                        button={
+                            <Button variant="default" className="text-lg font-semibold" onClick={handleSubscribe}>
+                                후속기사 팔로우하기
+                            </Button>
+                        }
+                        message="관심 토픽을 팔로우하고 후속기사 알림을 받아보세요"
+                    />
+                    <div className="flex justify-center mt-8" id="follow-button">
+                    </div>
                 </div>
 
                 {/* Timeline */}
