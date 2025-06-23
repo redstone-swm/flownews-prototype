@@ -20,3 +20,10 @@ export interface TopicSummary {
     description?: string;
     imageUrl: string;
 }
+
+export interface TopicSubscribeRequest{
+    topicId: number;
+    visitorId?: string;
+    userAgent: string;
+    token?: string;
+}
