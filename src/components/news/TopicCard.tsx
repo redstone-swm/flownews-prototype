@@ -25,9 +25,9 @@ export default function TopicCard({
                     <>
                         <div
                             className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/70 to-transparent z-10"/>
-                        <div className="absolute bottom-2 right-2 z-20 text-right text-white">
-                            <p className="text-2xl font-bold">{title}</p>
-                            <p className="text-sm text-gray-0 -mt-0.5">{subtitle}</p>
+                        <div className="w-2/3 absolute bottom-2 right-2 z-20 text-right text-white">
+                            <p className="text-4xl font-bold">{title}</p>
+                            <p className="text-lg text-gray-300 -mt-0.5 truncate">{subtitle}asfdsdffs</p>
                         </div>
                     </>
                 ) : (

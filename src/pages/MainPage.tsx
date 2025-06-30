@@ -6,8 +6,8 @@ import {useTopicList} from "@/hooks/useTopicList.tsx";
 export default function MainPage() {
     const {data: topics, isLoading, error} = useTopicList();
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error loading topics.</div>;
+    // if (isLoading) return <div>Loading...</div>;
+    // if (error) return <div>Error loading topics.</div>;
 
     return (
         <>
