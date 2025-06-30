@@ -36,7 +36,7 @@ interface GuidePopoverProps {
     message: string;
 }
 
-function GuidePopover({button, message}: GuidePopoverProps) {
+function GuidePopover({ button, message }: GuidePopoverProps) {
     const [isGuideShown, setIsGuideShown] = useState(localStorage.getItem('isGuideShown') === 'true');
     const popoverOpen = !isGuideShown;
 
@@ -46,7 +46,7 @@ function GuidePopover({button, message}: GuidePopoverProps) {
     };
 
     return (
-        <div className="flex justify-end w-full">
+        <div className="relative w-full">
             {popoverOpen && (
                 <div
                     className="fixed inset-0 bg-black bg-opacity-60 z-40"
@@ -54,17 +54,22 @@ function GuidePopover({button, message}: GuidePopoverProps) {
                 />
             )}
 
-            <Popover
-                open={popoverOpen}
-                onOpenChange={() => handleClose()}
-            >
+            <Popover open={popoverOpen} onOpenChange={handleClose}>
                 <PopoverTrigger asChild>
                     {button}
                 </PopoverTrigger>
+
                 <PopoverContent
-                    side="right"
+                    className={`
+                        z-50 bg-white text-black rounded-lg shadow-lg p-4
+                        w-[60vw] max-w-xs
+                        sm:w-60 sm:max-w-xs
+                        absolute sm:relative left-1/2 transform -translate-x-1/2 mt-2
+                        translate-x-1
+                    `}
+                    side="bottom"
                     align="center"
-                    className="bg-white text-black rounded-lg shadow-lg p-4 w-80"
+                    sideOffset={8}
                 >
                     {message}
                 </PopoverContent>
@@ -72,6 +77,7 @@ function GuidePopover({button, message}: GuidePopoverProps) {
         </div>
     );
 }
+
 
 const TopicHistoryItem = ({title, datetime, description, thumbnail, onClick, index, isLast}: TopicHistoryItemProps) => (
     <div className="relative group animate-in slide-in-from-left-5 fade-in duration-700"
