@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input.tsx";
 
 export default function NavBar() {
     return (
-        <header className="w-full  sticky top-0 z-50 shadow-sm">
+        <header className="fixed w-full top-0 z-50 shadow-sm">
             <div className="max-w-screen-lg mx-auto px-4 py-3 flex gap-8 items-center justify-between">
                 <div className="">
                     <Link to="/">
