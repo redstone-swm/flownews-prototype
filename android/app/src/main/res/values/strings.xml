@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">flownews-prototype</string>
     <string name="title_activity_main">flownews-prototype</string>
-    <string name="package_name">com.example.app</string>
-    <string name="custom_url_scheme">com.example.app</string>
+    <string name="package_name">com.flownews.app</string>
+    <string name="custom_url_scheme">com.flownews.app</string>
 </resources>
