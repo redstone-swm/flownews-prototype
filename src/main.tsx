@@ -9,6 +9,7 @@ import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ThemeProvider} from "@/components/theme-provider.tsx";
+import {initializeFirebaseMessaging} from './firebase';
 
 // Create a new router instance
 const router = createRouter({
@@ -44,6 +45,9 @@ if (rootElement && !rootElement.innerHTML) {
         </StrictMode>,
     )
 }
+
+// Initialize Firebase FCM
+initializeFirebaseMessaging(router);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
