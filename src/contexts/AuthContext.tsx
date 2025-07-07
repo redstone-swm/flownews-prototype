@@ -1,12 +1,7 @@
 import {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
-import axiosInstance from '@/api/axiosInstance';
+import {useUserMe} from '@/hooks/useUserMe';
+import type User from "@/types/user.ts";
 
-interface User {
-    id: number;
-    email: string;
-    name: string;
-    profileUrl?: string;
-}
 
 interface AuthContextType {
     user: User | null;
@@ -27,45 +22,50 @@ export function AuthProvider({children}: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const {
+        data: userData,
+        isLoading: isUserLoading,
+        error,
+        refetch: refetchUser,
+    } = useUserMe();
+
     const isAuthenticated = !!user;
 
-    const fetchUser = async () => {
+    useEffect(() => {
         const token = localStorage.getItem('accessToken');
         if (!token) {
             setIsLoading(false);
             return;
         }
-        try {
-            const response = await axiosInstance.get('/users/me');
-            setUser(response.data);
-            console.log(response.data);
-        } catch (error) {
+
+        if (userData) {
+            setUser(userData);
+            console.log(userData);
+        } else if (error) {
             console.error('사용자 정보를 가져오는데 실패했습니다:', error);
             // 토큰이 유효하지 않으면 삭제
             localStorage.removeItem('accessToken');
             setUser(null);
-        } finally {
-            setIsLoading(false);
         }
-    };
+
+        setIsLoading(isUserLoading);
+    }, [userData, error, isUserLoading]);
 
     const login = (token: string) => {
         localStorage.setItem('accessToken', token);
-        fetchUser();
+        refetchUser();
+        window.location.href = '/';
     };
 
     const logout = () => {
         localStorage.removeItem('accessToken');
         setUser(null);
+        window.location.href = '/';
     };
 
     const refreshUser = async () => {
-        await fetchUser();
+        await refetchUser();
     };
-
-    useEffect(() => {
-        fetchUser();
-    }, []);
 
     const value: AuthContextType = {
         user,
