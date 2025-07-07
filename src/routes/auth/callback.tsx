@@ -19,9 +19,6 @@ function RouteComponent() {
             // AuthContext의 login 함수를 사용하여 토큰 저장 및 사용자 정보 로드
             login(token)
             console.log('토큰이 저장되었습니다:', token)
-
-            // 메인 페이지로 리다이렉트
-            navigate({to: '/'})
         } else {
             // 토큰이 없으면 로그인 페이지로 리다이렉트
             console.error('토큰을 찾을 수 없습니다')

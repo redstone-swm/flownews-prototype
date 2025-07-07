@@ -1,6 +1,14 @@
 import {Button} from "@/components/ui/button";
+import {useAuth} from "@/contexts/AuthContext.tsx";
 
 export default function LoginPage() {
+    const {isAuthenticated} = useAuth();
+
+    if (isAuthenticated) {
+        window.location.href = `/`;
+        return null;
+    }
+
     const handleGoogleLogin = () => {
         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
         window.location.href = `${apiBaseUrl}/oauth2/authorization/google`;
