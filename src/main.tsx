@@ -37,13 +37,13 @@ if (rootElement && !rootElement.innerHTML) {
     const root = ReactDOM.createRoot(rootElement)
     root.render(
         <StrictMode>
-            <AuthProvider>
-                <ThemeProvider defaultTheme="light">
-                    <QueryClientProvider client={queryClient}>
+            <QueryClientProvider client={queryClient}>
+                <AuthProvider>
+                    <ThemeProvider defaultTheme="light">
                         <RouterProvider router={router}/>
-                    </QueryClientProvider>
-                </ThemeProvider>
-            </AuthProvider>
+                    </ThemeProvider>
+                </AuthProvider>
+            </QueryClientProvider>
         </StrictMode>,
     )
 }
