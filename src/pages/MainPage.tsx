@@ -4,7 +4,7 @@ import TopicMainCarousel from "@/components/news/TopicMainCarousel.tsx";
 import {useTopicList} from "@/hooks/useTopicList.tsx";
 
 export default function MainPage() {
-    const {data: topics, isLoading, error} = useTopicList();
+    const {data: topics} = useTopicList();
 
     // if (isLoading) return <div>Loading...</div>;
     // if (error) return <div>Error loading topics.</div>;

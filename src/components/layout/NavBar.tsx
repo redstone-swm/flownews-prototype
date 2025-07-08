@@ -1,12 +1,14 @@
-import {Search} from "lucide-react";
+import {Search, User, LogOut} from "lucide-react";
 import {Link} from "@tanstack/react-router";
 import {Input} from "@/components/ui/input.tsx";
+import NavbarAvatar from "@/components/layout/NavbarAvatar.tsx";
 
 
 export default function NavBar() {
     return (
-        <header className="w-full  sticky top-0 z-50 shadow-sm">
-            <div className="max-w-screen-lg mx-auto px-4 py-3 flex gap-8 items-center justify-between">
+        <header className="w-full bg-primary-foreground sticky top-0 z-50 shadow-sm">
+            <div
+                className="max-w-screen-lg mx-auto px-4 py-3 flex gap-4 items-center justify-between">
                 <div className="">
                     <Link to="/">
                         <img
@@ -30,6 +32,9 @@ export default function NavBar() {
                             className="pl-10 rounded-full"
                         />
                     </div>
+                </div>
+                <div className="flex items-center">
+                    <NavbarAvatar/>
                 </div>
             </div>
         </header>
