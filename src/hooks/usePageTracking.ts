@@ -115,7 +115,7 @@ export const usePageTracking = () => {
             const now = Date.now();
             const userAgent = window.navigator.userAgent;
             const duration = now - entryTimeRef.current;
-            const referer = cleanUrl(document.referrer) || undefined;
+            const referer = document.referrer || undefined;
 
             const visitData: PageVisit = {
                 ip: currentIpRef.current,
