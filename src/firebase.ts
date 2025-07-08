@@ -4,6 +4,8 @@ import {Router} from "@tanstack/react-router";
 import {initializeApp} from 'firebase/app';
 import {getFirestore} from 'firebase/firestore';
 import {getAnalytics} from "@firebase/analytics";
+import {storage} from "@/lib/stoarge.ts";
+
 // @ts-ignore
 
 // 알림 설정
@@ -12,12 +14,11 @@ export function initializeFirebaseMessaging(router: Router) {
         return;
     }
 
-    // 권한 요청 및 등록
-    PushNotifications.requestPermissions().then(permission => {
-        if (permission.receive === 'granted') {
-            PushNotifications.register();
-        }
-    });
+  // 토큰 등록 이벤트
+  PushNotifications.addListener('registration', (token: Token) => {
+    console.log('Push registration success, token:', token.value);
+    storage.set('deviceToken', token.value);
+  }).catch(e => console.error('Push registration error:', e));
 
     // 토큰 등록 이벤트
     PushNotifications.addListener('registration', (token: Token) => {
