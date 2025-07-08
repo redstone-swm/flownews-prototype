@@ -1,24 +1,25 @@
 import {Capacitor} from '@capacitor/core';
 import {PushNotifications, type Token} from '@capacitor/push-notifications';
 import {Router} from "@tanstack/react-router";
+import {storage} from "@/lib/stoarge.ts";
 
 // @ts-ignore
-
-// 알림 설정
 export function initializeFirebaseMessaging(router: Router) {
     if (!Capacitor.isNativePlatform()) {
         return;
     }
 
-  // 토큰 등록 이벤트
-  PushNotifications.addListener('registration', (token: Token) => {
-    console.log('Push registration success, token:', token.value);
-    storage.set('deviceToken', token.value);
-  }).catch(e => console.error('Push registration error:', e));
+    // 권한 요청 및 등록
+    PushNotifications.requestPermissions().then(permission => {
+        if (permission.receive === 'granted') {
+            PushNotifications.register();
+        }
+    });
 
     // 토큰 등록 이벤트
     PushNotifications.addListener('registration', (token: Token) => {
         console.log('Push registration success, token:', token.value);
+        storage.set('deviceToken', token.value);
     }).catch(e => console.error('Push registration error:', e));
 
     // 푸시 알림 액션 이벤트
