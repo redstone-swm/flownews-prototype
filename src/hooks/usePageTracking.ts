@@ -11,6 +11,7 @@ interface PageVisit {
     duration?: number;
     userId: string | null;
     action: 'enter' | 'navigate' | 'exit';
+    referer?: string;
 }
 
 export const usePageTracking = () => {
@@ -20,6 +21,17 @@ export const usePageTracking = () => {
     const {user} = useAuth();
     const currentIpRef = useRef<string>('unknown');
     const isFirstLoadRef = useRef<boolean>(true);
+
+    // URL에서 QueryParameters 제거
+    const cleanUrl = (url: string): string => {
+        if (!url) return '';
+        try {
+            const urlObj = new URL(url);
+            return `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}`;
+        } catch {
+            return url;
+        }
+    };
 
     const getUserIP = async (): Promise<string> => {
         try {
@@ -50,7 +62,8 @@ export const usePageTracking = () => {
                     exitTime: {integerValue: visitData.exitTime?.toString() || '0'},
                     duration: {integerValue: visitData.duration?.toString() || '0'},
                     userId: {stringValue: visitData.userId || ''},
-                    action: {stringValue: visitData.action}
+                    action: {stringValue: visitData.action},
+                    referer: {stringValue: visitData.referer || ''}
                 }
             };
 
@@ -68,6 +81,7 @@ export const usePageTracking = () => {
             const now = Date.now();
             const ip = await getUserIP();
             const userAgent = window.navigator.userAgent;
+            const referer = cleanUrl(document.referrer) || undefined;
 
             if (currentPageRef.current && !isFirstLoadRef.current) {
                 // 이전 페이지에서 나갈 때 (navigate)
@@ -80,7 +94,8 @@ export const usePageTracking = () => {
                     exitTime: now,
                     duration,
                     userId: user ? user.id.toString() : "guest",
-                    action: 'navigate'
+                    action: 'navigate',
+                    referer
                 };
 
                 sendPageVisitData(exitData);
@@ -97,7 +112,8 @@ export const usePageTracking = () => {
                 page: location.pathname,
                 entryTime: now,
                 userId: user ? user.id.toString() : "guest",
-                action: isFirstLoadRef.current ? 'enter' : 'navigate'
+                action: isFirstLoadRef.current ? 'enter' : 'navigate',
+                referer
             };
             sendPageVisitData(enterData);
             isFirstLoadRef.current = false;
@@ -109,6 +125,7 @@ export const usePageTracking = () => {
             const now = Date.now();
             const userAgent = window.navigator.userAgent;
             const duration = now - entryTimeRef.current;
+            const referer = cleanUrl(document.referrer) || undefined;
 
             const visitData: PageVisit = {
                 ip: currentIpRef.current,
@@ -118,7 +135,8 @@ export const usePageTracking = () => {
                 exitTime: now,
                 duration,
                 userId: user ? user.id.toString() : "guest",
-                action: 'exit'
+                action: 'exit',
+                referer
             };
 
             sendPageVisitData(visitData);
