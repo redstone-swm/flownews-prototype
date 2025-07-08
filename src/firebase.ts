@@ -18,6 +18,7 @@ export function initializeFirebaseMessaging(router: Router) {
   // 토큰 등록 이벤트
   PushNotifications.addListener('registration', (token: Token) => {
     console.log('Push registration success, token:', token.value);
+    localStorage.setItem('deviceToken', token.value);
   }).catch(e => console.error('Push registration error:', e));
 
   // 푸시 알림 액션 이벤트

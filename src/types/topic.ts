@@ -23,7 +23,5 @@ export interface TopicSummary {
 
 export interface TopicSubscribeRequest{
     topicId: number;
-    visitorId?: string;
-    userAgent: string;
-    token?: string;
+    deviceToken: string;
 }

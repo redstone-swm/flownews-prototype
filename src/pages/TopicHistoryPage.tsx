@@ -13,6 +13,7 @@ import {
     PopoverContent,
 } from "@/components/ui/popover";
 import {useSubscribeTopicMutation} from "@/hooks/useSubscribeTopicMutation.ts";
+import {Capacitor} from "@capacitor/core";
 
 interface TopicHistoryItemProps {
     eventId: number;
@@ -229,23 +230,22 @@ export default function TopicHistoryPage() {
         navigate({to: `/topics/${topicId}/events/${eventId}`});
 
     const handleSubscribe = () => {
-        const storedUser = localStorage.getItem('user');
-        const user = storedUser ? JSON.parse(storedUser) : {visitorId: null, token: null};
+        if (!Capacitor.isNativePlatform()) {
+            alert("모바일 앱에서만 후속기사 알림을 받을 수 있어요");
+            return;
+        }
 
         mutate({
             topicId: topicIdNum,
-            userAgent: window.navigator.userAgent,
-            visitorId: user?.id ?? null,
-            token: user?.token ?? null
+            deviceToken: localStorage.getItem('deviceToken') || '',
         }, {
-            onSuccess: ({code, data, message}) => {
+            onSuccess: ({code, message}) => {
                 if (code !== "200") {
                     alert(message);
                     return;
                 }
 
                 alert("후속기사가 나오면 알림드릴게요")
-                localStorage.setItem('user', JSON.stringify(data));
             }
         });
     };
