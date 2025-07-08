@@ -1,4 +1,4 @@
-package com.example.app;
+package kr.sijeom;
 
 import com.getcapacitor.BridgeActivity;
 
