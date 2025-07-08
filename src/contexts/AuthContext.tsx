@@ -1,6 +1,7 @@
 import {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
 import {useUserMe} from '@/hooks/useUserMe';
 import type User from "@/types/user.ts";
+import {storage} from "@/lib/stoarge.ts";
 
 
 interface AuthContextType {
@@ -32,7 +33,11 @@ export function AuthProvider({children}: AuthProviderProps) {
     const isAuthenticated = !!user;
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken');
+        checkTokenAndUser();
+    }, [userData, error, isUserLoading]);
+
+    const checkTokenAndUser = async () => {
+        const token = await storage.get('accessToken');
         if (!token) {
             setIsLoading(false);
             return;
@@ -44,21 +49,21 @@ export function AuthProvider({children}: AuthProviderProps) {
         } else if (error) {
             console.error('사용자 정보를 가져오는데 실패했습니다:', error);
             // 토큰이 유효하지 않으면 삭제
-            localStorage.removeItem('accessToken');
+            await storage.remove('accessToken');
             setUser(null);
         }
 
         setIsLoading(isUserLoading);
-    }, [userData, error, isUserLoading]);
+    };
 
-    const login = (token: string) => {
-        localStorage.setItem('accessToken', token);
+    const login = async (token: string) => {
+        await storage.set('accessToken', token);
         refetchUser();
         window.location.href = '/';
     };
 
-    const logout = () => {
-        localStorage.removeItem('accessToken');
+    const logout = async () => {
+        await storage.remove('accessToken');
         setUser(null);
         window.location.href = '/';
     };

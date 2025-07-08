@@ -6,13 +6,15 @@ import {Badge} from "@/components/ui/badge.tsx";
 import {Card, CardContent} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {useTopicDetails} from "@/hooks/useTopicDetails.tsx";
-import {type ReactNode, useState} from "react";
+import {type ReactNode, useEffect, useState} from "react";
 import {
     Popover,
     PopoverTrigger,
     PopoverContent,
 } from "@/components/ui/popover";
 import {useSubscribeTopicMutation} from "@/hooks/useSubscribeTopicMutation.ts";
+import {Capacitor} from "@capacitor/core";
+import {storage} from "@/lib/stoarge.ts";
 
 interface TopicHistoryItemProps {
     eventId: number;
@@ -37,11 +39,20 @@ interface GuidePopoverProps {
 }
 
 function GuidePopover({ button, message }: GuidePopoverProps) {
-    const [isGuideShown, setIsGuideShown] = useState(localStorage.getItem('isGuideShown') === 'true');
+    const [isGuideShown, setIsGuideShown] = useState(false);
     const popoverOpen = !isGuideShown;
 
+    useEffect(()=>{
+        const loadIsGuideShown = async () => {
+            const isGuideShown = await storage.get('isGuideShown');
+            setIsGuideShown(isGuideShown === 'true');
+        }
+
+        loadIsGuideShown();
+    },[])
+
     const handleClose = () => {
-        localStorage.setItem('isGuideShown', 'true');
+        storage.set('isGuideShown', 'true');
         setIsGuideShown(true);
     };
 
@@ -228,24 +239,30 @@ export default function TopicHistoryPage() {
     const goEventPage = (topicId: number, eventId: number) =>
         navigate({to: `/topics/${topicId}/events/${eventId}`});
 
-    const handleSubscribe = () => {
-        const storedUser = localStorage.getItem('user');
-        const user = storedUser ? JSON.parse(storedUser) : {visitorId: null, token: null};
+    const handleSubscribe = async () => {
+        if (!Capacitor.isNativePlatform()) {
+            alert("모바일 앱에서만 후속기사 알림을 받을 수 있어요");
+            return;
+        }
+
+        const deviceToken = await storage.get('deviceToken');
+        if(!deviceToken){
+            alert("앱을 다시 실행해주세요.");
+            return;
+        }
+
 
         mutate({
             topicId: topicIdNum,
-            userAgent: window.navigator.userAgent,
-            visitorId: user?.id ?? null,
-            token: user?.token ?? null
+            deviceToken: deviceToken,
         }, {
-            onSuccess: ({code, data, message}) => {
+            onSuccess: ({code, message}) => {
                 if (code !== "200") {
                     alert(message);
                     return;
                 }
 
                 alert("후속기사가 나오면 알림드릴게요")
-                localStorage.setItem('user', JSON.stringify(data));
             }
         });
     };
