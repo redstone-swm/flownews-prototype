@@ -22,16 +22,6 @@ export const usePageTracking = () => {
     const currentIpRef = useRef<string>('unknown');
     const isFirstLoadRef = useRef<boolean>(true);
 
-    // URL에서 QueryParameters 제거
-    const cleanUrl = (url: string): string => {
-        if (!url) return '';
-        try {
-            const urlObj = new URL(url);
-            return `${urlObj.protocol}//${urlObj.host}${urlObj.pathname}`;
-        } catch {
-            return url;
-        }
-    };
 
     const getUserIP = async (): Promise<string> => {
         try {
@@ -81,7 +71,7 @@ export const usePageTracking = () => {
             const now = Date.now();
             const ip = await getUserIP();
             const userAgent = window.navigator.userAgent;
-            const referer = cleanUrl(document.referrer) || undefined;
+            const referer = document.referrer || undefined;
 
             if (currentPageRef.current && !isFirstLoadRef.current) {
                 // 이전 페이지에서 나갈 때 (navigate)
