@@ -1,4 +1,4 @@
-import {Search, User, LogOut} from "lucide-react";
+import {Search} from "lucide-react";
 import {Link} from "@tanstack/react-router";
 import {Input} from "@/components/ui/input.tsx";
 import NavbarAvatar from "@/components/layout/NavbarAvatar.tsx";

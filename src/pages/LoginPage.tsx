@@ -15,8 +15,8 @@ export default function LoginPage() {
     };
 
     const handleAppleLogin = () => {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-        const appleOAuthUrl = `${apiBaseUrl}/oauth2/authorization/apple`;
+        // const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+        // const appleOAuthUrl = `${apiBaseUrl}/oauth2/authorization/apple`;
 
         // TODO: 애플 로그인은 현재 개발 중입니다.
     };
