@@ -1,7 +1,6 @@
 import {createFileRoute, useNavigate} from '@tanstack/react-router'
 import {useEffect} from 'react'
 import {useAuth} from '@/contexts/AuthContext'
-import {Capacitor} from "@capacitor/core";
 
 export const Route = createFileRoute('/auth/callback')({
     component: RouteComponent,
@@ -17,9 +16,7 @@ function RouteComponent() {
         const token = urlParams.get('token')
 
         if (token) {
-            if(!Capacitor.isNativePlatform()){
-                window.location.href = `sijeom://auth/callback?token=${token}`;
-            }
+            window.location.href = `sijeom://auth/callback?token=${token}`;
 
             // AuthContext의 login 함수를 사용하여 토큰 저장 및 사용자 정보 로드
             login(token)

@@ -6,22 +6,23 @@ import {useAuth} from "@/contexts/AuthContext.tsx";
 const AppUrlListener = () => {
     const navigate = useNavigate();
     const {login} = useAuth();
+    console.log('AppUrlListener initialized');
 
     useEffect(() => {
         const handler = (event: URLOpenListenerEvent) => {
-            const url = new URL(event.url)
-            const token = url.searchParams.get('token')
+            const url = new URL(event.url);
+            const token = url.searchParams.get('token');
 
             if (token) {
                 login(token);
-                navigate({to: '/'});
+                navigate({ to: '/' });
             } else {
-                navigate({to: '/auth/login'})
+                navigate({ to: '/auth/login' });
             }
         };
 
         App.addListener('appUrlOpen', handler);
-    }, [navigate]);
+    }, [navigate, login]);
 
     return null;
 };
