@@ -17,7 +17,7 @@ function RouteComponent() {
         const token = urlParams.get('token')
 
         if (token) {
-            if(Capacitor.isNativePlatform()){
+            if(!Capacitor.isNativePlatform()){
                 window.location.href = `sijeom://auth/callback?token=${token}`;
             }
 
