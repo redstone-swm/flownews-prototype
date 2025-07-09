@@ -37,6 +37,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
     "@tanstack/eslint-plugin-query": "^5.78.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
