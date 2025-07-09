@@ -1,18 +1,23 @@
-import { useEffect } from 'react';
-import { App, type URLOpenListenerEvent } from '@capacitor/app';
+import {useEffect} from 'react';
+import {App, type URLOpenListenerEvent} from '@capacitor/app';
 import {useNavigate} from "@tanstack/react-router";
+import {useAuth} from "@/contexts/AuthContext.tsx";
 
 const AppUrlListener = () => {
     const navigate = useNavigate();
+    const {login} = useAuth();
 
     useEffect(() => {
         const handler = (event: URLOpenListenerEvent) => {
-            const url = new URL(event.url); // URL 파싱 API 사용
-            const pathname = url.pathname;  // /auth/callback
-            const search = url.search;      // ?token=abc123
+            const url = new URL(event.url)
+            const token = url.searchParams.get('token')
 
-            // TanStack Router로 이동
-            navigate({ to: `${pathname}${search}` });
+            if (token) {
+                login(token);
+                navigate({to: '/'});
+            } else {
+                navigate({to: '/auth/login'})
+            }
         };
 
         App.addListener('appUrlOpen', handler);
@@ -22,3 +27,4 @@ const AppUrlListener = () => {
 };
 
 export default AppUrlListener;
+
