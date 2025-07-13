@@ -13,7 +13,6 @@ import TopicOutro from "@/components/topic/timeline/TopicOutro.tsx";
 
 export default function TopicHistoryPage() {
     const {topicId} = useParams({from: "/topics/$topicId/"});
-    const navigate = useNavigate();
     const {data, isLoading, error} = useTopicDetails(Number(topicId));
     const {data: topicList} = useTopicList();
 
@@ -21,73 +20,18 @@ export default function TopicHistoryPage() {
     const [api, setApi] = useState<CarouselApi>()
     const [isTextVisible, setIsTextVisible] = useState(false);
 
-    // 세로 스와이프 관련 상태
-    const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
-    const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
-    const [isTransitioning, setIsTransitioning] = useState(false);
-
-    // 현재 토픽의 인덱스 찾기
-    const currentTopicIndex = topicList?.findIndex(topic => topic.id === Number(topicId)) ?? -1;
-
-    // 스와이프 감지 함수들
-    const handleTouchStart = (e: React.TouchEvent) => {
-        setTouchEnd(null);
-        setTouchStart({
-            x: e.targetTouches[0].clientX,
-            y: e.targetTouches[0].clientY
-        });
-    };
-
-    const handleTouchMove = (e: React.TouchEvent) => {
-        setTouchEnd({
-            x: e.targetTouches[0].clientX,
-            y: e.targetTouches[0].clientY
-        });
-    };
-
-    const handleTouchEnd = () => {
-        if (!touchStart || !touchEnd || !topicList || isTransitioning) return;
-
-        const deltaX = touchStart.x - touchEnd.x;
-        const deltaY = touchStart.y - touchEnd.y;
-        const minSwipeDistance = 50;
-
-        // 세로 스와이프가 가로 스와이프보다 클 때만 토픽 전환
-        if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > minSwipeDistance) {
-            if (deltaY > 0) {
-                // 위로 스와이프 - 다음 토픽
-                if (currentTopicIndex < topicList.length - 1) {
-                    navigateToTopic(topicList[currentTopicIndex + 1].id);
-                }
-            } else {
-                // 아래로 스와이프 - 이전 토픽
-                if (currentTopicIndex > 0) {
-                    navigateToTopic(topicList[currentTopicIndex - 1].id);
-                }
-            }
-        }
-    };
-
-    const navigateToTopic = (newTopicId: number) => {
-        setIsTransitioning(true);
-        navigate({
-            to: `/topics/${newTopicId}`,
-            replace: true
-        });
-    };
-
     useEffect(() => {
         if (!api) return;
 
         api.on("select", () => {
             setCurrentIndex(api.selectedScrollSnap());
             setIsTextVisible(false);
-            setTimeout(() => setIsTextVisible(true), 200); // 이전: 500
+            setTimeout(() => setIsTextVisible(true), 200);
         });
     }, [api]);
 
     useEffect(() => {
-        const timer = setTimeout(() => setIsTextVisible(true), 300); // 이전: 1000
+        const timer = setTimeout(() => setIsTextVisible(true), 300);
         return () => clearTimeout(timer);
     }, []);
 
@@ -263,9 +207,6 @@ export default function TopicHistoryPage() {
                         if (e.key === 'ArrowRight') goToNext();
                     }}
                     tabIndex={0}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
                 />
             </div>
         </NavbarOverlayLayout>
