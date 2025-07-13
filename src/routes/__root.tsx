@@ -11,10 +11,7 @@ export const Route = createRootRoute({
         return (
             <>
                 <AppUrlListener/>
-                <NavBar/>
-                <div className="mt-5">
-                    <Outlet/>
-                </div>
+                <Outlet/>
                 <TanStackRouterDevtools/>
             </>
         );

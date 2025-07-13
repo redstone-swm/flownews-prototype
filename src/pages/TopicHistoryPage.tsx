@@ -1,359 +1,273 @@
-import {Clock, Calendar, Image as ImageIcon} from 'lucide-react';
-import {useNavigate, useParams} from "@tanstack/react-router";
-import {TopicBreadcrumb} from "@/components/topic/TopicBreadcrumb.tsx";
-import {Skeleton} from "@/components/ui/skeleton.tsx";
-import {Badge} from "@/components/ui/badge.tsx";
-import {Card, CardContent} from "@/components/ui/card.tsx";
-import {Button} from "@/components/ui/button.tsx";
+// src/pages/TopicHistoryPage.tsx
+import {useEffect, useState} from "react";
+import {useParams, useNavigate} from "@tanstack/react-router";
 import {useTopicDetails} from "@/hooks/useTopicDetails.tsx";
-import {type ReactNode, useEffect, useState} from "react";
-import {
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-} from "@/components/ui/popover";
-import {useSubscribeTopicMutation} from "@/hooks/useSubscribeTopicMutation.ts";
-import {Capacitor} from "@capacitor/core";
-import {storage} from "@/lib/stoarge.ts";
-
-interface TopicHistoryItemProps {
-    eventId: number;
-    title: string;
-    datetime: string;
-    description: string;
-    thumbnail?: string;
-    onClick?: () => void;
-    index: number;
-    isLast: boolean;
-}
-
-interface TopicHistoryHeaderProps {
-    title: string;
-    description?: string;
-    eventCount?: number;
-}
-
-interface GuidePopoverProps {
-    button: ReactNode;
-    message: string;
-}
-
-function GuidePopover({ button, message }: GuidePopoverProps) {
-    const [isGuideShown, setIsGuideShown] = useState(false);
-    const popoverOpen = !isGuideShown;
-
-    useEffect(()=>{
-        const loadIsGuideShown = async () => {
-            const isGuideShown = await storage.get('isGuideShown');
-            setIsGuideShown(isGuideShown === 'true');
-        }
-
-        loadIsGuideShown();
-    },[])
-
-    const handleClose = () => {
-        storage.set('isGuideShown', 'true');
-        setIsGuideShown(true);
-    };
-
-    return (
-        <div className="relative w-full">
-            {popoverOpen && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-60 z-40"
-                    onClick={() => setIsGuideShown(true)}
-                />
-            )}
-
-            <Popover open={popoverOpen} onOpenChange={handleClose}>
-                <PopoverTrigger asChild>
-                    {button}
-                </PopoverTrigger>
-
-                <PopoverContent
-                    className={`
-                        z-50 bg-white text-black rounded-lg shadow-lg p-4
-                        w-[60vw] max-w-xs
-                        sm:w-60 sm:max-w-xs
-                        absolute sm:relative left-1/2 transform -translate-x-1/2 mt-2
-                        translate-x-1
-                    `}
-                    side="bottom"
-                    align="center"
-                    sideOffset={8}
-                >
-                    {message}
-                </PopoverContent>
-            </Popover>
-        </div>
-    );
-}
-
-
-const TopicHistoryItem = ({title, datetime, description, thumbnail, onClick, index, isLast}: TopicHistoryItemProps) => (
-    <div className="relative group animate-in slide-in-from-left-5 fade-in duration-700"
-         style={{animationDelay: `${index * 100}ms`}}>
-        {/* Timeline line */}
-        {!isLast && (
-            <div
-                className="absolute left-6 top-16 h-full w-px bg-gradient-to-b from-primary/60 via-primary/30 to-transparent"/>
-        )}
-
-        {/* Timeline dot */}
-        <div className="absolute left-4 top-8 z-10">
-            <div className="h-4 w-4 rounded-full bg-primary shadow-lg border-4 border-background
-                          group-hover:scale-125 group-hover:shadow-primary/25 transition-all duration-300 ease-out"/>
-            <div className="absolute inset-0 rounded-full bg-primary/20 animate-pulse"/>
-        </div>
-
-        <div className="ml-16 mb-12">
-            <Card className="group-hover:shadow-xl group-hover:shadow-primary/5 transition-all duration-500 overflow-hidden
-                           border-0 bg-gradient-to-br from-card to-card/50 backdrop-blur-sm
-                           hover:scale-[1.02] hover:-translate-y-1 cursor-pointer"
-                  onClick={onClick}>
-
-                {thumbnail && (
-                    <div className="relative h-56 overflow-hidden bg-muted">
-                        <img
-                            src={thumbnail}
-                            alt={title}
-                            className="w-full h-full object-cover transition-all duration-700
-                                     group-hover:scale-110 group-hover:brightness-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent
-                                      group-hover:from-black/20 transition-all duration-500"/>
-
-                        {/* Floating date badge on image */}
-                        <Badge variant="secondary" className="absolute top-4 right-4 bg-black/60 text-white border-0
-                                                           backdrop-blur-sm hover:bg-black/80 transition-colors">
-                            <Calendar className="h-3 w-3 mr-1"/>
-                            {datetime}
-                        </Badge>
-                    </div>
-                )}
-
-                <CardContent className="p-8">
-                    {/* Date section for items without thumbnail */}
-                    {!thumbnail && (
-                        <div className="flex items-center gap-2 text-muted-foreground text-sm mb-4">
-                            <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                <Clock className="h-4 w-4 text-primary"/>
-                            </div>
-                            <span className="font-medium">{datetime}</span>
-                        </div>
-                    )}
-
-                    <div className="">
-                        <div className="flex items-start justify-between ">
-                            <h3 className="text-3xl font-bold text-foreground leading-tight
-                                         group-hover:text-primary transition-colors duration-300">
-                                {title}
-                            </h3>
-                            {/*<Button variant="ghost" size="icon"*/}
-                            {/*        className="shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-300*/}
-                            {/*               hover:bg-primary/10 hover:text-primary">*/}
-                            {/*    <ArrowRight className="h-4 w-4"/>*/}
-                            {/*</Button>*/}
-                        </div>
-
-                        <p className="text-muted-foreground leading-tight text-lg line-clamp-3">
-                            {description}
-                        </p>
-
-                        {/*/!* Action hint *!/*/}
-                        {/*<div className="flex items-center gap-2 text-xs text-muted-foreground/60*/}
-                        {/*              opacity-0 group-hover:opacity-100 transition-all duration-300">*/}
-                        {/*    <span>자세히 보기</span>*/}
-                        {/*    <ArrowRight className="h-3 w-3"/>*/}
-                        {/*</div>*/}
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
-    </div>
-);
-
-function TopicHeader({title, description, eventCount}: TopicHistoryHeaderProps) {
-    return (
-        <div className="text-center space-y-6 py-8">
-            <div className="space-y-4">
-                <Badge variant="outline" className="px-4 py-2 text-sm font-medium">
-                    {eventCount ? `${eventCount}개의 이벤트` : '히스토리'}
-                </Badge>
-
-                <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70
-                             bg-clip-text text-transparent leading-tight">
-                    {title}
-                </h1>
-
-                {description && (
-                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                        {description}
-                    </p>
-                )}
-            </div>
-
-            {/* Decorative line */}
-            <div className="flex items-center justify-center gap-4">
-                <div className="h-px w-16 bg-gradient-to-r from-transparent to-primary/50"/>
-                <div className="h-2 w-2 rounded-full bg-primary/50"/>
-                <div className="h-px w-16 bg-gradient-to-l from-transparent to-primary/50"/>
-            </div>
-        </div>
-    )
-}
-
-function LoadingSkeleton() {
-    return (
-        <div className="max-w-4xl mx-auto p-6 space-y-8">
-            <div className="space-y-4 text-center">
-                <Skeleton className="h-8 w-32 mx-auto"/>
-                <Skeleton className="h-12 w-64 mx-auto"/>
-                <Skeleton className="h-6 w-96 mx-auto"/>
-            </div>
-
-            {[...Array(3)].map((_, i) => (
-                <div key={i} className="relative ml-16">
-                    <Card className="p-6 space-y-4">
-                        <Skeleton className="h-48 w-full rounded-lg"/>
-                        <div className="space-y-2">
-                            <Skeleton className="h-6 w-3/4"/>
-                            <Skeleton className="h-4 w-full"/>
-                            <Skeleton className="h-4 w-2/3"/>
-                        </div>
-                    </Card>
-                </div>
-            ))}
-        </div>
-    );
-}
+import {useTopicList} from "@/hooks/useTopicList.tsx";
+import {Carousel, type CarouselApi, CarouselContent, CarouselItem} from "@/components/ui/carousel.tsx";
+import {ChevronLeft, ChevronRight,} from "lucide-react";
+import {motion, AnimatePresence} from "framer-motion";
+import NavbarOverlayLayout from "@/layouts/NavbarOverlayLayout.tsx";
+import EventItem from "@/components/topic/timeline/EventItem.tsx";
+import TopicIntro from "@/components/topic/timeline/TopicIntro.tsx";
+import TopicOutro from "@/components/topic/timeline/TopicOutro.tsx";
 
 export default function TopicHistoryPage() {
     const {topicId} = useParams({from: "/topics/$topicId/"});
-    const topicIdNum = Number(topicId);
     const navigate = useNavigate();
+    const {data, isLoading, error} = useTopicDetails(Number(topicId));
+    const {data: topicList} = useTopicList();
 
-    const {data, isLoading, error} = useTopicDetails(topicIdNum);
-    const {mutate} = useSubscribeTopicMutation();
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [api, setApi] = useState<CarouselApi>()
+    const [isTextVisible, setIsTextVisible] = useState(false);
 
-    const goEventPage = (topicId: number, eventId: number) =>
-        navigate({to: `/topics/${topicId}/events/${eventId}`});
+    // 세로 스와이프 관련 상태
+    const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
+    const [touchEnd, setTouchEnd] = useState<{ x: number; y: number } | null>(null);
+    const [isTransitioning, setIsTransitioning] = useState(false);
 
-    const handleSubscribe = async () => {
-        if (!Capacitor.isNativePlatform()) {
-            alert("모바일 앱에서만 후속기사 알림을 받을 수 있어요");
-            return;
-        }
+    // 현재 토픽의 인덱스 찾기
+    const currentTopicIndex = topicList?.findIndex(topic => topic.id === Number(topicId)) ?? -1;
 
-        const deviceToken = await storage.get('deviceToken');
-        if(!deviceToken){
-            alert("앱을 다시 실행해주세요.");
-            return;
-        }
-
-
-        mutate({
-            topicId: topicIdNum,
-            deviceToken: deviceToken,
-        }, {
-            onSuccess: ({code, message}) => {
-                if (code !== "200") {
-                    alert(message);
-                    return;
-                }
-
-                alert("후속기사가 나오면 알림드릴게요")
-            }
+    // 스와이프 감지 함수들
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null);
+        setTouchStart({
+            x: e.targetTouches[0].clientX,
+            y: e.targetTouches[0].clientY
         });
     };
 
-    if (isLoading) return <LoadingSkeleton/>;
+    const handleTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd({
+            x: e.targetTouches[0].clientX,
+            y: e.targetTouches[0].clientY
+        });
+    };
 
-    if (!data || error) {
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd || !topicList || isTransitioning) return;
+
+        const deltaX = touchStart.x - touchEnd.x;
+        const deltaY = touchStart.y - touchEnd.y;
+        const minSwipeDistance = 50;
+
+        // 세로 스와이프가 가로 스와이프보다 클 때만 토픽 전환
+        if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > minSwipeDistance) {
+            if (deltaY > 0) {
+                // 위로 스와이프 - 다음 토픽
+                if (currentTopicIndex < topicList.length - 1) {
+                    navigateToTopic(topicList[currentTopicIndex + 1].id);
+                }
+            } else {
+                // 아래로 스와이프 - 이전 토픽
+                if (currentTopicIndex > 0) {
+                    navigateToTopic(topicList[currentTopicIndex - 1].id);
+                }
+            }
+        }
+    };
+
+    const navigateToTopic = (newTopicId: number) => {
+        setIsTransitioning(true);
+        navigate({
+            to: `/topics/${newTopicId}`,
+            replace: true
+        });
+    };
+
+    useEffect(() => {
+        if (!api) return;
+
+        api.on("select", () => {
+            setCurrentIndex(api.selectedScrollSnap());
+            setIsTextVisible(false);
+            setTimeout(() => setIsTextVisible(true), 200); // 이전: 500
+        });
+    }, [api]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsTextVisible(true), 300); // 이전: 1000
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (isLoading || !data || error) {
         return (
-            <div className="max-w-4xl mx-auto p-6">
-                <Card className="p-8 text-center border-destructive/20">
-                    <div className="space-y-4">
-                        <div
-                            className="h-12 w-12 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
-                            <ImageIcon className="h-6 w-6 text-destructive"/>
-                        </div>
-                        <h2 className="text-xl font-semibold text-destructive">로딩 오류</h2>
-                        <p className="text-muted-foreground">토픽 정보를 불러올 수 없습니다.</p>
-                        <Button variant="outline" onClick={() => window.location.reload()}>
-                            다시 시도
-                        </Button>
-                    </div>
-                </Card>
+            <div className="w-full h-screen bg-black flex items-center justify-center">
+                <div className="text-white text-xl">Loading...</div>
             </div>
         );
     }
 
+    const events = data.events;
+    const currentEvent = events[currentIndex - 1]; // 인덱스 조정 (첫 번째는 토픽 소개)
+    const totalItems = events.length + 2;
+
+    const recommendedTopics = [
+        {
+            topicId: 1,
+            title: "AI 혁명",
+            subtitle: "인공지능이 바꾸는 세상",
+            imageUrl: "https://picsum.photos/400/300?random=1"
+        },
+        {
+            topicId: 2,
+            title: "기후 변화",
+            subtitle: "지구를 위한 행동",
+            imageUrl: "https://picsum.photos/400/300?random=2"
+        },
+        {
+            topicId: 3,
+            title: "우주 탐사",
+            subtitle: "새로운 세계를 향해",
+            imageUrl: "https://picsum.photos/400/300?random=3"
+        },
+        {
+            topicId: 4,
+            title: "바이오 기술",
+            subtitle: "생명과학의 미래",
+            imageUrl: "https://picsum.photos/400/300?random=4"
+        }
+    ];
+
+    const goToPrevious = () => api?.scrollPrev();
+    const goToNext = () => api?.scrollNext();
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-            <div className="max-w-4xl mx-auto p-6 space-y-12">
-                {/* Breadcrumb */}
-                <div className="animate-in slide-in-from-top-3 fade-in duration-500">
-                    <TopicBreadcrumb category="카테고리" subcategory={data.title}/>
-                </div>
+        <NavbarOverlayLayout>
+            <div className="relative w-full h-screen overflow-hidden bg-black">
+                <AnimatePresence mode="wait">
+                    {currentEvent?.imageUrl && (
+                        <motion.div
+                            key={`bg-${currentEvent.id}`}
+                            initial={{opacity: 0, scale: 1.05}}
+                            animate={{opacity: 1, scale: 1}}
+                            exit={{opacity: 0, scale: 0.97}}
+                            transition={{duration: 0.6, ease: "easeInOut"}}
+                            className="absolute inset-0 bg-cover bg-center z-0"
+                            style={{
+                                backgroundImage: `url(${currentEvent.imageUrl})`,
+                                filter: 'blur(2px) brightness(0.4)'
+                            }}
+                        />
+                    )}
+                    {currentIndex === 0 && data.imageUrl && (
+                        <motion.div
+                            key={`bg-topic-intro`}
+                            initial={{opacity: 0, scale: 1.05}}
+                            animate={{opacity: 1, scale: 1}}
+                            exit={{opacity: 0, scale: 0.97}}
+                            transition={{duration: 0.6, ease: "easeInOut"}}
+                            className="absolute inset-0 bg-cover bg-center z-0"
+                            style={{
+                                backgroundImage: `url(${data.imageUrl})`,
+                                filter: 'blur(2px) brightness(0.4)'
+                            }}
+                        />
+                    )}
+                    {currentIndex === totalItems - 1 && (
+                        <motion.div
+                            key={`bg-topic-outro`}
+                            initial={{opacity: 0, scale: 1.05}}
+                            animate={{opacity: 1, scale: 1}}
+                            exit={{opacity: 0, scale: 0.97}}
+                            transition={{duration: 0.6, ease: "easeInOut"}}
+                            className="absolute inset-0 bg-gradient-to-br from-purple-700/50 via-blue-700/50  z-0"
+                        />
+                    )}
+                </AnimatePresence>
 
-                {/* Header */}
-                <div className="animate-in slide-in-from-top-4 fade-in duration-700">
-                    <TopicHeader
-                        title={data.title}
-                        description={data.description}
-                        eventCount={data.events?.length}
-                    />
-                </div>
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10"/>
 
-                {/* Popover */}
-                <div className="relative space-y-0">
-                    <GuidePopover
-                        button={
-                            <Button variant="default" className="text-lg font-semibold" onClick={handleSubscribe}>
-                                후속기사 팔로우하기
-                            </Button>
-                        }
-                        message="관심 토픽을 팔로우하고 후속기사 알림을 받아보세요"
-                    />
-                    <div className="flex justify-center mt-8" id="follow-button">
+                <div className="relative z-20 h-full flex flex-col">
+                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+                        <div className="flex space-x-2">
+                            {Array.from({length: totalItems}).map((_, index) => (
+                                <motion.div
+                                    key={index}
+                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                        index === currentIndex ? 'bg-white' : 'bg-white/30'
+                                    }`}
+                                    initial={{scale: 0.8}}
+                                    animate={{scale: index === currentIndex ? 1.2 : 0.8}}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {currentIndex !== totalItems - 1 && (
+                        <button
+                            onClick={goToNext}
+                            className="absolute right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 text-white"
+                        >
+                            <ChevronRight size={24}/>
+                        </button>
+                    )}
+
+                    {currentIndex !== 0 && (
+                        <button
+                            onClick={goToPrevious}
+                            className="absolute left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 text-white"
+                        >
+                            <ChevronLeft size={24}/>
+                        </button>
+                    )}
+
+                    <div className="flex-1 flex items-center justify-center px-4">
+                        <div className="w-full max-w-6xl">
+                            <Carousel
+                                opts={{align: "center", loop: false}}
+                                setApi={setApi}
+                                className="w-full"
+                            >
+                                <CarouselContent>
+                                    <CarouselItem key="topic-intro" className="basis-full">
+                                        <AnimatePresence>
+                                            <TopicIntro
+                                                topic={data}
+                                                isActive={currentIndex === 0}
+                                                isTextVisible={isTextVisible}
+                                            />
+                                        </AnimatePresence>
+                                    </CarouselItem>
+                                    {events.map((event, index) => (
+                                        <CarouselItem key={event.id} className="basis-full">
+                                            <AnimatePresence>
+                                                <EventItem
+                                                    event={event}
+                                                    isActive={index === currentIndex - 1}
+                                                    isTextVisible={isTextVisible}
+                                                />
+                                            </AnimatePresence>
+                                        </CarouselItem>
+                                    ))}
+                                    <CarouselItem key="topic-outro" className="basis-full">
+                                        <AnimatePresence>
+                                            <TopicOutro
+                                                recommendedTopics={recommendedTopics}
+                                                isActive={currentIndex === totalItems - 1}
+                                                isTextVisible={isTextVisible}
+                                            />
+                                        </AnimatePresence>
+                                    </CarouselItem>
+                                </CarouselContent>
+                            </Carousel>
+                        </div>
                     </div>
                 </div>
 
-                {/* Timeline */}
-                <div className="relative space-y-0">
-                    {data.events && data.events.length > 0 ? (
-                        data.events.map((event, index) => (
-                            <TopicHistoryItem
-                                key={event.id}
-                                eventId={event.id}
-                                title={event.title}
-                                datetime={new Date(event.eventTime).toLocaleDateString('ko-KR', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                })}
-                                description={event.description || '상세 정보가 없습니다.'}
-                                thumbnail={event.imageUrl}
-                                onClick={() => goEventPage(topicIdNum, event.id)}
-                                index={index}
-                                isLast={index === data.events.length - 1}
-                            />
-                        ))
-                    ) : (
-                        <Card className="p-12 text-center">
-                            <div className="space-y-4">
-                                <div
-                                    className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mx-auto">
-                                    <Clock className="h-8 w-8 text-muted-foreground"/>
-                                </div>
-                                <h3 className="text-lg font-semibold">이벤트가 없습니다</h3>
-                                <p className="text-muted-foreground">아직 등록된 이벤트가 없습니다.</p>
-                            </div>
-                        </Card>
-                    )}
-                </div>
+                <div
+                    className="absolute inset-0 z-0"
+                    onKeyDown={(e) => {
+                        if (e.key === 'ArrowLeft') goToPrevious();
+                        if (e.key === 'ArrowRight') goToNext();
+                    }}
+                    tabIndex={0}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                />
             </div>
-        </div>
+        </NavbarOverlayLayout>
     );
 }
