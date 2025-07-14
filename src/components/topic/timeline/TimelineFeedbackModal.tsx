@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog'
 import {Button} from "@/components/ui/button.tsx";
 import {useTimelineFeedbackMutation} from "@/hooks/useTimelineFeedbackMutation";
+import {useEffect, useState} from "react";
 
 interface TimelineFeedbackModalProps {
     open: boolean;
@@ -16,6 +17,22 @@ interface TimelineFeedbackModalProps {
 }
 
 export default function TimelineFeedbackModal({open, onOpenChange, topicId}: TimelineFeedbackModalProps) {
+    const [ipAddress, setIpAddress] = useState<string>("");
+
+    useEffect(() => {
+        const fetchIpAddress = async () => {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                setIpAddress(data.ip);
+            } catch (error) {
+                // console.error('IP 주소를 가져오는 데 실패했습니다:', error);
+            }
+        };
+
+        fetchIpAddress();
+    }, []);
+
     const feedbackMutation = useTimelineFeedbackMutation({
         onSuccess: () => {
             onOpenChange(false);
@@ -25,9 +42,11 @@ export default function TimelineFeedbackModal({open, onOpenChange, topicId}: Tim
         }
     });
 
+
     const handleFeedback = async (score: number | null) => {
         feedbackMutation.mutate({
             topicId,
+            ipAddress,
             time: new Date().toISOString(),
             content: null,
             score

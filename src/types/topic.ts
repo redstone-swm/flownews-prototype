@@ -21,12 +21,22 @@ export interface TopicSummary {
     imageUrl: string;
 }
 
+export interface TopicMainData {
+    sections: TopicSection[];
+}
+
+export interface TopicSection {
+    title: string;
+    topics: TopicSummary[];
+}
+
 export interface TopicSubscribeRequest {
     topicId: number;
     deviceToken: string;
 }
 
 export interface TimelineFeedbackRequest {
+    ipAddress: string;
     topicId: number;
     time: string;
     content: string | null;

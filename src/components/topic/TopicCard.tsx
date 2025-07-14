@@ -3,9 +3,9 @@ import {useState} from "react";
 import {Skeleton} from "../ui/skeleton";
 
 interface TopicCardProps {
-    topicId: number;
+    id: number;
     title: string;
-    subtitle: string | undefined;
+    description: string | undefined;
     imageUrl: string;
     overlay?: 'none' | 'bottom-right';
     onClick?: () => void;
@@ -13,9 +13,9 @@ interface TopicCardProps {
 }
 
 export default function TopicCard({
-                                      topicId,
+                                      id,
                                       title,
-                                      subtitle,
+                                      description,
                                       imageUrl,
                                       overlay = 'none',
                                       className,
@@ -27,8 +27,9 @@ export default function TopicCard({
     };
 
     return (
-        <Link to="/topics/$topicId" params={{topicId: String(topicId)}} className={className}>
+        <Link to="/topics/$topicId" params={{topicId: String(id)}} className={className}>
             <div className="relative w-full cursor-pointer rounded-lg">
+
                 <div className="relative aspect-video w-full overflow-hidden rounded-lg">
                     {!imageLoaded && (
                         <Skeleton className="absolute inset-0 w-full h-full rounded-lg"/>
@@ -54,7 +55,7 @@ export default function TopicCard({
 
                         <div className="w-2/3 absolute bottom-2 right-2 z-20 text-right">
                             <p className="text-4xl font-bold text-white/90">{title}</p>
-                            <p className="text-md text-white/70 -mt-0.5 truncate">{subtitle}</p>
+                            <p className="text-md text-white/70 -mt-0.5 truncate">{description}</p>
                         </div>
                     </>
 
@@ -68,7 +69,7 @@ export default function TopicCard({
                         ) : (
                             <>
                                 <p className="text-2xl font-bold text-opacity-80">{title}</p>
-                                <p className="text-sm text-gray-500/80 -mt-1">{subtitle}</p>
+                                <p className="text-sm text-gray-500/80 -mt-1 truncate">{description}</p>
                             </>
                         )}
                     </div>

@@ -2,7 +2,7 @@
 import {useEffect, useState} from "react";
 import {useParams, useNavigate} from "@tanstack/react-router";
 import {useTopicDetails} from "@/hooks/useTopicDetails.tsx";
-import {useTopicList} from "@/hooks/useTopicList.tsx";
+import {useMainTopics} from "@/hooks/useMainTopics.tsx";
 import {Carousel, type CarouselApi, CarouselContent, CarouselItem} from "@/components/ui/carousel.tsx";
 import {ChevronLeft, ChevronRight,} from "lucide-react";
 import {motion, AnimatePresence} from "framer-motion";
@@ -14,7 +14,7 @@ import TopicOutro from "@/components/topic/timeline/TopicOutro.tsx";
 export default function TopicHistoryPage() {
     const {topicId} = useParams({from: "/topics/$topicId/"});
     const {data, isLoading, error} = useTopicDetails(Number(topicId));
-    const {data: topicList} = useTopicList();
+    const {data: topicList} = useMainTopics();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [api, setApi] = useState<CarouselApi>()

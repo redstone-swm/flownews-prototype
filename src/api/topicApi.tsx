@@ -1,13 +1,19 @@
 import axiosInstance from './axiosInstance';
-import type {TopicDetails, TopicSubscribeRequest, TopicSummary, TimelineFeedbackRequest} from "@/types/topic.ts";
+import type {
+    TopicDetails,
+    TopicSubscribeRequest,
+    TopicSummary,
+    TimelineFeedbackRequest,
+    TopicMainData
+} from "@/types/topic.ts";
 
 export const fetchTopicDetails = async (id: number): Promise<TopicDetails> => {
     const response = await axiosInstance.get<TopicDetails>(`/topics/${id}`);
     return response.data;
 };
 
-export const fetchTopicList = async (): Promise<TopicSummary[]> => {
-    const response = await axiosInstance.get<TopicSummary[]>('/topics');
+export const fetchMainTopics = async (): Promise<TopicMainData> => {
+    const response = await axiosInstance.get<TopicMainData>('/topics?for=main');
     return response.data;
 };
 
@@ -17,6 +23,6 @@ export const subscribeTopic = async (req: TopicSubscribeRequest) => {
 }
 
 export const submitTimelineFeedback = async (feedback: TimelineFeedbackRequest) => {
-    const response = await axiosInstance.post(`/feedback`, feedback);
+    const response = await axiosInstance.post(`/logs/feedback`, feedback);
     return response.data;
 };

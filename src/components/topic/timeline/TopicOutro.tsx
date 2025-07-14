@@ -3,6 +3,7 @@ import {motion} from "framer-motion";
 import {useEffect, useState} from "react";
 import TopicCard from "@/components/topic/TopicCard.tsx";
 import TimelineFeedbackModal from "@/components/topic/timeline/TimelineFeedbackModal.tsx";
+import {useParams} from "@tanstack/react-router";
 
 interface TopicOutroProps {
     recommendedTopics: {
@@ -17,6 +18,11 @@ interface TopicOutroProps {
 
 export default function TopicOutro({recommendedTopics, isActive, isTextVisible}: TopicOutroProps) {
     const [isFeedbackModalOpen, setisFeedbackModalOpen] = useState(false);
+    const topicId = useParams({
+        from: '/topics/$topicId/',
+        select: (params) => params.topicId ? Number(params.topicId) : 0,
+    })
+
 
     useEffect(() => {
         if (isActive) {
@@ -82,9 +88,9 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                                 >
                                     <TopicCard
                                         className="text-white"
-                                        topicId={topic.topicId}
+                                        id={topic.topicId}
                                         title={topic.title}
-                                        subtitle={topic.subtitle}
+                                        description={topic.subtitle}
                                         imageUrl={topic.imageUrl}
                                     />
                                 </motion.div>
@@ -96,6 +102,7 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
             <TimelineFeedbackModal
                 open={isFeedbackModalOpen}
                 onOpenChange={setisFeedbackModalOpen}
+                topicId={topicId}
             />
         </>
     );

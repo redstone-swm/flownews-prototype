@@ -15,9 +15,9 @@ export default function TopicMainCarousel({items, className,}: TopicCarouselProp
                 {items.map((item, index) => (
                     <CarouselItem key={index} className="basis-[82%] lg:basis-[72%] pl-1">
                         <TopicCard
-                            topicId={item.id}
+                            id={item.id}
                             title={item.title}
-                            subtitle={item.description}
+                            description={item.description}
                             imageUrl={item.imageUrl}
                             overlay="bottom-right"
                         />
