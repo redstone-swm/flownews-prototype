@@ -73,7 +73,6 @@ export default function TopicHistoryPage() {
                     to: "/topics/$topicId",
                     params: {topicId: String(recommendedTopics[0]?.topicId)}
                 }), 300);
-                // setTimeout(() => window.location.href = `/topics/${recommendedTopics[0]?.topicId}`, 200);
             }
         });
     }, [vApi, navigate]);

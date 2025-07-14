@@ -4,6 +4,7 @@ export interface Event {
     description?: string;
     imageUrl?: string;
     eventTime: string;
+    relatedLinks?: string;
 }
 
 export interface TopicDetails {
