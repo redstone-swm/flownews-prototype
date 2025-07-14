@@ -1,5 +1,4 @@
 import TopicCarousel from "@/components/topic/TopicCarousel.tsx";
-import {mockTopicData} from "@/data/mockTopicData.ts";
 import TopicMainCarousel from "@/components/topic/TopicMainCarousel.tsx";
 import NavbarLayout from "@/layouts/NavbarLayout.tsx";
 import {useMainTopics} from "@/hooks/useMainTopics.tsx";

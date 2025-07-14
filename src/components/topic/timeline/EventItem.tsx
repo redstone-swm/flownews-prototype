@@ -33,7 +33,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
             animate={{opacity: 1, y: 0}}
             exit={{opacity: 0, y: -30}}
             transition={{duration: 0.4, ease: "easeOut"}}
-            className="flex flex-col h-full"
+            className="flex flex-col justify-center items-center w-screen h-screen px-6"
         >
             <motion.div
                 initial={{opacity: 0, y: -20}}
@@ -42,7 +42,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                     y: isTextVisible ? 0 : -20
                 }}
                 transition={{duration: 0.3, delay: 0.05}}
-                className="text-center mb-4"
+                className="text-center mb-8"
             >
                 <h2
                     className="text-3xl lg:text-4xl text-white font-light"
@@ -52,19 +52,19 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                 </h2>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center flex-1">
+            <div className="flex flex-col lg:flex-row gap-8 items-center justify-center max-w-6xl w-full">
                 <motion.div
                     initial={{opacity: 0, x: -60}}
                     animate={{opacity: 1, x: 0}}
                     transition={{duration: 0.3, delay: 0.05}}
-                    className="relative"
+                    className="relative flex-shrink-0"
                 >
                     {event.imageUrl && (
                         <div className="relative overflow-hidden rounded-2xl shadow-2xl">
                             <img
                                 src={event.imageUrl}
                                 alt={event.title}
-                                className="w-full h-[400px] lg:h-[500px] object-cover"
+                                className="w-full h-[400px] lg:h-[500px] lg:w-[500px] object-cover"
                             />
                             <div
                                 className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"/>
@@ -76,6 +76,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                     initial={{opacity: 0, x: 60}}
                     animate={{opacity: 1, x: 0}}
                     transition={{duration: 0.3, delay: 0.1}}
+                    className="flex flex-col items-center lg:items-start text-center lg:text-left flex-1"
                 >
                     <motion.div
                         initial={{opacity: 0, y: 20}}
@@ -84,9 +85,9 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                             y: isTextVisible ? 0 : 20
                         }}
                         transition={{duration: 0.3, delay: 0.1}}
-                        className=""
+                        className="mb-4"
                     >
-                        <h1 className="text-4xl lg:text-5xl font-bold text-white ">
+                        <h1 className="text-4xl lg:text-5xl font-bold text-white">
                             {event.title}
                         </h1>
                     </motion.div>

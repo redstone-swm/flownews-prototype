@@ -23,7 +23,6 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
         select: (params) => params.topicId ? Number(params.topicId) : 0,
     })
 
-
     useEffect(() => {
         if (isActive) {
             const feedbackModalShown = localStorage.getItem('feedbackModalShown');
@@ -37,14 +36,14 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
     if (!isActive) return null;
 
     return (
-        <>
-            <motion.div
-                initial={{opacity: 0, y: 30}}
-                animate={{opacity: 1, y: 0}}
-                exit={{opacity: 0, y: -30}}
-                transition={{duration: 0.4, ease: "easeOut"}}
-                className="flex flex-col h-full"
-            >
+        <motion.div
+            initial={{opacity: 0, y: 30}}
+            animate={{opacity: 1, y: 0}}
+            exit={{opacity: 0, y: -30}}
+            transition={{duration: 0.4, ease: "easeOut"}}
+            className="flex flex-col justify-center items-center w-screen h-screen px-6"
+        >
+            <div className="flex flex-col justify-center items-center w-full h-full max-w-6xl">
                 <motion.div
                     initial={{opacity: 0, y: -20}}
                     animate={{
@@ -52,10 +51,10 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                         y: isTextVisible ? 0 : -20
                     }}
                     transition={{duration: 0.3, delay: 0.05}}
-                    className="text-center mb-8"
+                    className="text-center mb-12"
                 >
                     <h2
-                        className="text-3xl lg:text-4xl text-white font-light "
+                        className="text-3xl lg:text-4xl text-white font-light mb-4"
                         style={{letterSpacing: '0.4em'}}
                     >
                         추천 토픽
@@ -72,38 +71,37 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                         y: isTextVisible ? 0 : 40
                     }}
                     transition={{duration: 0.4, delay: 0.1}}
-                    className="flex-1 flex items-center justify-center px-4"
+                    className="w-full"
                 >
-                    <div className="w-full max-w-5xl">
-                        <div className="grid grid-cols-3 gap-6">
-                            {recommendedTopics.slice(0, 3).map((topic, index) => (
-                                <motion.div
-                                    key={topic.topicId}
-                                    initial={{opacity: 0, y: 20}}
-                                    animate={{
-                                        opacity: isTextVisible ? 1 : 0,
-                                        y: isTextVisible ? 0 : 20
-                                    }}
-                                    transition={{duration: 0.3, delay: 0.15 + index * 0.1}}
-                                >
-                                    <TopicCard
-                                        className="text-white"
-                                        id={topic.topicId}
-                                        title={topic.title}
-                                        description={topic.subtitle}
-                                        imageUrl={topic.imageUrl}
-                                    />
-                                </motion.div>
-                            ))}
-                        </div>
+                    <div className="grid grid-cols-3 gap-6">
+                        {recommendedTopics.slice(0, 3).map((topic, index) => (
+                            <motion.div
+                                key={topic.topicId}
+                                initial={{opacity: 0, y: 20}}
+                                animate={{
+                                    opacity: isTextVisible ? 1 : 0,
+                                    y: isTextVisible ? 0 : 20
+                                }}
+                                transition={{duration: 0.3, delay: 0.15 + index * 0.1}}
+                            >
+                                <TopicCard
+                                    className="text-white"
+                                    id={topic.topicId}
+                                    title={topic.title}
+                                    description={topic.subtitle}
+                                    imageUrl={topic.imageUrl}
+                                />
+                            </motion.div>
+                        ))}
                     </div>
                 </motion.div>
-            </motion.div>
+            </div>
+
             <TimelineFeedbackModal
                 open={isFeedbackModalOpen}
                 onOpenChange={setisFeedbackModalOpen}
                 topicId={topicId}
             />
-        </>
+        </motion.div>
     );
 }

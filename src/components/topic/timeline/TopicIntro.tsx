@@ -1,6 +1,5 @@
 // src/components/topic/timeline/TopicIntro.tsx
 import {motion} from "framer-motion";
-import {ChevronLeft, ChevronRight} from "lucide-react";
 
 interface TopicIntroductionProps {
     topic: {
@@ -22,7 +21,7 @@ export default function TopicIntro({topic, isActive, isTextVisible}: TopicIntrod
             animate={{opacity: 1, y: 0}}
             exit={{opacity: 0, y: -30}}
             transition={{duration: 0.4, ease: "easeOut"}}
-            className="flex flex-col h-full items-center justify-center relative"
+            className="flex flex-col justify-center items-center w-screen h-screen px-6"
         >
             <div className="max-w-4xl">
                 <motion.div
@@ -68,11 +67,41 @@ export default function TopicIntro({topic, isActive, isTextVisible}: TopicIntrod
                     transition={{duration: 0.3, delay: 0.25}}
                     className="text-center mt-8"
                 >
-                    <div className="flex items-center justify-center space-x-2 text-white/60">
-                        <span
-                        >
-                            읽으려면 오른쪽으로 스와이프하세요
-                        </span>
+                    <div className="flex flex-col items-center justify-center  text-white/60">
+                        <div className="flex items-center space-x-2">
+                            <span className="text-sm">읽으려면 오른쪽으로 스와이프하세요</span>
+                            <motion.div
+                                animate={{
+                                    x: [0, 8, 0],
+                                }}
+                                transition={{
+                                    duration: 1.5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                }}
+                                className="text-lg"
+                            >
+                                →
+                            </motion.div>
+                        </div>
+
+                        <div className="flex items-center space-x-2">
+                            <span className="text-sm">다른 토픽을 보려면 아래쪽으로 스와이프하세요</span>
+                            <motion.div
+                                animate={{
+                                    y: [-4, 4, -4],
+                                }}
+                                transition={{
+                                    duration: 1.5,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                    delay: 0.75
+                                }}
+                                className="text-lg"
+                            >
+                                ↓
+                            </motion.div>
+                        </div>
                     </div>
 
                 </motion.div>
