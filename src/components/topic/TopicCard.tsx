@@ -60,7 +60,7 @@ export default function TopicCard({
                     </>
 
                 ) : (
-                    <div className="text-right mt-2">
+                    <div className="text-right mt-2 mr-1 pl-4">
                         {!imageLoaded ? (
                             <>
                                 <Skeleton className="h-8 w-3/4 ml-auto mb-1"/>
@@ -68,8 +68,8 @@ export default function TopicCard({
                             </>
                         ) : (
                             <>
-                                <p className="text-2xl font-bold text-opacity-80">{title}</p>
-                                <p className="text-sm text-gray-500/80 -mt-1 truncate">{description}</p>
+                                <p className="text-2xl font-bold text-opacity-80 truncate">{title}</p>
+                                <p className="text-sm text-gray-500/80 truncate">{description}</p>
                             </>
                         )}
                     </div>

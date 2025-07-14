@@ -13,7 +13,7 @@ export default function TopicCarousel({items, className}: TopicCarouselProps) {
         <Carousel>
             <CarouselContent className={cn("gap-1 -ml-1", className)}>
                 {items.map((item, index) => (
-                    <CarouselItem key={index} className="basis-[42%] lg:basis-[30%] pl-1">
+                    <CarouselItem key={index} className="basis-[54%] lg:basis-[30%] pl-1">
                         <TopicCard
                             id={item.id}
                             title={item.title}
