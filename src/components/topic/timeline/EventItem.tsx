@@ -107,7 +107,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                             }}
                             transition={{duration: 0.3, delay: 0.15}}
                         >
-                            <p className="text-lg lg:text-xl text-white/90 font-extralight">
+                            <p className="text-lg lg:text-xl text-white/90 font-light leading-tight">
                                 {event.description}
                             </p>
                         </motion.div>
@@ -121,10 +121,10 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                                 y: isTextVisible ? 0 : 20
                             }}
                             transition={{duration: 0.3, delay: 0.2}}
-                            className="mt-6"
+                            className="mt-6 flex flex-col items-end w-full"
                         >
                             <div className="text-white/80 text-xs font-extralight">관련 기사 보기</div>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col ">
                                 {event.relatedLinks.map((link, index) => (
                                     <a
                                         key={index}
