@@ -9,7 +9,6 @@ import {
 } from '../ui/dialog.tsx';
 import {Button} from '../ui/button.tsx';
 import {Input} from '../ui/input.tsx';
-import {useTimelineFeedbackMutation} from "@/hooks/useTimelineFeedbackMutation.ts";
 import {useTopicSuggestionFeedbackMutation} from "@/hooks/useTopicSuggestionFeedbackMutation.ts";
 
 interface TopicSuggestionModalProps {

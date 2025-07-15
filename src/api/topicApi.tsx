@@ -3,7 +3,6 @@ import type {
     TopicDetails,
     TopicMainData,
     TopicSubscribeRequest,
-    TopicSuggestionFeedbackRequest
 } from "@/types/topic.ts";
 import type {TopicHistoryRecordRequest} from "@/types/TopicHistoryRecord.tsx";
 
