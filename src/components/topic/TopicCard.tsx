@@ -54,7 +54,7 @@ export default function TopicCard({
                             className="rounded-lg absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-black/70 to-transparent z-10"/>
 
                         <div className="w-2/3 absolute bottom-2 right-2 z-20 text-right">
-                            <p className="text-2xl md:text-3xl font-bold text-white/95  leading-tight line-clamp-2">{title}</p>
+                            <p className="text-2xl md:text-3xl font-bold text-white/95  leading-tight ">{title}</p>
                             <p className="text-sm md:text-base text-white/70 leading-tight line-clamp-2 ">{description}</p>
                         </div>
                     </>
