@@ -4,14 +4,10 @@ import {useEffect, useState} from "react";
 import TopicCard from "@/components/topic/TopicCard.tsx";
 import TimelineFeedbackModal from "@/components/topic/timeline/TimelineFeedbackModal.tsx";
 import {useParams} from "@tanstack/react-router";
+import type {TopicSummary} from "@/types/topic.ts";
 
 interface TopicOutroProps {
-    recommendedTopics: {
-        topicId: number;
-        title: string;
-        subtitle: string;
-        imageUrl: string;
-    }[];
+    recommendedTopics: TopicSummary[];
     isActive: boolean;
     isTextVisible: boolean;
 }
@@ -76,7 +72,7 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                     <div className="grid grid-cols-3 gap-6">
                         {recommendedTopics.slice(0, 3).map((topic, index) => (
                             <motion.div
-                                key={topic.topicId}
+                                key={topic.id}
                                 initial={{opacity: 0, y: 20}}
                                 animate={{
                                     opacity: isTextVisible ? 1 : 0,
@@ -86,9 +82,9 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                             >
                                 <TopicCard
                                     className="text-white"
-                                    id={topic.topicId}
+                                    id={topic.id}
                                     title={topic.title}
-                                    description={topic.subtitle}
+                                    description={topic.description}
                                     imageUrl={topic.imageUrl}
                                 />
                             </motion.div>

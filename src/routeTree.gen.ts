@@ -15,7 +15,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthCallbackImport } from './routes/auth/callback'
 import { Route as TopicsTopicIdIndexImport } from './routes/topics/$topicId/index'
-import { Route as TopicsTopicIdEventIdImport } from './routes/topics/$topicId/$eventId'
+import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topicId/events/$eventId'
 
 // Create/Update Routes
 
@@ -43,11 +43,13 @@ const TopicsTopicIdIndexRoute = TopicsTopicIdIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TopicsTopicIdEventIdRoute = TopicsTopicIdEventIdImport.update({
-  id: '/topics/$topicId/$eventId',
-  path: '/topics/$topicId/$eventId',
-  getParentRoute: () => rootRoute,
-} as any)
+const TopicsTopicIdEventsEventIdRoute = TopicsTopicIdEventsEventIdImport.update(
+  {
+    id: '/topics/$topicId/events/$eventId',
+    path: '/topics/$topicId/events/$eventId',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -74,18 +76,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
-    '/topics/$topicId/$eventId': {
-      id: '/topics/$topicId/$eventId'
-      path: '/topics/$topicId/$eventId'
-      fullPath: '/topics/$topicId/$eventId'
-      preLoaderRoute: typeof TopicsTopicIdEventIdImport
-      parentRoute: typeof rootRoute
-    }
     '/topics/$topicId/': {
       id: '/topics/$topicId/'
       path: '/topics/$topicId'
       fullPath: '/topics/$topicId'
       preLoaderRoute: typeof TopicsTopicIdIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/topics/$topicId/events/$eventId': {
+      id: '/topics/$topicId/events/$eventId'
+      path: '/topics/$topicId/events/$eventId'
+      fullPath: '/topics/$topicId/events/$eventId'
+      preLoaderRoute: typeof TopicsTopicIdEventsEventIdImport
       parentRoute: typeof rootRoute
     }
   }
@@ -97,16 +99,16 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
-  '/topics/$topicId/$eventId': typeof TopicsTopicIdEventIdRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
+  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
-  '/topics/$topicId/$eventId': typeof TopicsTopicIdEventIdRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
+  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
 export interface FileRoutesById {
@@ -114,8 +116,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
-  '/topics/$topicId/$eventId': typeof TopicsTopicIdEventIdRoute
   '/topics/$topicId/': typeof TopicsTopicIdIndexRoute
+  '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
 export interface FileRouteTypes {
@@ -124,22 +126,22 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/callback'
     | '/auth/login'
-    | '/topics/$topicId/$eventId'
     | '/topics/$topicId'
+    | '/topics/$topicId/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth/callback'
     | '/auth/login'
-    | '/topics/$topicId/$eventId'
     | '/topics/$topicId'
+    | '/topics/$topicId/events/$eventId'
   id:
     | '__root__'
     | '/'
     | '/auth/callback'
     | '/auth/login'
-    | '/topics/$topicId/$eventId'
     | '/topics/$topicId/'
+    | '/topics/$topicId/events/$eventId'
   fileRoutesById: FileRoutesById
 }
 
@@ -147,16 +149,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthLoginRoute: typeof AuthLoginRoute
-  TopicsTopicIdEventIdRoute: typeof TopicsTopicIdEventIdRoute
   TopicsTopicIdIndexRoute: typeof TopicsTopicIdIndexRoute
+  TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthLoginRoute: AuthLoginRoute,
-  TopicsTopicIdEventIdRoute: TopicsTopicIdEventIdRoute,
   TopicsTopicIdIndexRoute: TopicsTopicIdIndexRoute,
+  TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -172,8 +174,8 @@ export const routeTree = rootRoute
         "/",
         "/auth/callback",
         "/auth/login",
-        "/topics/$topicId/$eventId",
-        "/topics/$topicId/"
+        "/topics/$topicId/",
+        "/topics/$topicId/events/$eventId"
       ]
     },
     "/": {
@@ -185,11 +187,11 @@ export const routeTree = rootRoute
     "/auth/login": {
       "filePath": "auth/login.tsx"
     },
-    "/topics/$topicId/$eventId": {
-      "filePath": "topics/$topicId/$eventId.tsx"
-    },
     "/topics/$topicId/": {
       "filePath": "topics/$topicId/index.tsx"
+    },
+    "/topics/$topicId/events/$eventId": {
+      "filePath": "topics/$topicId/events/$eventId.tsx"
     }
   }
 }

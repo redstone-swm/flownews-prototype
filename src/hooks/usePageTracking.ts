@@ -60,7 +60,7 @@ export const usePageTracking = () => {
             navigator.sendBeacon(url, JSON.stringify(data));
             // console.log('Page visit data sent via sendBeacon:', visitData);
         } catch (error) {
-            console.error('Failed to send page visit data sync:', error);
+            // console.error('Failed to send page visit data sync:', error);
         }
     };
 

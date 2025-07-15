@@ -1,6 +1,5 @@
 import {createRootRoute, Outlet} from '@tanstack/react-router'
 import {TanStackRouterDevtools} from '@tanstack/react-router-devtools'
-import NavBar from "@/components/layout/NavBar.tsx";
 import {usePageTracking} from "@/hooks/usePageTracking";
 import AppUrlListener from "@/lib/scheme-listener.ts";
 

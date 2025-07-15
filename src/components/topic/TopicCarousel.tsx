@@ -26,3 +26,4 @@ export default function TopicCarousel({items, className}: TopicCarouselProps) {
         </Carousel>
     );
 }
+

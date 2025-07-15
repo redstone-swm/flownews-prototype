@@ -4,7 +4,7 @@ export interface Event {
     description?: string;
     imageUrl?: string;
     eventTime: string;
-    relatedLinks?: string;
+    relatedLinks?: string[];
 }
 
 export interface TopicDetails {
@@ -13,6 +13,7 @@ export interface TopicDetails {
     description?: string;
     imageUrl: string;
     events: Event[];
+    recommendTopics: TopicSummary[];
 }
 
 export interface TopicSummary {

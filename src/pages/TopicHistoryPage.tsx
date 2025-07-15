@@ -2,6 +2,7 @@
 import {useEffect, useState} from "react";
 import {useParams, useNavigate} from "@tanstack/react-router";
 import {useTopicDetails} from "@/hooks/useTopicDetails.tsx";
+import {useTopicHistoryRecord} from "@/hooks/useTopicHistoryRecord";
 import {
     Carousel,
     type CarouselApi,
@@ -11,71 +12,104 @@ import {
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {motion, AnimatePresence} from "framer-motion";
 import NavbarOverlayLayout from "@/layouts/NavbarOverlayLayout.tsx";
-import EventItem from "@/components/topic/timeline/EventItem.tsx";
-import TopicIntro from "@/components/topic/timeline/TopicIntro.tsx";
-import TopicOutro from "@/components/topic/timeline/TopicOutro.tsx";
+import TopicTimelineCarousel from "@/components/topic/timeline/TopicTimelineCarousel.tsx";
+import TopicTimelineIndicator from "@/components/topic/timeline/TopicTimelineIndicator.tsx";
 
-const recommendedTopics = [
-    {
-        topicId: 6,
-        title: "AI 혁명",
-        subtitle: "인공지능이 바꾸는 세상",
-        imageUrl: "https://picsum.photos/400/300?random=1",
-    },
-    {
-        topicId: 2,
-        title: "기후 변화",
-        subtitle: "지구를 위한 행동",
-        imageUrl: "https://picsum.photos/400/300?random=2",
-    },
-    {
-        topicId: 3,
-        title: "우주 탐사",
-        subtitle: "새로운 세계를 향해",
-        imageUrl: "https://picsum.photos/400/300?random=3",
-    },
-    {
-        topicId: 4,
-        title: "바이오 기술",
-        subtitle: "생명과학의 미래",
-        imageUrl: "https://picsum.photos/400/300?random=4",
-    },
-];
 
 export default function TopicHistoryPage() {
     const {topicId} = useParams({from: "/topics/$topicId/"});
     const {data, isLoading, error} = useTopicDetails(Number(topicId));
+    const historyRecordMutation = useTopicHistoryRecord();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hApi, setHApi] = useState<CarouselApi>(); // 가로 Carousel API
     const [vApi, setVApi] = useState<CarouselApi>(); // 세로 Carousel API
     const [isTextVisible, setIsTextVisible] = useState(false);
+    const [eventStartTime, setEventStartTime] = useState<number>(Date.now());
 
     const navigate = useNavigate();
 
+    // IP 주소 가져오기 (실제 환경에서는 서버에서 처리하거나 다른 방법 사용)
+    const getClientIP = () => {
+        // 개발 환경에서는 임시로 localhost 사용
+        return "127.0.0.1";
+    };
+
+    // 히스토리 기록 전송 함수
+    const recordEventHistory = (eventId: number | null, direction: 'forward' | 'backward' | 'downward' | 'upward') => {
+        const elapsedTime = Math.floor((Date.now() - eventStartTime) / 1000);
+
+        historyRecordMutation.mutate({
+            topicId: Number(topicId),
+            eventId,
+            ipAddress: getClientIP(),
+            elapsedTime,
+            direction
+        });
+    };
+
+
     useEffect(() => {
         if (!hApi) return;
-        hApi.on("select", () => {
-            setCurrentIndex(hApi.selectedScrollSnap());
+        if (!data) return;
+
+        const handleSelect = () => {
+            const newIndex = hApi.selectedScrollSnap();
+            const oldIndex = currentIndex;
+
+            // 이전 이벤트 기록 전송 (intro가 아닌 경우만)
+            if (oldIndex > 0 && oldIndex <= data?.events.length) {
+                const eventId = data.events[oldIndex - 1].id;
+                const direction = newIndex > oldIndex ? 'forward' : 'backward';
+                recordEventHistory(eventId, direction);
+            }
+
+            setCurrentIndex(newIndex);
             setIsTextVisible(false);
             setTimeout(() => setIsTextVisible(true), 200);
-        });
-    }, [hApi]);
+
+            // 새로운 이벤트 시작 시간 기록
+            setEventStartTime(Date.now());
+        };
+
+        hApi.on("select", handleSelect);
+
+        // cleanup 함수로 이전 리스너 제거
+        return () => {
+            hApi.off("select", handleSelect);
+        };
+    }, [hApi, currentIndex, data]);
 
     /* ------------- 세로 Carousel(페이지 전환용) select 감지 & redirect ------------- */
     useEffect(() => {
         if (!vApi) return;
-        vApi.on("select", () => {
+        if (!data) return;
+
+        const handleSelect = () => {
             const idx = vApi.selectedScrollSnap();
             // 아래로 스와이프해 idx 1에 도달하면 페이지 이동
             if (idx === 1) {
+                if (currentIndex > 0 && currentIndex <= data?.events.length) {
+                    const eventId = data.events[currentIndex - 1].id;
+                    recordEventHistory(eventId, 'downward');
+                } else if (currentIndex === 0) {
+                    recordEventHistory(null, 'downward');
+                }
+
                 setTimeout(() => navigate({
                     to: "/topics/$topicId",
-                    params: {topicId: String(recommendedTopics[0]?.topicId)}
+                    params: {topicId: String(data?.recommendTopics[0].id)}
                 }), 300);
             }
-        });
-    }, [vApi, navigate]);
+        };
+
+        vApi.on("select", handleSelect);
+
+        // cleanup 함수로 이전 리스너 제거
+        return () => {
+            vApi.off("select", handleSelect);
+        };
+    }, [vApi, navigate, currentIndex, data]);
 
     useEffect(() => {
         const timer = setTimeout(() => setIsTextVisible(true), 300);
@@ -90,12 +124,33 @@ export default function TopicHistoryPage() {
         );
     }
 
+
     const events = data.events;
     const currentEvent = events[currentIndex - 1];
     const totalItems = events.length + 2; // Intro + events + Outro
 
-    const goToPrevious = () => hApi?.scrollPrev();
-    const goToNext = () => hApi?.scrollNext();
+    const goToPrevious = () => {
+        if (hApi) {
+            hApi.scrollPrev();
+        }
+    };
+
+    const goToNext = () => {
+        if (hApi) {
+            hApi.scrollNext();
+        }
+    };
+
+    // 키보드 이벤트 핸들러
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === "ArrowLeft") {
+            goToPrevious();
+        }
+        if (e.key === "ArrowRight") {
+            goToNext();
+        }
+    };
+
 
     return (
         <NavbarOverlayLayout>
@@ -145,20 +200,10 @@ export default function TopicHistoryPage() {
 
                 <div className="relative z-20 h-full flex flex-col">
                     {/* 페이지 indicator 점 */}
-                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-                        <div className="flex space-x-2">
-                            {Array.from({length: totalItems}).map((_, index) => (
-                                <motion.div
-                                    key={index}
-                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                                        index === currentIndex ? "bg-white" : "bg-white/30"
-                                    }`}
-                                    initial={{scale: 0.8}}
-                                    animate={{scale: index === currentIndex ? 1.2 : 0.8}}
-                                />
-                            ))}
-                        </div>
-                    </div>
+                    <TopicTimelineIndicator
+                        totalItems={totalItems}
+                        currentIndex={currentIndex}
+                    />
 
                     {/* 좌우 화살표 */}
                     {currentIndex !== totalItems - 1 && (
@@ -192,45 +237,14 @@ export default function TopicHistoryPage() {
                             >
                                 <CarouselContent className="-mt-0 h-screen">
                                     <CarouselItem className="pt-0">
-                                        <Carousel
-                                            opts={{align: "center", loop: false}}
-                                            setApi={setHApi}
-                                        >
-                                            <CarouselContent>
-                                                {/* Intro */}
-                                                <CarouselItem key="topic-intro">
-                                                    <AnimatePresence>
-                                                        <TopicIntro
-                                                            topic={data}
-                                                            isActive={currentIndex === 0}
-                                                            isTextVisible={isTextVisible}
-                                                        />
-                                                    </AnimatePresence>
-                                                </CarouselItem>
-                                                {/* Events */}
-                                                {events.map((event, index) => (
-                                                    <CarouselItem key={event.id}>
-                                                        <AnimatePresence>
-                                                            <EventItem
-                                                                event={event}
-                                                                isActive={index === currentIndex - 1}
-                                                                isTextVisible={isTextVisible}
-                                                            />
-                                                        </AnimatePresence>
-                                                    </CarouselItem>
-                                                ))}
-                                                {/* Outro */}
-                                                <CarouselItem key="topic-outro">
-                                                    <AnimatePresence>
-                                                        <TopicOutro
-                                                            recommendedTopics={recommendedTopics}
-                                                            isActive={currentIndex === totalItems - 1}
-                                                            isTextVisible={isTextVisible}
-                                                        />
-                                                    </AnimatePresence>
-                                                </CarouselItem>
-                                            </CarouselContent>
-                                        </Carousel>
+                                        <TopicTimelineCarousel
+                                            data={data}
+                                            events={events}
+                                            currentIndex={currentIndex}
+                                            totalItems={totalItems}
+                                            isTextVisible={isTextVisible}
+                                            setHApi={setHApi}
+                                        />
                                     </CarouselItem>
 
                                     {/* --- 빈 슬라이드: 아래로 스와이프 시 '/topics'로 이동 --- */}
@@ -251,10 +265,7 @@ export default function TopicHistoryPage() {
 
                 <div
                     className="absolute inset-0 z-0"
-                    onKeyDown={(e) => {
-                        if (e.key === "ArrowLeft") goToPrevious();
-                        if (e.key === "ArrowRight") goToNext();
-                    }}
+                    onKeyDown={handleKeyDown}
                     tabIndex={0}
                 />
             </div>
