@@ -241,7 +241,7 @@ export default function TopicHistoryPage() {
                                     <CarouselItem className="pt-0">
                                         <div className="w-screen h-screen flex justify-center mt-5">
                                             <div className="text-center">
-                                                <p className="text-lg text-gray-600 ">
+                                                <p className="text-lg text-white/40 ">
                                                     아래로 스와이프하여 다음 토픽 보기
                                                 </p>
                                             </div>
