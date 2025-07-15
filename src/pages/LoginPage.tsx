@@ -1,6 +1,5 @@
 import {Button} from "@/components/ui/button";
 import {useAuth} from "@/contexts/AuthContext.tsx";
-import NavbarLayout from "@/layouts/NavbarLayout.tsx";
 
 export default function LoginPage() {
     const {isAuthenticated} = useAuth();

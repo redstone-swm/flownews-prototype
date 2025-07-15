@@ -5,7 +5,7 @@ import {useMainTopics} from "@/hooks/useMainTopics.tsx";
 import TopicSuggestionBanner from "@/components/feedback/TopicSuggestionBanner.tsx";
 
 export default function MainPage() {
-    const {data, isLoading, error} = useMainTopics();
+    const {data, isLoading} = useMainTopics();
     const sections = data?.sections || [];
 
     if (isLoading || sections.length === 0) {
