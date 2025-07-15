@@ -2,7 +2,7 @@
 import {motion} from "framer-motion";
 import {useEffect, useState} from "react";
 import TopicCard from "@/components/topic/TopicCard.tsx";
-import TimelineFeedbackModal from "@/components/topic/timeline/TimelineFeedbackModal.tsx";
+import TimelineFeedbackModal from "@/components/feedback/TimelineFeedbackModal.tsx";
 import {useParams} from "@tanstack/react-router";
 import type {TopicSummary} from "@/types/topic.ts";
 

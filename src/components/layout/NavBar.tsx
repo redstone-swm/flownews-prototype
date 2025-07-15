@@ -1,18 +1,19 @@
-import {Link} from "@tanstack/react-router";
+import {Link, useRouter} from "@tanstack/react-router";
 import NavbarAvatar from "@/components/layout/NavbarAvatar.tsx";
+import {ThemeToggle} from "@/components/ui/theme-toggle";
 
 interface NavBarProps {
     variant?: 'default' | 'transparent-fixed';
 }
 
 export default function NavBar({variant = 'default'}: NavBarProps) {
+    const router = useRouter();
+    const currentPath = router.state.location.pathname;
+    const isTopicPage = /^\/topics\/[^\/]+$/.test(currentPath);
+
     const headerClasses = variant === 'transparent-fixed'
         ? "w-full h-14 bg-transparent backdrop-blur-sm fixed top-0 z-50 border-b border-white/10"
         : "w-full h-14 bg-primary-foreground sticky top-0 z-50 border-b border-gray";
-
-    const textClasses = variant === 'transparent-fixed'
-        ? "text-white"
-        : "";
 
     return (
         <header className={headerClasses}>
@@ -42,7 +43,8 @@ export default function NavBar({variant = 'default'}: NavBarProps) {
                     {/*    />*/}
                     {/*</div>*/}
                 </div>
-                <div className={`flex items-center justify-center`}>
+                <div className={`flex items-center justify-center gap-3`}>
+                    {!isTopicPage && <ThemeToggle/>}
                     <NavbarAvatar/>
                 </div>
             </div>

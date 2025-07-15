@@ -1,6 +1,6 @@
 import {useMutation} from '@tanstack/react-query';
-import {submitTimelineFeedback} from '@/api/topicApi';
 import type {TimelineFeedbackRequest} from '@/types/topic';
+import {submitTimelineFeedback} from "@/api/submitTimelineFeedback.tsx";
 
 interface UseTimelineFeedbackMutationOptions {
     onSuccess?: () => void;

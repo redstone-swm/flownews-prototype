@@ -1,9 +1,9 @@
 import axiosInstance from './axiosInstance';
 import type {
     TopicDetails,
+    TopicMainData,
     TopicSubscribeRequest,
-    TimelineFeedbackRequest,
-    TopicMainData
+    TopicSuggestionFeedbackRequest
 } from "@/types/topic.ts";
 import type {TopicHistoryRecordRequest} from "@/types/TopicHistoryRecord.tsx";
 
@@ -22,10 +22,6 @@ export const subscribeTopic = async (req: TopicSubscribeRequest) => {
     return data;
 }
 
-export const submitTimelineFeedback = async (feedback: TimelineFeedbackRequest) => {
-    const response = await axiosInstance.post(`/logs/feedback`, feedback);
-    return response.data;
-};
 
 export const postTopicHistory = async (req: TopicHistoryRecordRequest) => {
     const {data} = await axiosInstance.post(`/topics/${req.topicId}/read`, req);

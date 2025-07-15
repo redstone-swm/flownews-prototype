@@ -69,7 +69,7 @@ export default function TopicCard({
                         ) : (
                             <>
                                 <p className="text-2xl font-bold text-opacity-80 truncate">{title}</p>
-                                <p className="text-sm text-gray-500/80 truncate">{description}</p>
+                                <p className="text-sm text-gray-500/80 -mt-0.5 truncate">{description}</p>
                             </>
                         )}
                     </div>
