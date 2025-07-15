@@ -9,7 +9,7 @@ import {
     CarouselContent,
     CarouselItem,
 } from "@/components/ui/carousel.tsx";
-import {ChevronLeft, ChevronRight} from "lucide-react";
+import {NavigationArrows} from "@/components/topic/timeline/NavigationArrows.tsx";
 import {motion, AnimatePresence} from "framer-motion";
 import NavbarOverlayLayout from "@/layouts/NavbarOverlayLayout.tsx";
 import TopicTimelineCarousel from "@/components/topic/timeline/TopicTimelineCarousel.tsx";
@@ -206,22 +206,12 @@ export default function TopicHistoryPage() {
                     />
 
                     {/* 좌우 화살표 */}
-                    {currentIndex !== totalItems - 1 && (
-                        <button
-                            onClick={goToNext}
-                            className="absolute right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 text-white"
-                        >
-                            <ChevronRight size={24}/>
-                        </button>
-                    )}
-                    {currentIndex !== 0 && (
-                        <button
-                            onClick={goToPrevious}
-                            className="absolute left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/5 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 text-white"
-                        >
-                            <ChevronLeft size={24}/>
-                        </button>
-                    )}
+                    <NavigationArrows
+                        currentIndex={currentIndex}
+                        totalItems={totalItems}
+                        onNext={goToNext}
+                        onPrevious={goToPrevious}
+                    />
 
                     {/* ---------------- 세로 Carousel ---------------- */}
                     <div className="flex-1 flex items-center justify-center px-4">

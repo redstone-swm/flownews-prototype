@@ -47,10 +47,10 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                         y: isTextVisible ? 0 : -20
                     }}
                     transition={{duration: 0.3, delay: 0.05}}
-                    className="text-center mb-12"
+                    className="text-center mb-8"
                 >
                     <h2
-                        className="text-3xl lg:text-4xl text-white font-light mb-4"
+                        className="text-3xl lg:text-4xl text-white font-light"
                         style={{letterSpacing: '0.4em'}}
                     >
                         추천 토픽
@@ -69,7 +69,7 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                     transition={{duration: 0.4, delay: 0.1}}
                     className="w-full"
                 >
-                    <div className="grid grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                         {recommendedTopics.slice(0, 3).map((topic, index) => (
                             <motion.div
                                 key={topic.id}
