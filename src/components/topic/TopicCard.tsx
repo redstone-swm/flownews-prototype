@@ -51,11 +51,11 @@ export default function TopicCard({
                     imageLoaded &&
                     <>
                         <div
-                            className="rounded-lg absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/70 to-transparent z-10"/>
+                            className="rounded-lg absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-black/70 to-transparent z-10"/>
 
                         <div className="w-2/3 absolute bottom-2 right-2 z-20 text-right">
-                            <p className="text-4xl font-bold text-white/90">{title}</p>
-                            <p className="text-md text-white/70 -mt-0.5 truncate">{description}</p>
+                            <p className="text-2xl md:text-4xl font-bold text-white/95 leading-none">{title}</p>
+                            <p className="text-sm md:text-md text-white/70 truncate">{description}</p>
                         </div>
                     </>
 
@@ -68,8 +68,8 @@ export default function TopicCard({
                             </>
                         ) : (
                             <>
-                                <p className="text-2xl font-bold text-opacity-80 truncate">{title}</p>
-                                <p className="text-sm text-gray-500/80 -mt-0.5 truncate">{description}</p>
+                                <p className="text-xl md:text-4xl font-bold text-opacity-80 truncate">{title}</p>
+                                <p className="text-sm md:text-md text-gray-500/80 -mt-0.5 truncate">{description}</p>
                             </>
                         )}
                     </div>

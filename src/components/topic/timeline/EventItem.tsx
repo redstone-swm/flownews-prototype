@@ -43,17 +43,17 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                     y: isTextVisible ? 0 : -20
                 }}
                 transition={{duration: 0.3, delay: 0.05}}
-                className="text-center mb-8"
+                className="text-center mb-4"
             >
                 <h2
-                    className="text-3xl lg:text-4xl text-white font-light"
+                    className="text-2xl lg:text-4xl text-white font-light"
                     style={{letterSpacing: '0.4em'}}
                 >
                     {formatEventDate(event.eventTime)}
                 </h2>
             </motion.div>
 
-            <div className="flex flex-col lg:flex-row gap-8 items-center justify-center max-w-6xl w-full">
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-center max-w-6xl w-full">
                 <motion.div
                     initial={{opacity: 0, x: -60}}
                     animate={{opacity: 1, x: 0}}
@@ -66,7 +66,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                                 <img
                                     src={event.imageUrl}
                                     alt={event.title}
-                                    className="w-full h-[300px] lg:h-[500px] lg:w-[500px] object-cover"
+                                    className="w-full h-[200px] lg:h-[500px] lg:w-[500px] object-cover"
                                 />
                                 <div
                                     className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"/>
@@ -91,7 +91,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                             y: isTextVisible ? 0 : 20
                         }}
                         transition={{duration: 0.3, delay: 0.1}}
-                        className=""
+                        className="mb-1"
                     >
                         <h1 className="text-4xl lg:text-5xl font-bold text-white">
                             {event.title}
@@ -107,7 +107,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                             }}
                             transition={{duration: 0.3, delay: 0.15}}
                         >
-                            <p className="text-lg lg:text-xl text-white/90 font-light leading-tight">
+                            <p className="text-lg lg:text-xl text-white/90 font-light ">
                                 {event.description}
                             </p>
                         </motion.div>

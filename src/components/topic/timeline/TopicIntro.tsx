@@ -34,8 +34,8 @@ export default function TopicIntro({topic, isActive, isTextVisible}: TopicIntrod
                     className="text-center mb-4"
                 >
                     <h2
-                        className="text-3xl lg:text-4xl text-white font-bold"
-                        style={{letterSpacing: '0.4em'}}
+                        className="text-3xl lg:text-4xl text-white font-bold "
+                        style={{letterSpacing: '0.2em'}}
                     >
                         {topic.title}
                     </h2>
@@ -49,9 +49,8 @@ export default function TopicIntro({topic, isActive, isTextVisible}: TopicIntrod
                             y: isTextVisible ? 0 : 20
                         }}
                         transition={{duration: 0.3, delay: 0.15}}
-                        className="mb-8"
                     >
-                        <p className="text-center text-lg lg:text-xl text-white/90 font-extralight tracking-widest">
+                        <p className="text-center text-lg lg:text-xl text-white/90 font-light tracking-widest ">
                             {topic.description}
                         </p>
                     </motion.div>
@@ -65,7 +64,7 @@ export default function TopicIntro({topic, isActive, isTextVisible}: TopicIntrod
                         y: isTextVisible ? 0 : 20
                     }}
                     transition={{duration: 0.3, delay: 0.25}}
-                    className="text-center mt-8"
+                    className="text-center mt-4"
                 >
                     <div className="flex flex-col items-center justify-center  text-white/60">
                         <div className="flex items-center space-x-2">
