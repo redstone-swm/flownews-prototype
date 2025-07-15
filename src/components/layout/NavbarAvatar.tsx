@@ -1,12 +1,14 @@
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {LogOut} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
-import {Link} from "@tanstack/react-router";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
+import {useState} from "react";
+import LoginModal from "@/components/auth/LoginModal.tsx";
 
 export default function NavbarAvatar() {
     const {user, isAuthenticated, isLoading, logout} = useAuth();
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -44,12 +46,19 @@ export default function NavbarAvatar() {
                     </PopoverContent>
                 </Popover>
             ) : (
-                <Link to="/auth/login">
-                    <Button variant="outline" className="rounded-full">
-                        로그인
-                    </Button>
-                </Link>
+                <Button
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={() => setIsLoginModalOpen(true)}
+                >
+                    로그인
+                </Button>
             )}
+
+            <LoginModal
+                open={isLoginModalOpen}
+                onOpenChange={setIsLoginModalOpen}
+            />
         </>
     )
 }
