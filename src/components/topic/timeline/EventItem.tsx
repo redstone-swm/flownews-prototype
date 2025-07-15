@@ -73,7 +73,7 @@ export default function EventItem({event, isActive, isTextVisible}: EventItemPro
                             </div>
                         )}
                         <div className=" text-gray-500/20 mt-2 text-xs">
-                            해당 이미지는 이해를 돕기 위해 생성된 것으로, 해당 사건과 직접적인 연관이 없습니다.
+                            본 이미지는 이해를 돕기 위한 이미지로, 실제 사건과 직접적인 관련이 없을 수 있습니다.
                         </div>
                     </div>
                 </motion.div>
