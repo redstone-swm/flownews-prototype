@@ -64,13 +64,14 @@ export default function TimelineFeedbackModal({open, onOpenChange, topicId}: Tim
                 </DialogHeader>
                 <DialogFooter className="items-center">
                     <Button
+                        variant="default_feedback"
                         onClick={() => handleFeedback(5)}
                         disabled={feedbackMutation.isPending}
                     >
                         네!
                     </Button>
                     <Button
-                        variant="destructive"
+                        variant="destructive_feedback"
                         onClick={() => handleFeedback(0)}
                         disabled={feedbackMutation.isPending}
                     >
