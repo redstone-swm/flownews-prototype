@@ -1,5 +1,5 @@
 import {Card, CardContent} from "@/components/ui/card.tsx";
-import {Lightbulb, ChevronRight} from "lucide-react";
+import {ChevronRight} from "lucide-react";
 import {useState} from "react";
 import {TopicSuggestionModal} from "./TopicSuggestionModal.tsx";
 
