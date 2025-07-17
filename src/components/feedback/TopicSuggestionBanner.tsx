@@ -27,9 +27,9 @@ export default function TopicSuggestionBanner() {
                         </p>
 
                         <div
-                            className="flex text-blue-600 dark:text-blue-400 font-medium hover:text-blue-700 dark:hover:text-blue-300 transition-colors">
+                            className="inline-flex leading-none items-center text-blue-600 dark:text-blue-400 font-medium">
                             <ChevronRight className="w-4 h-4 mr-1"/>
-                            클릭하여 제안하기
+                            <span className="relative top-[1px]">클릭하여 제안하기</span>
                         </div>
 
                     </div>

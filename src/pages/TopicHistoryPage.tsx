@@ -119,7 +119,6 @@ export default function TopicHistoryPage() {
     if (isLoading || !data || error) {
         return (
             <div className="w-full h-screen bg-black flex items-center justify-center">
-                <div className="text-white text-xl">Loading...</div>
             </div>
         );
     }
