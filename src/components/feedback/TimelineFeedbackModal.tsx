@@ -62,7 +62,7 @@ export default function TimelineFeedbackModal({open, onOpenChange, topicId}: Tim
                         여러분들의 의견을 남겨주세요.
                     </DialogDescription>
                 </DialogHeader>
-                <DialogFooter>
+                <DialogFooter className="items-center">
                     <Button
                         onClick={() => handleFeedback(5)}
                         disabled={feedbackMutation.isPending}
@@ -74,7 +74,7 @@ export default function TimelineFeedbackModal({open, onOpenChange, topicId}: Tim
                         onClick={() => handleFeedback(0)}
                         disabled={feedbackMutation.isPending}
                     >
-                        아니요..
+                        아니요
                     </Button>
                 </DialogFooter>
             </DialogContent>
