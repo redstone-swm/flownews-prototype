@@ -37,7 +37,7 @@ export default function TopicHistoryPage() {
 
     // 히스토리 기록 전송 함수
     const recordEventHistory = (eventId: number | null, direction: 'forward' | 'backward' | 'downward' | 'upward') => {
-        const elapsedTime = Math.floor((Date.now() - eventStartTime) / 1000);
+        const elapsedTime = (Date.now() - eventStartTime);
 
         historyRecordMutation.mutate({
             topicId: Number(topicId),

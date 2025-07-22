@@ -9,6 +9,6 @@ export interface TopicHistoryRecordRequest {
     topicId: number;
     eventId: number | null; // 표지만 보고 넘긴 경우 null
     ipAddress: string;
-    elapsedTime: number; // in seconds
+    elapsedTime: number; // in milliseconds
     direction: 'forward' | 'backward' | 'downward' | 'upward';
 }
