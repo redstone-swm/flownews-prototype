@@ -18,6 +18,7 @@ export default function MainPage() {
                 <section>
                     <TopicMainCarousel items={sections[0].topics}/>
                 </section>
+                <TopicSuggestionBanner/>
                 {
                     sections.slice(1).map((section, index) => (
                         <>
@@ -25,8 +26,6 @@ export default function MainPage() {
                                 <h2 className="text-2xl font-bold mb-2">{section.title}</h2>
                                 <TopicCarousel items={section.topics}/>
                             </section>
-                            {index === 0 &&
-                                <TopicSuggestionBanner/>}
                         </>
                     ))
                 }
