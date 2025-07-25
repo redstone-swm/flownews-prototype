@@ -16,6 +16,7 @@ import TopicTimelineCarousel from "@/components/topic/timeline/TopicTimelineCaro
 import TopicTimelineIndicator from "@/components/topic/timeline/TopicTimelineIndicator.tsx";
 import { TopicSuggestionModal } from "@/components/feedback/TopicSuggestionModal";
 import { useTopicSuggestionModal } from "@/hooks/useTopicSuggestionModal";
+import TimelineFeedbackModal from "@/components/feedback/TimelineFeedbackModal";
 
 
 export default function TopicHistoryPage() {
@@ -28,6 +29,7 @@ export default function TopicHistoryPage() {
     const [vApi, setVApi] = useState<CarouselApi>(); // 세로 Carousel API
     const [isTextVisible, setIsTextVisible] = useState(false);
     const [eventStartTime, setEventStartTime] = useState<number>(Date.now());
+    const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
     const {
         showSuggestionModal,
@@ -127,6 +129,16 @@ export default function TopicHistoryPage() {
         const timer = setTimeout(() => setIsTextVisible(true), 300);
         return () => clearTimeout(timer);
     }, []);
+
+    useEffect(() => {
+        if (!data) return;
+
+        const feedbackModalShown = localStorage.getItem("feedbackModalShown");
+        if (!feedbackModalShown && currentIndex >= Math.ceil(data.events.length * (2 / 3))) {
+            setShowFeedbackModal(true);
+            localStorage.setItem("feedbackModalShown", "true");
+        }
+    }, [currentIndex, data]);
 
     if (isLoading || !data || error) {
         return (
@@ -277,6 +289,12 @@ export default function TopicHistoryPage() {
                     onOpenChange={(open) => {
                         if (!open) resetDownSwipeCount();
                     }}
+                />
+
+                <TimelineFeedbackModal
+                    open={showFeedbackModal}
+                    onOpenChange={setShowFeedbackModal}
+                    topicId={Number(topicId)}
                 />
             </div>
         </NavbarOverlayLayout>
