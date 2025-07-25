@@ -14,6 +14,8 @@ import {motion, AnimatePresence} from "framer-motion";
 import NavbarOverlayLayout from "@/layouts/NavbarOverlayLayout.tsx";
 import TopicTimelineCarousel from "@/components/topic/timeline/TopicTimelineCarousel.tsx";
 import TopicTimelineIndicator from "@/components/topic/timeline/TopicTimelineIndicator.tsx";
+import { TopicSuggestionModal } from "@/components/feedback/TopicSuggestionModal";
+import { useTopicSuggestionModal } from "@/hooks/useTopicSuggestionModal";
 
 
 export default function TopicHistoryPage() {
@@ -26,6 +28,12 @@ export default function TopicHistoryPage() {
     const [vApi, setVApi] = useState<CarouselApi>(); // 세로 Carousel API
     const [isTextVisible, setIsTextVisible] = useState(false);
     const [eventStartTime, setEventStartTime] = useState<number>(Date.now());
+
+    const {
+        showSuggestionModal,
+        increaseDownSwipeCount,
+        resetDownSwipeCount
+    } = useTopicSuggestionModal();
 
     const navigate = useNavigate();
 
@@ -54,6 +62,8 @@ export default function TopicHistoryPage() {
         if (!data) return;
 
         const handleSelect = () => {
+            resetDownSwipeCount();
+
             const newIndex = hApi.selectedScrollSnap();
             const oldIndex = currentIndex;
 
@@ -78,7 +88,7 @@ export default function TopicHistoryPage() {
         return () => {
             hApi.off("select", handleSelect);
         };
-    }, [hApi, currentIndex, data]);
+    }, [hApi, currentIndex, data, resetDownSwipeCount]);
 
     /* ------------- 세로 Carousel(페이지 전환용) select 감지 & redirect ------------- */
     useEffect(() => {
@@ -89,6 +99,8 @@ export default function TopicHistoryPage() {
             const idx = vApi.selectedScrollSnap();
             // 아래로 스와이프해 idx 1에 도달하면 페이지 이동
             if (idx === 1) {
+                increaseDownSwipeCount();
+
                 if (currentIndex > 0 && currentIndex <= data?.events.length) {
                     const eventId = data.events[currentIndex - 1].id;
                     recordEventHistory(eventId, 'downward');
@@ -109,7 +121,7 @@ export default function TopicHistoryPage() {
         return () => {
             vApi.off("select", handleSelect);
         };
-    }, [vApi, navigate, currentIndex, data]);
+    }, [vApi, navigate, currentIndex, data, increaseDownSwipeCount]);
 
     useEffect(() => {
         const timer = setTimeout(() => setIsTextVisible(true), 300);
@@ -129,12 +141,14 @@ export default function TopicHistoryPage() {
     const totalItems = events.length + 2; // Intro + events + Outro
 
     const goToPrevious = () => {
+        resetDownSwipeCount();
         if (hApi) {
             hApi.scrollPrev();
         }
     };
 
     const goToNext = () => {
+        resetDownSwipeCount();
         if (hApi) {
             hApi.scrollNext();
         }
@@ -256,6 +270,13 @@ export default function TopicHistoryPage() {
                     className="absolute inset-0 z-0"
                     onKeyDown={handleKeyDown}
                     tabIndex={0}
+                />
+
+                <TopicSuggestionModal
+                    open={showSuggestionModal}
+                    onOpenChange={(open) => {
+                        if (!open) resetDownSwipeCount();
+                    }}
                 />
             </div>
         </NavbarOverlayLayout>
