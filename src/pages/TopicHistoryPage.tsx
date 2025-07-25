@@ -87,15 +87,35 @@ export default function TopicHistoryPage() {
 
         const handleSelect = () => {
             const idx = vApi.selectedScrollSnap();
-            // 아래로 스와이프해 idx 1에 도달하면 페이지 이동
-            if (idx === 1) {
+
+            // 위로 스와이프해 idx 0에 도달하면 이전 토픽으로 이동
+            if (idx === 0) {
+                if (currentIndex > 0 && currentIndex <= data?.events.length) {
+                    const eventId = data.events[currentIndex - 1].id;
+                    recordEventHistory(eventId, 'upward');
+                } else if (currentIndex === 0) {
+                    recordEventHistory(null, 'upward');
+                }
+                const previousTopicId = localStorage.getItem("previousTopicId");
+                if (previousTopicId) {
+                    setTimeout(() => navigate({
+                        to: "/topics/$topicId",
+                        params: {topicId: String(previousTopicId)}
+                    }), 300);
+                } else {
+                    setTimeout(() => navigate({to: "/"}), 300);
+                }
+            }
+
+            // 아래로 스와이프해 idx 2에 도달하면 페이지 이동
+            if (idx === 2) {
                 if (currentIndex > 0 && currentIndex <= data?.events.length) {
                     const eventId = data.events[currentIndex - 1].id;
                     recordEventHistory(eventId, 'downward');
                 } else if (currentIndex === 0) {
                     recordEventHistory(null, 'downward');
                 }
-
+                localStorage.setItem("previousTopicId", String(topicId));
                 setTimeout(() => navigate({
                     to: "/topics/$topicId",
                     params: {topicId: String(data?.recommendTopics[0].id)}
@@ -218,13 +238,25 @@ export default function TopicHistoryPage() {
                             <Carousel
                                 opts={{
                                     axis: "y",
-                                    align: "start", loop: false
+                                    align: "start", loop: false,
+                                    startIndex: 1
                                 }}
                                 orientation="vertical"
                                 className="h-screen"
                                 setApi={setVApi}
                             >
                                 <CarouselContent className="-mt-0 h-screen">
+                                    {/* --- 0번째 슬라이드: 위로 스와이프 시 이전 토픽으로 이동 --- */}
+                                    <CarouselItem className="pt-0">
+                                        <div className="w-screen h-screen flex justify-center items-end pb-20">
+                                            <div className="text-center">
+                                                <p className="text-lg text-white/40">
+                                                    위로 스와이프하여 이전 토픽 보기
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </CarouselItem>
+
                                     <CarouselItem className="pt-0">
                                         <TopicTimelineCarousel
                                             data={data}
