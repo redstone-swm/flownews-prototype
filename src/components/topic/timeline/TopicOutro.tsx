@@ -1,9 +1,6 @@
 // src/components/topic/timeline/TopicOutro.tsx
 import {motion} from "framer-motion";
-import {useEffect, useState} from "react";
 import TopicCard from "@/components/topic/TopicCard.tsx";
-import TimelineFeedbackModal from "@/components/feedback/TimelineFeedbackModal.tsx";
-import {useParams} from "@tanstack/react-router";
 import type {TopicSummary} from "@/types/topic.ts";
 
 interface TopicOutroProps {
@@ -13,22 +10,6 @@ interface TopicOutroProps {
 }
 
 export default function TopicOutro({recommendedTopics, isActive, isTextVisible}: TopicOutroProps) {
-    const [isFeedbackModalOpen, setisFeedbackModalOpen] = useState(false);
-    const topicId = useParams({
-        from: '/topics/$topicId/',
-        select: (params) => params.topicId ? Number(params.topicId) : 0,
-    })
-
-    useEffect(() => {
-        if (isActive) {
-            const feedbackModalShown = localStorage.getItem('feedbackModalShown');
-            if (!feedbackModalShown) {
-                setisFeedbackModalOpen(true);
-                localStorage.setItem('feedbackModalShown', 'true');
-            }
-        }
-    }, [isActive]);
-
     if (!isActive) return null;
 
     return (
@@ -92,12 +73,6 @@ export default function TopicOutro({recommendedTopics, isActive, isTextVisible}:
                     </div>
                 </motion.div>
             </div>
-
-            <TimelineFeedbackModal
-                open={isFeedbackModalOpen}
-                onOpenChange={setisFeedbackModalOpen}
-                topicId={topicId}
-            />
         </motion.div>
     );
 }

@@ -16,12 +16,14 @@ interface TimelineFeedbackModalProps {
     topicId: number;
 }
 
-export default function TimelineFeedbackModal({open, onOpenChange, topicId}: TimelineFeedbackModalProps) {
+export default function TimelineFeedbackModal({ open, onOpenChange, topicId }: TimelineFeedbackModalProps) {
     const [ipAddress, setIpAddress] = useState<string>("");
+    const [feedbackContent, setFeedbackContent] = useState<string>("");
+    const [showInput, setShowInput] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchIpAddress = async () => {
-            const response = await fetch('https://api.ipify.org?format=json');
+            const response = await fetch("https://api.ipify.org?format=json");
             const data = await response.json();
             setIpAddress(data.ip);
         };
@@ -35,17 +37,16 @@ export default function TimelineFeedbackModal({open, onOpenChange, topicId}: Tim
         },
         onError: () => {
             onOpenChange(false);
-        }
+        },
     });
-
 
     const handleFeedback = async (score: number | null) => {
         feedbackMutation.mutate({
             topicId,
             ipAddress,
             time: new Date().toISOString(),
-            content: null,
-            score
+            content: score === 0 ? feedbackContent : null, // "아니요"일 경우 content 포함
+            score,
         });
     };
 
@@ -63,20 +64,43 @@ export default function TimelineFeedbackModal({open, onOpenChange, topicId}: Tim
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="items-center">
-                    <Button
-                        variant="default_feedback"
-                        onClick={() => handleFeedback(5)}
-                        disabled={feedbackMutation.isPending}
-                    >
-                        네!
-                    </Button>
-                    <Button
-                        variant="destructive_feedback"
-                        onClick={() => handleFeedback(0)}
-                        disabled={feedbackMutation.isPending}
-                    >
-                        아니요
-                    </Button>
+                    {!showInput ? ( // "아니요"를 누르기 전
+                        <>
+                            <Button
+                                variant="default_feedback"
+                                onClick={() => handleFeedback(5)}
+                                disabled={feedbackMutation.isPending}
+                            >
+                                네!
+                            </Button>
+                            <Button
+                                variant="destructive_feedback"
+                                onClick={() => setShowInput(true)} // "아니요"를 누르면 input 표시
+                                disabled={feedbackMutation.isPending}
+                            >
+                                아니요
+                            </Button>
+                        </>
+                    ) : ( // "아니요"를 누른 후
+                        <div className="w-full">
+                            <input
+                                type="text"
+                                placeholder="어떤 점이 안 좋았는지 알려주세요."
+                                value={feedbackContent}
+                                onChange={(e) => setFeedbackContent(e.target.value)}
+                                className="mt-2 w-full border rounded p-2"
+                                disabled={feedbackMutation.isPending}
+                            />
+                            <Button
+                                variant="default_feedback"
+                                onClick={() => handleFeedback(0)}
+                                disabled={feedbackMutation.isPending || !feedbackContent.trim()}
+                                className="mt-2"
+                            >
+                                제출하기
+                            </Button>
+                        </div>
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>
