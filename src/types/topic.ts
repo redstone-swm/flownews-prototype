@@ -19,7 +19,7 @@ export interface TopicDetails {
 export interface TopicSummary {
     id: number;
     title: string;
-    description?: string;
+    description: string;
     imageUrl: string;
 }
 
