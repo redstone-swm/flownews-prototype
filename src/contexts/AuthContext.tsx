@@ -1,8 +1,7 @@
 import {createContext, useContext, useState, useEffect, type ReactNode} from 'react';
-import {useUserMe} from '@/hooks/useUserMe';
 import type User from "@/types/user.ts";
 import {storage} from "@/lib/stoarge.ts";
-
+import {useGetCurrentUser} from "@/api/user-query-api/user-query-api.ts";
 
 interface AuthContextType {
     user: User | null;
@@ -22,13 +21,29 @@ interface AuthProviderProps {
 export function AuthProvider({children}: AuthProviderProps) {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [token, setToken] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadAccessToken = async () => {
+            const token = await storage.get('accessToken');
+            setToken(token);
+            setLoading(false);
+        }
+
+        loadAccessToken();
+    }, []);
 
     const {
         data: userData,
         isLoading: isUserLoading,
         error,
         refetch: refetchUser,
-    } = useUserMe();
+    } = useGetCurrentUser({
+        query: {
+            enabled: !loading && !!token,
+        }
+    });
 
     const isAuthenticated = !!user;
 

@@ -6,9 +6,15 @@ import {useGetAllTopics} from "@/api/topic-list-query-api/topic-list-query-api.t
 import type {TopicSectionListQueryResponse} from "@/api/models";
 
 
-
 export default function MainPage() {
-    const { data, isLoading } = useGetAllTopics();
+    const {data, isLoading} = useGetAllTopics({
+        request: {
+            params: {for: 'main'}
+        },
+        query: {
+            queryKey: ['/topics', 'main']
+        }
+    });
     const isTopicSectionList = data && 'sections' in data;
     const sections = isTopicSectionList ? (data as TopicSectionListQueryResponse).sections : [];
 
