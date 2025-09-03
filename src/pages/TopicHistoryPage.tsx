@@ -1,8 +1,8 @@
 // src/pages/TopicHistoryPage.tsx
 import {useEffect, useState} from "react";
 import {useParams, useNavigate} from "@tanstack/react-router";
-import {useTopicDetails} from "@/hooks/useTopicDetails.tsx";
-import {useTopicHistoryRecord} from "@/hooks/useTopicHistoryRecord";
+import {useGetTopicDetails} from "@/api/topic-details-query-api/topic-details-query-api.ts";
+import {useRecordTopicHistory} from "@/api/topic-history-record-api/topic-history-record-api.ts";
 import {
     Carousel,
     type CarouselApi,
@@ -21,8 +21,8 @@ import TimelineFeedbackModal from "@/components/feedback/TimelineFeedbackModal";
 
 export default function TopicHistoryPage() {
     const {topicId} = useParams({from: "/topics/$topicId/"});
-    const {data, isLoading, error} = useTopicDetails(Number(topicId));
-    const historyRecordMutation = useTopicHistoryRecord();
+    const {data, isLoading, error} = useGetTopicDetails(Number(topicId));
+    const historyRecordMutation = useRecordTopicHistory();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hApi, setHApi] = useState<CarouselApi>(); // 가로 Carousel API
@@ -51,10 +51,13 @@ export default function TopicHistoryPage() {
 
         historyRecordMutation.mutate({
             topicId: Number(topicId),
-            eventId,
-            ipAddress: getClientIP(),
-            elapsedTime,
-            direction
+            data: {
+                topicId: Number(topicId),
+                eventId: eventId ?? undefined,
+                ipAddress: getClientIP(),
+                elapsedTime,
+                direction
+            }
         });
     };
 

@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios, { type AxiosRequestConfig } from 'axios'
 import {storage} from "@/lib/stoarge.ts";
 
-const axiosInstance = axios.create({
+const instance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     timeout: 5000,
     headers: {
@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
     withCredentials: true,
 });
 
-axiosInstance.interceptors.request.use(
+instance.interceptors.request.use(
     async (config) => {
         const token = await storage.get('accessToken');
         if (token) {
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-axiosInstance.interceptors.response.use(
+instance.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
@@ -35,4 +35,22 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-export default axiosInstance;
+// Orval mutator function
+export const axiosInstance = <T = any>(
+  config: AxiosRequestConfig,
+  options?: AxiosRequestConfig,
+): Promise<T> => {
+  const source = axios.CancelToken.source();
+  const promise = instance({ ...config, ...options, cancelToken: source.token }).then(
+    ({ data }) => data,
+  );
+
+  // @ts-ignore
+  promise.cancel = () => {
+    source.cancel('Query was cancelled');
+  };
+
+  return promise;
+};
+
+export default instance;

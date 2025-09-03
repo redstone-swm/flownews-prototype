@@ -1,12 +1,22 @@
 import TopicCarousel from "@/components/topic/TopicCarousel.tsx";
 import TopicMainCarousel from "@/components/topic/TopicMainCarousel.tsx";
 import NavbarLayout from "@/layouts/NavbarLayout.tsx";
-import {useMainTopics} from "@/hooks/useMainTopics.tsx";
 import TopicSuggestionBanner from "@/components/feedback/TopicSuggestionBanner.tsx";
+import {useGetAllTopics} from "@/api/topic-list-query-api/topic-list-query-api.ts";
+import type {TopicSectionListQueryResponse} from "@/api/models";
+
 
 export default function MainPage() {
-    const {data, isLoading} = useMainTopics();
-    const sections = data?.sections || [];
+    const {data, isLoading} = useGetAllTopics({
+        request: {
+            params: {for: 'main'}
+        },
+        query: {
+            queryKey: ['/topics', 'main']
+        }
+    });
+    const isTopicSectionList = data && 'sections' in data;
+    const sections = isTopicSectionList ? (data as TopicSectionListQueryResponse).sections : [];
 
     if (isLoading || sections.length === 0) {
         return;

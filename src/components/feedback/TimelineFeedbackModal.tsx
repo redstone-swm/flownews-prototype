@@ -7,8 +7,8 @@ import {
     DialogFooter
 } from '@/components/ui/dialog.tsx'
 import {Button} from "@/components/ui/button.tsx";
-import {useTimelineFeedbackMutation} from "@/hooks/useTimelineFeedbackMutation.ts";
 import {useEffect, useState} from "react";
+import {useAppendEventLog} from "@/api/user-event-log-api/user-event-log-api.ts";
 
 interface TimelineFeedbackModalProps {
     open: boolean;
@@ -16,7 +16,7 @@ interface TimelineFeedbackModalProps {
     topicId: number;
 }
 
-export default function TimelineFeedbackModal({ open, onOpenChange, topicId }: TimelineFeedbackModalProps) {
+export default function TimelineFeedbackModal({open, onOpenChange, topicId}: TimelineFeedbackModalProps) {
     const [ipAddress, setIpAddress] = useState<string>("");
     const [feedbackContent, setFeedbackContent] = useState<string>("");
     const [showInput, setShowInput] = useState<boolean>(false);
@@ -31,22 +31,27 @@ export default function TimelineFeedbackModal({ open, onOpenChange, topicId }: T
         fetchIpAddress();
     }, []);
 
-    const feedbackMutation = useTimelineFeedbackMutation({
-        onSuccess: () => {
-            onOpenChange(false);
-        },
-        onError: () => {
-            onOpenChange(false);
-        },
+    const feedbackMutation = useAppendEventLog({
+        mutation: {
+            onSuccess: () => {
+                onOpenChange(false);
+            },
+            onError: () => {
+                onOpenChange(false);
+            },
+        }
     });
 
     const handleFeedback = async (score: number | null) => {
         feedbackMutation.mutate({
-            topicId,
-            ipAddress,
-            time: new Date().toISOString(),
-            content: score === 0 ? feedbackContent : null, // "아니요"일 경우 content 포함
-            score,
+            eventType: 'feedback',
+            data: {
+                topicId,
+                ipAddress,
+                time: new Date().toISOString(),
+                content: score === 0 ? feedbackContent : null, // "아니요"일 경우 content 포함
+                score,
+            }
         });
     };
 

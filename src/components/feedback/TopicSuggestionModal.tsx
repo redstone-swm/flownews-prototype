@@ -9,7 +9,7 @@ import {
 } from '../ui/dialog.tsx';
 import {Button} from '../ui/button.tsx';
 import {Input} from '../ui/input.tsx';
-import {useTopicSuggestionFeedbackMutation} from "@/hooks/useTopicSuggestionFeedbackMutation.ts";
+import {useAppendEventLog} from "@/api/user-event-log-api/user-event-log-api.ts";
 
 interface TopicSuggestionModalProps {
     open: boolean;
@@ -31,18 +31,21 @@ export const TopicSuggestionModal = ({open, onOpenChange}: TopicSuggestionModalP
         fetchIpAddress();
     }, []);
 
-    const feedbackMutation = useTopicSuggestionFeedbackMutation({
-        onSuccess: () => {
-            setTopicSuggestion("");
-            onOpenChange(false);
-            setShowThankYouModal(true);
-        },
-        onError: () => {
-            setTopicSuggestion("");
-            onOpenChange(false);
-            setShowThankYouModal(true);
+    const feedbackMutation = useAppendEventLog({
+        mutation: {
+            onSuccess: () => {
+                setTopicSuggestion("");
+                onOpenChange(false);
+                setShowThankYouModal(true);
+            },
+            onError: () => {
+                setTopicSuggestion("");
+                onOpenChange(false);
+                setShowThankYouModal(true);
+            }
         }
     });
+
 
     const handleSubmit = async (e?: React.FormEvent) => {
         e?.preventDefault();
@@ -50,9 +53,12 @@ export const TopicSuggestionModal = ({open, onOpenChange}: TopicSuggestionModalP
         if (!topicSuggestion.trim()) return;
 
         feedbackMutation.mutate({
-            ipAddress,
-            time: new Date().toISOString(),
-            content: topicSuggestion
+            eventType: 'topic-suggestion',
+            data: {
+                ipAddress,
+                time: new Date().toISOString(),
+                content: topicSuggestion
+            }
         });
     };
 

@@ -42,7 +42,7 @@ export const usePageTracking = () => {
 
         try {
             const url = import.meta.env.VITE_FIRESTORE_URL;
-            const routeApiUrl = `${import.meta.env.VITE_API_URL}/logs/page-route`;
+            const routeApiUrl = `${import.meta.env.VITE_API_BASE_URL}/logs/page-route`;
 
             const data = {
                 fields: {
@@ -60,7 +60,7 @@ export const usePageTracking = () => {
 
             navigator.sendBeacon(url, JSON.stringify(data));
 
-            const blob = new Blob([JSON.stringify(visitData)], { type: 'application/json' });
+            const blob = new Blob([JSON.stringify(visitData)], {type: 'application/json'});
             navigator.sendBeacon(routeApiUrl, blob);
             // console.log('Page visit data sent via sendBeacon:', visitData);
         } catch (error) {
