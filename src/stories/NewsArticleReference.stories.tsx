@@ -51,7 +51,7 @@ export const DifferentColors: Story = {
     source: "조선일보",
     date: "2025.02.15",
     title: "다양한 색상의 소스 배지",
-    onArticleClick: () => console.log("색상 테스트 기사가 클릭되었습니다"),
+    link: "https://example.com/news/colors",
   },
   decorators: [
     (_) => (
@@ -84,9 +84,9 @@ export const DifferentColors: Story = {
 export const ResponsiveDemo: Story = {
   args: {
     source: "연합뉴스",
-    date: "2025.01.01",
+    date: "2025.01.01", 
     title: "반응형 테스트 기사",
-    onArticleClick: () => console.log("반응형 기사가 클릭되었습니다"),
+    link: "https://example.com/news/responsive",
   },
   decorators: [
     (Story) => (
