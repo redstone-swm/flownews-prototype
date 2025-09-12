@@ -8,7 +8,6 @@
 export * from './appendEventLogBody';
 export * from './eventSummaryResponse';
 export * from './getAllTopics200';
-export * from './getCurrentUser200';
 export * from './pushMessageSendRequest';
 export * from './sendPushMessageByTopic200';
 export * from './subscribeTopic200';
