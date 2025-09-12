@@ -23,9 +23,7 @@ type Story = StoryObj<typeof meta>
 const defaultReactions: ReactionsProps = {
   heartCount: 1000,
   angryCount: 1000,
-  sadCount: 1000,
   activeReaction: null,
-  isBookmarked: false,
 }
 
 export const Default: Story = {
@@ -51,11 +49,11 @@ export const WithActiveHeart: Story = {
   decorators: Default.decorators,
 }
 
-export const WithBookmark: Story = {
+export const WithActiveAngry: Story = {
   args: {
     reactions: {
       ...defaultReactions,
-      isBookmarked: true,
+      activeReaction: "angry",
     },
   },
   decorators: Default.decorators,
@@ -66,9 +64,7 @@ export const LargeNumbers: Story = {
     reactions: {
       heartCount: 25300,
       angryCount: 8750,
-      sadCount: 15200,
       activeReaction: "heart",
-      isBookmarked: true,
     },
   },
   decorators: Default.decorators,
@@ -79,9 +75,7 @@ export const SmallNumbers: Story = {
     reactions: {
       heartCount: 42,
       angryCount: 7,
-      sadCount: 15,
       activeReaction: null,
-      isBookmarked: false,
     },
   },
   decorators: Default.decorators,
@@ -92,9 +86,7 @@ export const ZeroCounts: Story = {
     reactions: {
       heartCount: 0,
       angryCount: 0,
-      sadCount: 0,
       activeReaction: null,
-      isBookmarked: false,
     },
   },
   decorators: Default.decorators,

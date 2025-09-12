@@ -39,9 +39,7 @@ export const Default: Story = {
     reactions: {
       heartCount: 1000,
       angryCount: 1000,
-      sadCount: 1000,
       activeReaction: null,
-      isBookmarked: false,
     },
     showTimeline: true,
   },
@@ -71,9 +69,7 @@ export const WithActiveReaction: Story = {
     reactions: {
       heartCount: 2500,
       angryCount: 850,
-      sadCount: 1200,
       activeReaction: "heart",
-      isBookmarked: true,
     },
     showTimeline: true,
   },
@@ -113,9 +109,7 @@ export const MultipleArticles: Story = {
     reactions: {
       heartCount: 5200,
       angryCount: 123,
-      sadCount: 456,
       activeReaction: "heart",
-      isBookmarked: false,
     },
     showTimeline: true,
   },
@@ -139,9 +133,7 @@ export const LargeNumbers: Story = {
     reactions: {
       heartCount: 25300,
       angryCount: 8750,
-      sadCount: 15200,
       activeReaction: "angry",
-      isBookmarked: true,
     },
     showTimeline: true,
   },
@@ -165,9 +157,7 @@ export const SmallNumbers: Story = {
     reactions: {
       heartCount: 42,
       angryCount: 7,
-      sadCount: 15,
       activeReaction: null,
-      isBookmarked: false,
     },
     showTimeline: true,
   },
@@ -196,7 +186,6 @@ export const Timeline: Story = {
             reactions={{
               heartCount: 2100,
               angryCount: 150,
-              sadCount: 300,
               activeReaction: "heart",
             }}
           />
@@ -225,7 +214,6 @@ export const Timeline: Story = {
             reactions={{
               heartCount: 1500,
               angryCount: 800,
-              sadCount: 200,
             }}
           />
           <EventItem
@@ -244,8 +232,6 @@ export const Timeline: Story = {
             reactions={{
               heartCount: 3200,
               angryCount: 450,
-              sadCount: 100,
-              isBookmarked: true,
             }}
           />
         </div>
