@@ -16,7 +16,7 @@ export function NewsArticleReference({
                                          source,
                                          date,
                                          title,
-                                         sourceBgColor = "bg-gray-700",
+                                         sourceBgColor = "bg-zinc-700",
                                          link,
                                      }: NewsArticleReferenceProps) {
     return (
@@ -25,39 +25,55 @@ export function NewsArticleReference({
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-                "block w-full max-w-sm sm:max-w-md lg:max-w-lg",
-                "cursor-pointer transition-transform duration-200 hover:scale-[1.01] active:scale-[0.99]",
-                "no-underline",
+                "block w-full",
+                "cursor-pointer transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]",
+                "no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-xl",
                 className
             )}
+            aria-label={`${source} - ${title}`}
         >
             <div
                 className={cn(
-                    "bg-gray-50 border border-gray-300 rounded-xl hover:bg-gray-100",
-                    "focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
-                    "px-3 py-2 sm:px-4 sm:py-3"
+                    "bg-zinc-50 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-xl ",
+                    "hover:bg-zinc-100 dark:hover:bg-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500",
+                    "hover:shadow-sm transition-all duration-200",
+                    "px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-4"
                 )}
             >
                 {/* 상단: 소스 배지 / 날짜 */}
-                <div className="flex items-center gap-2 text-xs sm:text-[13px]">
-          <span className={cn("inline-flex items-center rounded-md text-white px-2 py-[2px] font-semibold", sourceBgColor)}>
-            {source}
-          </span>
-                    <span className="text-gray-700 font-normal">{date}</span>
-                </div>
+                <header className="flex items-center gap-2 text-xs sm:text-sm">
+                    <span 
+                        className={cn(
+                            "inline-flex items-center rounded-md text-white px-2 py-1 font-semibold",
+                            "text-xs leading-none",
+                            sourceBgColor
+                        )}
+                    >
+                        {source}
+                    </span>
+                    <time 
+                        className="text-zinc-600 dark:text-zinc-400 font-normal"
+                        dateTime={date}
+                    >
+                        {date}
+                    </time>
+                </header>
 
                 {/* 하단: 기사 제목 */}
-                <div className="mt-1 sm:mt-2 grid grid-cols-[1fr_auto] items-center gap-2">
-                    <p
+                <div className="mt-2 sm:mt-3 grid grid-cols-[1fr_auto] items-start gap-3">
+                    <h4
                         className={cn(
-                            "text-sm sm:text-base font-medium text-black",
-                            "truncate"
+                            "text-sm sm:text-base md:text-lg font-medium text-zinc-900 dark:text-zinc-100",
+                            "line-clamp-2 leading-snug"
                         )}
                         title={title}
                     >
                         {title}
-                    </p>
-                    <ChevronRight className="size-4 sm:size-5 text-gray-700 stroke-[2px] shrink-0"/>
+                    </h4>
+                    <ChevronRight 
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-600 dark:text-zinc-400 stroke-2 shrink-0 mt-0.5" 
+                        aria-hidden="true"
+                    />
                 </div>
             </div>
         </a>
