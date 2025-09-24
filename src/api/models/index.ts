@@ -6,9 +6,11 @@
  */
 
 export * from './appendEventLogBody';
+export * from './articleResponse';
 export * from './eventSummaryResponse';
 export * from './getAllTopics200';
 export * from './pushMessageSendRequest';
+export * from './reactionSummaryResponse';
 export * from './sendPushMessageByTopic200';
 export * from './subscribeTopic200';
 export * from './topicDetailsResponse';

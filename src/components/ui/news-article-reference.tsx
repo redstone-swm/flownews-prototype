@@ -1,36 +1,26 @@
 import {ChevronRight} from "lucide-react";
 import {cn} from "@/lib/utils";
-import * as React from "react";
+import type {ArticleResponse} from "@/api/models";
 
-export interface NewsArticleReferenceProps
-    extends React.HTMLAttributes<HTMLDivElement> {
-    source?: string;
-    date?: string;
-    title?: string;
-    sourceBgColor?: string;
-    link: string;
+export interface NewsArticleReferenceProps {
+    article: ArticleResponse;
 }
 
 export function NewsArticleReference({
-                                         className,
-                                         source,
-                                         date,
-                                         title,
-                                         sourceBgColor = "bg-zinc-700",
-                                         link,
+                                         article,
                                      }: NewsArticleReferenceProps) {
     return (
         <a
-            href={link}
+            href={article.url}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
                 "block w-full",
                 "cursor-pointer transition-all duration-200 hover:scale-[1.01] active:scale-[0.99]",
                 "no-underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-xl",
-                className
+                // className
             )}
-            aria-label={`${source} - ${title}`}
+            aria-label={`${article.source} - ${article.title}`}
         >
             <div
                 className={cn(
@@ -42,21 +32,21 @@ export function NewsArticleReference({
             >
                 {/* 상단: 소스 배지 / 날짜 */}
                 <header className="flex items-center gap-2 text-xs sm:text-sm">
-                    <span 
+                    <span
                         className={cn(
-                            "inline-flex items-center rounded-md text-white px-2 py-1 font-semibold",
+                            "inline-flex items-center rounded-md  px-2 py-1 font-semibold",
                             "text-xs leading-none",
-                            sourceBgColor
+                            // sourceBgColor
                         )}
                     >
-                        {source}
+                        {article.source}
                     </span>
-                    <time 
-                        className="text-zinc-600 dark:text-zinc-400 font-normal"
-                        dateTime={date}
-                    >
-                        {date}
-                    </time>
+                    {/*<time*/}
+                    {/*    className="text-zinc-600 dark:text-zinc-400 font-normal"*/}
+                    {/*    dateTime={article.time}*/}
+                    {/*>*/}
+                    {/*    {article.time}*/}
+                    {/*</time>*/}
                 </header>
 
                 {/* 하단: 기사 제목 */}
@@ -66,12 +56,12 @@ export function NewsArticleReference({
                             "text-sm sm:text-base md:text-lg font-medium text-zinc-900 dark:text-zinc-100",
                             "line-clamp-2 leading-snug"
                         )}
-                        title={title}
+                        title={article.title}
                     >
-                        {title}
+                        {article.title}
                     </h4>
-                    <ChevronRight 
-                        className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-600 dark:text-zinc-400 stroke-2 shrink-0 mt-0.5" 
+                    <ChevronRight
+                        className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-600 dark:text-zinc-400 stroke-2 shrink-0 mt-0.5"
                         aria-hidden="true"
                     />
                 </div>

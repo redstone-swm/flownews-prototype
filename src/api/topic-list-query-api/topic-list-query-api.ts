@@ -20,7 +20,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  GetAllTopics200
+  TopicSummaryResponse
 } from '.././models';
 
 import { axiosInstance } from '.././axiosInstance';
@@ -36,7 +36,7 @@ export const getAllTopics = (
 ) => {
       
       
-      return axiosInstance<GetAllTopics200>(
+      return axiosInstance<TopicSummaryResponse[]>(
       {url: `/topics`, method: 'GET', signal
     },
       options);
