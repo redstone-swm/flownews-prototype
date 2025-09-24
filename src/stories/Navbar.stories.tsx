@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type {Meta, StoryObj} from "@storybook/react";
 import '../styles.css'
 import NavBar from "@/components/layout/NavBar";
 
 const meta = {
-  title: "Sijeom/NavBar",
-  component: NavBar,
-  parameters: {
-    layout: "fullscreen",
-  },
-  tags: ["autodocs"],
+    title: "Sijeom/NavBar",
+    component: NavBar,
+    parameters: {
+        layout: "fullscreen",
+    },
+    tags: ["autodocs"],
 } satisfies Meta<typeof NavBar>;
 
 export default meta;
@@ -16,7 +16,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    variant: "default",
-  },
+    args: {
+        variant: "default",
+    },
 };
