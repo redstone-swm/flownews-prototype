@@ -1,10 +1,15 @@
 import NavbarLayout from "@/layouts/NavbarLayout.tsx";
 import {useGetUserEventFeed} from "@/api/event-feed/event-feed.ts";
-import {EventFeed} from "@/components/ui";
+import {EventFeed, PullToRefresh} from "@/components/ui";
 
 
 export default function MainPage() {
-    const {data, isLoading} = useGetUserEventFeed();
+    const {data, isLoading, refetch} = useGetUserEventFeed();
+
+    const handleRefresh = async () => {
+        await refetch();
+    };
+
     if (isLoading || !data) {
         return (<>Loading...</>);
     }
@@ -12,9 +17,11 @@ export default function MainPage() {
     console.log(data)
     return (
         <NavbarLayout>
-            {data.map((e) => (
-                <EventFeed eventSummary={e}/>
-            ))}
+            <PullToRefresh onRefresh={handleRefresh}>
+                {data.map((e) => (
+                    <EventFeed key={e.id || Math.random()} eventSummary={e}/>
+                ))}
+            </PullToRefresh>
         </NavbarLayout>
     );
 }
