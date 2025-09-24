@@ -24,12 +24,12 @@ export default function NavBar({variant = 'default'}: NavBarProps) {
                         <img
                             src="/logo.png"
                             alt="logo"
-                            className={`h-6 w-auto object-contain ${variant === 'transparent-fixed' ? 'hidden' : 'dark:hidden'}`}
+                            className={`h-12 w-auto object-contain ${variant === 'transparent-fixed' ? 'hidden' : 'dark:hidden'}`}
                         />
                         <img
                             src="/logo-dark.png"
                             alt="logo dark"
-                            className={`h-6 w-auto object-contain ${variant === 'transparent-fixed' ? 'block' : 'hidden dark:block'}`}
+                            className={`h-12 w-auto object-contain ${variant === 'transparent-fixed' ? 'block' : 'hidden dark:block'}`}
                         />
                     </Link>
                 </div>

@@ -8,9 +8,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                // sans: ["Pretendard", "sans-serif"]
-                // sans: ["sans-serif"]
-                sans: ["Plus Jakarta Sans", "sans-serif"],
+                sans: ["Pretendard", "ui-sans-serif", "system-ui"],
             },
             borderRadius: {
                 lg: 'var(--radius)',
@@ -63,4 +61,3 @@ export default {
     },
     plugins: [require("tailwindcss-animate")],
 }
-

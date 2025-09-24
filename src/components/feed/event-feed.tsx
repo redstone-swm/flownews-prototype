@@ -1,10 +1,12 @@
 import * as React from "react"
 import {Sparkles} from "lucide-react"
-import {cn} from "@/lib/utils"
+import {cn} from "@/lib/utils.ts"
 import {formatDistanceToNow} from "date-fns"
 import {ko} from "date-fns/locale"
 import type {EventSummaryResponse} from "@/api/models";
 import {NewsArticleReference} from "@/components/ui/news-article-reference.tsx";
+import {Button} from "@/components/ui/button.tsx";
+import {ReactionBar} from "@/components/ui";
 
 export interface EventFeedProps extends React.HTMLAttributes<HTMLDivElement> {
     eventSummary: EventSummaryResponse
@@ -25,28 +27,15 @@ const EventFeed: React.FC<EventFeedProps> = ({
                                                  ...props
                                              }) => {
     return (
-        <article className={cn("relative bg-white", className)} {...props}>
-            {showTimeline && <div className="absolute left-5 top-0 w-0.5 h-full bg-gray-300" aria-hidden="true"/>}
+        <article className={cn("relative ", className)} {...props}>
+            {showTimeline && <div className="absolute left-5 top-0 w-0.5 h-full bg-muted" aria-hidden="true"/>}
 
             <div className="relative pl-10 pr-4 pt-3">
                 {/* Event Header */}
-                <header className="flex items-start justify-between mb-2">
-                    <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-gray-500 mb-1">
-                            {eventSummary.topicTitle}
-                        </h4>
-                        <div className="flex items-center justify-between gap-2">
-                            <h3 className="text-base font-medium text-gray-900 tracking-tight leading-tight mb-1 truncate">
-                                {eventSummary.title}
-                            </h3>
-                            <div className="text-xs text-gray-500 shrink-0">
-                                {formatDistanceToNow(new Date(eventSummary.eventTime), {
-                                    addSuffix: true,
-                                    locale: ko,
-                                })}
-                            </div>
-                        </div>
-                    </div>
+                <header className="flex justify-between items-center mb-2">
+                    <h4 className="text-sm font-medium text-muted-foreground">
+                        {eventSummary.topicTitle}
+                    </h4>
 
                     {/* Right side controls */}
                     <div className="flex items-center gap-2 ml-4 shrink-0">
@@ -57,25 +46,32 @@ const EventFeed: React.FC<EventFeedProps> = ({
                             </div>
                         )}
 
-                        <button
+                        <Button
                             onClick={onFollowToggle}
-                            className={cn(
-                                "px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200",
-                                "border",
-                                isFollowing
-                                    ? "bg-white text-gray-900 border-gray-300 hover:bg-gray-50"
-                                    : "bg-black text-white border-black hover:bg-gray-800"
-                            )}
-                            type="button"
+                            rounded={true}
+                            size={"sm"}
                         >
                             {isFollowing ? "팔로잉" : "팔로우"}
-                        </button>
+                        </Button>
                     </div>
                 </header>
 
+                {/* Event Title and Time */}
+                <div className="flex items-center justify-between gap-2 mb-2">
+                    <h3 className="text-base font-bold tracking-tight leading-tight truncate">
+                        {eventSummary.title}
+                    </h3>
+                    <div className="text-xs text-muted-foreground shrink-0">
+                        {formatDistanceToNow(new Date(eventSummary.eventTime), {
+                            addSuffix: true,
+                            locale: ko,
+                        })}
+                    </div>
+                </div>
+
                 {/* Event Description */}
                 <section className="mb-4">
-                    <p className="text-sm font-medium text-black tracking-tight leading-relaxed line-clamp-2">
+                    <p className="text-sm font-medium tracking-tight leading-relaxed line-clamp-2">
                         {eventSummary.description}
                     </p>
                 </section>
@@ -83,21 +79,36 @@ const EventFeed: React.FC<EventFeedProps> = ({
                 {/* Image container */}
                 {eventSummary.imageUrl && (
                     <section className="mb-4">
-                        <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden">
+                        <div className="aspect-[2/1] rounded-2xl overflow-hidden">
                             <img
                                 src={eventSummary.imageUrl}
                                 alt={eventSummary.title}
                                 className="w-full h-full object-cover"
+                                onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = 'https://placehold.co/600x300/e5e7eb/9ca3af?text=No Image';
+                                }}
                             />
                         </div>
                     </section>
                 )}
 
+                <ReactionBar
+                    className="mb-4"
+                    reactions={
+                        {
+                            heartCount: 10,
+                            angryCount: 15,
+                            activeReaction: null
+                        }
+                    }
+                />
+
                 {/*Articles Section */}
                 {eventSummary.articles.length > 0 && (
                     <section className="mb-4">
                         <ul className="space-y-2">
-                            {eventSummary.articles.map((article, index) => (
+                            {eventSummary.articles.slice(0, 2).map((article, index) => (
                                 <li key={index}>
                                     <NewsArticleReference article={article}/>
                                 </li>
@@ -107,13 +118,6 @@ const EventFeed: React.FC<EventFeedProps> = ({
                 )}
             </div>
 
-            {/* Reaction Bar Footer */}
-            {/*<footer className="pl-5 pr-4">*/}
-            {/*    <ReactionBar*/}
-            {/*        reactions={reactions}*/}
-            {/*        className="border-t border-gray-100"*/}
-            {/*    />*/}
-            {/*</footer>*/}
         </article>
     )
 }
