@@ -18,7 +18,7 @@ export default function NavBar({variant = 'default'}: NavBarProps) {
     return (
         <header className={headerClasses}>
             <div
-                className={`py-4 h-full mx-auto flex gap-4 items-center justify-between ${variant === 'transparent-fixed' ? 'px-4' : 'px-4 max-w-screen-xl'} `}>
+                className={`py-4 h-full mx-auto flex gap-4 items-center justify-between ${variant === 'transparent-fixed' ? 'px-4' : 'px-4 max-w-screen-lg'} `}>
                 <div className="">
                     <Link to="/">
                         <img

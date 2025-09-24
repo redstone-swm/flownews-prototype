@@ -1,6 +1,6 @@
 import * as React from "react"
 import {Heart, Angry, BarChart3, Share} from "lucide-react"
-import {cn, formatCount} from "@/lib/utils"
+import {cn, formatCount} from "@/lib/utils.ts"
 
 export interface ReactionItemProps {
     icon: React.ReactNode

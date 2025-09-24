@@ -1,5 +1,5 @@
 import {ChevronRight} from "lucide-react";
-import {cn} from "@/lib/utils";
+import {cn} from "@/lib/utils.ts";
 import type {ArticleResponse} from "@/api/models";
 import {Badge} from "@/components/ui/badge.tsx";
 

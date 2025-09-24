@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/carousel.tsx";
 import {NavigationArrows} from "@/components/topic/timeline/NavigationArrows.tsx";
 import {motion, AnimatePresence} from "framer-motion";
-import NavbarOverlayLayout from "@/layouts/NavbarOverlayLayout.tsx";
+import NavbarOverlayLayout from "@/components/layout/NavbarOverlayLayout.tsx";
 import TopicTimelineCarousel from "@/components/topic/timeline/TopicTimelineCarousel.tsx";
 import TopicTimelineIndicator from "@/components/topic/timeline/TopicTimelineIndicator.tsx";
-import { TopicSuggestionModal } from "@/components/feedback/TopicSuggestionModal";
-import { useTopicSuggestionModal } from "@/hooks/useTopicSuggestionModal";
+import {TopicSuggestionModal} from "@/components/feedback/TopicSuggestionModal";
+import {useTopicSuggestionModal} from "@/hooks/useTopicSuggestionModal";
 import TimelineFeedbackModal from "@/components/feedback/TimelineFeedbackModal";
 
 

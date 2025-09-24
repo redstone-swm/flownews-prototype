@@ -1,4 +1,4 @@
-import NavbarLayout from "@/layouts/NavbarLayout.tsx";
+import NavbarLayout from "@/components/layout/NavbarLayout.tsx";
 import {useGetUserEventFeed} from "@/api/event-feed/event-feed.ts";
 import {EventFeed, PullToRefresh} from "@/components/ui";
 

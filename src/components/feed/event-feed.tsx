@@ -4,7 +4,7 @@ import {cn} from "@/lib/utils.ts"
 import {formatDistanceToNow} from "date-fns"
 import {ko} from "date-fns/locale"
 import type {EventSummaryResponse} from "@/api/models";
-import {NewsArticleReference} from "@/components/ui/news-article-reference.tsx";
+import {NewsArticleReference} from "@/components/feed/news-article-reference.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {ReactionBar} from "@/components/ui";
 
