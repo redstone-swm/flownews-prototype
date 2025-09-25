@@ -18,8 +18,8 @@ export default function MainPage() {
     return (
         <NavbarLayout>
             <PullToRefresh onRefresh={handleRefresh}>
-                {data.map((e) => (
-                    <EventFeed key={e.id || Math.random()} eventSummary={e}/>
+                {data.eventIds.map((e) => (
+                    <EventFeed key={e || Math.random()} eventId={e}/>
                 ))}
             </PullToRefresh>
         </NavbarLayout>

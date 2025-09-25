@@ -1,58 +1,102 @@
 import * as React from "react"
-import {Sparkles} from "lucide-react"
 import {cn} from "@/lib/utils.ts"
 import {formatDistanceToNow} from "date-fns"
 import {ko} from "date-fns/locale"
-import type {EventSummaryResponse} from "@/api/models";
 import {NewsArticleReference} from "@/components/feed/news-article-reference.tsx";
-import {Button} from "@/components/ui/button.tsx";
+import {TopicFollowButton} from "@/components/feed/topic-follow-button.tsx";
 import {ReactionBar} from "@/components/ui";
+import {Skeleton} from "@/components/ui/skeleton";
+import {useGetEvent} from "@/api/event-query/event-query.ts";
 
-export interface EventFeedProps extends React.HTMLAttributes<HTMLDivElement> {
-    eventSummary: EventSummaryResponse
-    imageUrl?: string
-    isRecommended?: boolean
-    isFollowing?: boolean
-    onFollowToggle?: () => void
-    showTimeline?: boolean
-}
+const EventFeed = ({
+                       eventId,
+                       className,
+                       ...props
+                   }: { eventId: number, className?: string }) => {
+    const {data: eventSummary, isLoading, refetch} = useGetEvent(eventId);
 
-const EventFeed: React.FC<EventFeedProps> = ({
-                                                 className,
-                                                 eventSummary,
-                                                 isRecommended = false,
-                                                 isFollowing = false,
-                                                 onFollowToggle,
-                                                 showTimeline = true,
-                                                 ...props
-                                             }) => {
+    if (isLoading || !eventSummary) {
+        return (
+            <article className={cn("relative ", className)} {...props}>
+                <div className="absolute left-5 top-0 w-0.5 h-full bg-muted" aria-hidden="true"/>
+
+                <div className="relative pl-10 pr-4 pt-3">
+                    {/* Event Header Skeleton */}
+                    <header className="flex justify-between items-center mb-2">
+                        <Skeleton className="h-4 w-20"/>
+                        <Skeleton className="h-8 w-16 rounded-full"/>
+                    </header>
+
+                    {/* Event Title and Time Skeleton */}
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                        <Skeleton className="h-6 w-3/4"/>
+                        <Skeleton className="h-3 w-16"/>
+                    </div>
+
+                    {/* Event Description Skeleton */}
+                    <section className="mb-4">
+                        <Skeleton className="h-4 w-full mb-2"/>
+                        <Skeleton className="h-4 w-4/5"/>
+                    </section>
+
+                    {/* Image Skeleton */}
+                    <section className="mb-4">
+                        <Skeleton className="aspect-[2/1] w-full rounded-2xl"/>
+                    </section>
+
+                    {/*/!* Reaction Bar Skeleton *!/*/}
+                    {/*<div className="flex items-center gap-2 mb-4">*/}
+                    {/*    <Skeleton className="h-8 w-12 rounded-full"/>*/}
+                    {/*    <Skeleton className="h-8 w-12 rounded-full"/>*/}
+                    {/*    <Skeleton className="h-8 w-12 rounded-full"/>*/}
+                    {/*    <Skeleton className="h-8 w-12 rounded-full"/>*/}
+                    {/*</div>*/}
+
+                    {/* Articles Section Skeleton */}
+                    <section className="mb-4">
+                        <Skeleton className="h-5 w-24 mb-3"/>
+                        <div className="space-y-3">
+                            <div className="flex gap-3">
+                                <div className="flex-1 space-y-2">
+                                    <Skeleton className="h-4 w-full"/>
+                                    <Skeleton className="h-4 w-3/4"/>
+                                    <Skeleton className="h-3 w-1/2"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </article>
+        );
+    }
+
     return (
         <article className={cn("relative ", className)} {...props}>
-            {showTimeline && <div className="absolute left-5 top-0 w-0.5 h-full bg-muted" aria-hidden="true"/>}
+            <div className="absolute left-5 top-0 w-0.5 h-full bg-muted" aria-hidden="true"/>
 
             <div className="relative pl-10 pr-4 pt-3">
                 {/* Event Header */}
                 <header className="flex justify-between items-center mb-2">
                     <h4 className="text-sm font-medium text-muted-foreground">
-                        {eventSummary.topicTitle}
+                        {eventSummary.topics[0].title}
                     </h4>
 
                     {/* Right side controls */}
                     <div className="flex items-center gap-2 ml-4 shrink-0">
-                        {isRecommended && (
-                            <div className="flex items-center gap-1 text-xs text-gray-600">
-                                <Sparkles className="w-4 h-4"/>
-                                <span className="hidden sm:inline">추천됨</span>
-                            </div>
-                        )}
+                        {/*{isRecommended && (*/}
+                        {/*    <div className="flex items-center gap-1 text-xs text-gray-600">*/}
+                        {/*        <Sparkles className="w-4 h-4"/>*/}
+                        {/*        <span className="hidden sm:inline">추천됨</span>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
 
-                        <Button
-                            onClick={onFollowToggle}
-                            rounded={true}
-                            size={"sm"}
-                        >
-                            {isFollowing ? "팔로잉" : "팔로우"}
-                        </Button>
+                        <TopicFollowButton
+                            topicId={eventSummary.topics[0].id}
+                            isFollowing={eventSummary.topics[0].isFollowing}
+                            onFollowStateChange={() => {
+                                refetch();
+                            }}
+                        />
                     </div>
                 </header>
 
@@ -95,11 +139,11 @@ const EventFeed: React.FC<EventFeedProps> = ({
 
                 <ReactionBar
                     className="mb-4"
-                    reactions={
-                        {
-                            heartCount: 10,
-                            angryCount: 15,
-                            activeReaction: null
+                    reactions={eventSummary.reactions}
+                    eventId={eventSummary.id}
+                    onReactionChange={
+                        () => {
+                            refetch();
                         }
                     }
                 />

@@ -12,6 +12,7 @@ export interface TopicDetailsResponse {
   title: string;
   description: string;
   imageUrl: string;
+  isFollowing: boolean;
   lastReadEvent?: number;
   events: EventSummaryResponse[];
   recommendTopics: TopicSummaryResponse[];

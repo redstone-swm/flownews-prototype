@@ -5,6 +5,4 @@
  * OpenAPI spec version: v1
  */
 
-export interface UserDeviceTokenUpdateRequest {
-  deviceToken: string;
-}
+export type UnsubscribeTopic200 = { [key: string]: unknown };

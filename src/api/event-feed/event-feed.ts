@@ -20,7 +20,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  EventSummaryResponse
+  EventFeedResponse
 } from '.././models';
 
 import { axiosInstance } from '.././axiosInstance';
@@ -31,7 +31,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
- * 인증된 사용자의 개인화된 이벤트 피드를 반환합니다. 현재는 모든 이벤트를 반환하며, 향후 추천 알고리즘이 적용될 예정입니다.
+ * 인증된 사용자의 개인화된 이벤트 피드의 이벤트 ID 목록을 반환합니다. 각 이벤트의 상세 정보는 /events/{id} 엔드포인트로 별도 요청해야 합니다.
  * @summary 사용자별 이벤트 피드 조회
  */
 export const getUserEventFeed = (
@@ -40,7 +40,7 @@ export const getUserEventFeed = (
 ) => {
       
       
-      return axiosInstance<EventSummaryResponse[]>(
+      return axiosInstance<EventFeedResponse>(
       {url: `/events/feed`, method: 'GET', signal
     },
       options);

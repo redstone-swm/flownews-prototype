@@ -4,6 +4,7 @@
  * FlowNews API
  * OpenAPI spec version: v1
  */
+import type { TopicSummaryResponse } from './topicSummaryResponse';
 import type { ArticleResponse } from './articleResponse';
 import type { ReactionSummaryResponse } from './reactionSummaryResponse';
 
@@ -21,8 +22,8 @@ export interface EventSummaryResponse {
   imageUrl: string;
   /** 이벤트 발생 일시 */
   eventTime: string;
-  /** 토픽 제목 */
-  topicTitle?: string;
+  /** 토픽 */
+  topics: TopicSummaryResponse[];
   /** 관련 기사 목록 */
   articles: ArticleResponse[];
   /** 반응 통계 */

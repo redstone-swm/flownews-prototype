@@ -16,6 +16,7 @@ import type {
 
 import type {
   SubscribeTopic200,
+  UnsubscribeTopic200,
   UserDeviceTokenUpdateRequest
 } from '.././models';
 
@@ -26,7 +27,63 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
-export const subscribeTopic = (
+export const unsubscribeTopic = (
+    topicId: number,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<UnsubscribeTopic200>(
+      {url: `/topics/${topicId}/unsubscribe`, method: 'POST', signal
+    },
+      options);
+    }
+  
+
+
+export const getUnsubscribeTopicMutationOptions = <TError = string,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unsubscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof unsubscribeTopic>>, TError,{topicId: number}, TContext> => {
+
+const mutationKey = ['unsubscribeTopic'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unsubscribeTopic>>, {topicId: number}> = (props) => {
+          const {topicId} = props ?? {};
+
+          return  unsubscribeTopic(topicId,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UnsubscribeTopicMutationResult = NonNullable<Awaited<ReturnType<typeof unsubscribeTopic>>>
+    
+    export type UnsubscribeTopicMutationError = string
+
+    export const useUnsubscribeTopic = <TError = string,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unsubscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof unsubscribeTopic>>,
+        TError,
+        {topicId: number},
+        TContext
+      > => {
+
+      const mutationOptions = getUnsubscribeTopicMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    export const subscribeTopic = (
     topicId: number,
     userDeviceTokenUpdateRequest: UserDeviceTokenUpdateRequest,
  options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal

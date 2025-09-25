@@ -7,10 +7,12 @@
 
 export * from './appendEventLogBody';
 export * from './articleResponse';
+export * from './eventFeedResponse';
 export * from './eventSummaryResponse';
 export * from './getAllTopics200';
 export * from './pushMessageSendRequest';
 export * from './reactionSummaryResponse';
+export * from './reactionToggleResponse';
 export * from './sendPushMessageByTopic200';
 export * from './subscribeTopic200';
 export * from './topicDetailsResponse';
@@ -18,5 +20,6 @@ export * from './topicHistoryRecordRequest';
 export * from './topicSectionListItem';
 export * from './topicSectionListQueryResponse';
 export * from './topicSummaryResponse';
+export * from './unsubscribeTopic200';
 export * from './userDeviceTokenUpdateRequest';
 export * from './userQueryResponse';

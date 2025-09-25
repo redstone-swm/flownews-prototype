@@ -5,7 +5,16 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * 반응 통계 응답
+ */
 export interface ReactionSummaryResponse {
+  /** 반응 타입 ID */
+  reactionTypeId: number;
+  /** 반응 타입 이름 */
   reactionTypeName: string;
+  /** 반응 개수 */
   count: number;
+  /** 사용자가 이 반응을 눌렀는지 여부 */
+  isActive: boolean;
 }

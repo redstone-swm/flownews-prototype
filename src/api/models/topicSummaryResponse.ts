@@ -5,9 +5,18 @@
  * OpenAPI spec version: v1
  */
 
+/**
+ * 토픽 요약 정보
+ */
 export interface TopicSummaryResponse {
+  /** 토픽 ID */
   id: number;
+  /** 토픽 제목 */
   title: string;
+  /** 토픽 설명 */
   description: string;
+  /** 토픽 이미지 URL */
   imageUrl: string;
+  /** 사용자가 이 토픽을 팔로우하는지 여부 */
+  isFollowing: boolean;
 }
