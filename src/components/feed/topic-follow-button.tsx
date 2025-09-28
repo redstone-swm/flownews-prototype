@@ -4,20 +4,24 @@ import {Button} from "@/components/ui/button.tsx"
 import {useSubscribeTopic, useUnsubscribeTopic} from "@/api/topic-subscribe-api/topic-subscribe-api"
 import type {UserDeviceTokenUpdateRequest} from "@/api/models"
 import {cn} from "@/lib/utils.ts";
+import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
 
 export interface TopicFollowButtonProps {
     topicId: number
     isFollowing: boolean
     onFollowStateChange?: () => void
     className?: string
+    eventId?: number
 }
 
 export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                                                                         topicId,
                                                                         isFollowing,
                                                                         onFollowStateChange,
-                                                                        className
+                                                                        className,
+                                                                        eventId
                                                                     }) => {
+    const {trackTopicFollowed} = useInteractionTracking();
     const subscribeTopicMutation = useSubscribeTopic({
         mutation: {
             onSuccess: () => {
@@ -43,6 +47,15 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
     const handleFollow = async () => {
         if (isFollowing) {
             return
+        }
+
+        // Track the topic followed interaction
+        if (eventId) {
+            trackTopicFollowed(eventId, JSON.stringify({
+                topicId,
+                action: 'follow',
+                wasFollowing: isFollowing
+            }));
         }
 
         const deviceToken = localStorage.getItem('fcm-device-token') || ''

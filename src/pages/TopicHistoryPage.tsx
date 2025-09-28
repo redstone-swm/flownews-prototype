@@ -17,12 +17,14 @@ import TopicTimelineIndicator from "@/components/topic/timeline/TopicTimelineInd
 import {TopicSuggestionModal} from "@/components/feedback/TopicSuggestionModal";
 import {useTopicSuggestionModal} from "@/hooks/useTopicSuggestionModal";
 import TimelineFeedbackModal from "@/components/feedback/TimelineFeedbackModal";
+import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
 
 
 export default function TopicHistoryPage() {
     const {topicId} = useParams({from: "/topics/$topicId/"});
     const {data, isLoading, error} = useGetTopicDetails(Number(topicId));
     const historyRecordMutation = useRecordTopicHistory();
+    const {trackTopicViewed} = useInteractionTracking();
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const [hApi, setHApi] = useState<CarouselApi>(); // 가로 Carousel API
@@ -79,6 +81,16 @@ export default function TopicHistoryPage() {
                 recordEventHistory(eventId, direction);
             }
 
+            // 새로운 이벤트에 대한 interaction tracking (intro가 아닌 경우만)
+            if (newIndex > 0 && newIndex <= data?.events.length) {
+                const eventId = data.events[newIndex - 1].id;
+                trackTopicViewed(eventId, JSON.stringify({
+                    topicId: Number(topicId),
+                    eventIndex: newIndex,
+                    direction: newIndex > oldIndex ? 'forward' : 'backward'
+                }));
+            }
+
             setCurrentIndex(newIndex);
             setIsTextVisible(false);
             setTimeout(() => setIsTextVisible(true), 200);
@@ -93,7 +105,7 @@ export default function TopicHistoryPage() {
         return () => {
             hApi.off("select", handleSelect);
         };
-    }, [hApi, currentIndex, data, resetDownSwipeCount]);
+    }, [hApi, currentIndex, data, resetDownSwipeCount, trackTopicViewed, topicId]);
 
     /* ------------- 세로 Carousel(페이지 전환용) select 감지 & redirect ------------- */
     useEffect(() => {

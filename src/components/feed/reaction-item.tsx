@@ -48,7 +48,7 @@ const ReactionItem: React.FC<ReactionItemProps> = ({
         <div
             className={cn(
                 "inline-flex items-center gap-1 px-1.5 sm:px-2 py-1 rounded-md",
-                "transition-colors select-none",
+                "transition-colors select-none cursor-pointer",
                 "",
                 isActive && "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400",
                 !isActive && className

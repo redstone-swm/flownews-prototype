@@ -2,19 +2,35 @@ import {ChevronRight} from "lucide-react";
 import {cn} from "@/lib/utils.ts";
 import type {ArticleResponse} from "@/api/models";
 import {Badge} from "@/components/ui/badge.tsx";
+import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
 
 export interface NewsArticleReferenceProps {
     article: ArticleResponse;
+    eventId?: number;
 }
 
 export function NewsArticleReference({
                                          article,
+                                         eventId,
                                      }: NewsArticleReferenceProps) {
+    const {trackArticleClicked} = useInteractionTracking();
+
+    const handleClick = () => {
+        if (eventId) {
+            trackArticleClicked(eventId, JSON.stringify({
+                articleUrl: article.url,
+                articleTitle: article.title,
+                source: article.source
+            }));
+        }
+    };
+
     return (
         <a
             href={article.url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={handleClick}
             className={cn(
                 "block w-full",
                 "bg-muted border",

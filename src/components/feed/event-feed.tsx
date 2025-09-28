@@ -7,6 +7,8 @@ import {TopicFollowButton} from "@/components/feed/topic-follow-button.tsx";
 import {ReactionBar} from "@/components/ui";
 import {Skeleton} from "@/components/ui/skeleton";
 import {useGetEvent} from "@/api/event-query/event-query.ts";
+import {Link} from "@tanstack/react-router";
+import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
 
 const EventFeed = ({
                        eventId,
@@ -14,6 +16,13 @@ const EventFeed = ({
                        ...props
                    }: { eventId: number, className?: string }) => {
     const {data: eventSummary, isLoading, refetch} = useGetEvent(eventId);
+    const {trackViewed, trackTopicViewed, trackTopicFollowed} = useInteractionTracking();
+
+    React.useEffect(() => {
+        if (eventSummary) {
+            trackViewed(eventSummary.id);
+        }
+    }, [eventSummary, trackViewed]);
 
     if (isLoading || !eventSummary) {
         return (
@@ -77,9 +86,14 @@ const EventFeed = ({
             <div className="relative pl-10 pr-4 pt-3">
                 {/* Event Header */}
                 <header className="flex justify-between items-center mb-2">
-                    <h4 className="text-sm font-medium text-muted-foreground">
-                        {eventSummary.topics[0].title}
-                    </h4>
+                    <Link 
+                        to={`/topics/${eventSummary.topics[0].id}`}
+                        onClick={() => trackTopicViewed(eventSummary.id)}
+                    >
+                        <h4 className="text-sm font-medium text-muted-foreground">
+                            {eventSummary.topics[0].title}
+                        </h4>
+                    </Link>
 
                     {/* Right side controls */}
                     <div className="flex items-center gap-2 ml-4 shrink-0">
@@ -93,6 +107,7 @@ const EventFeed = ({
                         <TopicFollowButton
                             topicId={eventSummary.topics[0].id}
                             isFollowing={eventSummary.topics[0].isFollowing}
+                            eventId={eventSummary.id}
                             onFollowStateChange={() => {
                                 refetch();
                             }}
@@ -154,7 +169,10 @@ const EventFeed = ({
                         <ul className="space-y-2">
                             {eventSummary.articles.slice(0, 2).map((article, index) => (
                                 <li key={index}>
-                                    <NewsArticleReference article={article}/>
+                                    <NewsArticleReference 
+                                        article={article} 
+                                        eventId={eventSummary.id}
+                                    />
                                 </li>
                             ))}
                         </ul>
