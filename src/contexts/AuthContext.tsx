@@ -61,6 +61,13 @@ export function AuthProvider({children}: AuthProviderProps) {
         if (userData) {
             setUser(userData);
             console.log(userData);
+            
+            // 프로필 완성 여부 체크 - profile-complete 페이지가 아닌 경우만
+            if (userData.isProfileComplete === false && 
+                !window.location.pathname.includes('/auth/profile-complete')) {
+                window.location.href = '/auth/profile-complete';
+                return;
+            }
         } else if (error) {
             console.error('사용자 정보를 가져오는데 실패했습니다:', error);
             // 토큰이 유효하지 않으면 삭제
@@ -73,6 +80,8 @@ export function AuthProvider({children}: AuthProviderProps) {
 
     const login = async (token: string) => {
         await storage.set('accessToken', token);
+        
+        // 사용자 정보를 조회하여 프로필 완성 여부를 확인
         refetchUser();
         window.location.href = '/';
     };

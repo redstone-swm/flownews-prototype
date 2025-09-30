@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthProfileCompleteImport } from './routes/auth/profile-complete'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthCallbackImport } from './routes/auth/callback'
 import { Route as TopicsTopicIdIndexImport } from './routes/topics/$topicId/index'
@@ -22,6 +23,12 @@ import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topi
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthProfileCompleteRoute = AuthProfileCompleteImport.update({
+  id: '/auth/profile-complete',
+  path: '/auth/profile-complete',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -76,6 +83,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginImport
       parentRoute: typeof rootRoute
     }
+    '/auth/profile-complete': {
+      id: '/auth/profile-complete'
+      path: '/auth/profile-complete'
+      fullPath: '/auth/profile-complete'
+      preLoaderRoute: typeof AuthProfileCompleteImport
+      parentRoute: typeof rootRoute
+    }
     '/topics/$topicId/': {
       id: '/topics/$topicId/'
       path: '/topics/$topicId'
@@ -99,6 +113,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -107,6 +122,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -116,6 +132,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/topics/$topicId/': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -126,6 +143,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/callback'
     | '/auth/login'
+    | '/auth/profile-complete'
     | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
@@ -133,6 +151,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/callback'
     | '/auth/login'
+    | '/auth/profile-complete'
     | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   id:
@@ -140,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth/callback'
     | '/auth/login'
+    | '/auth/profile-complete'
     | '/topics/$topicId/'
     | '/topics/$topicId/events/$eventId'
   fileRoutesById: FileRoutesById
@@ -149,6 +169,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthProfileCompleteRoute: typeof AuthProfileCompleteRoute
   TopicsTopicIdIndexRoute: typeof TopicsTopicIdIndexRoute
   TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -157,6 +178,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthProfileCompleteRoute: AuthProfileCompleteRoute,
   TopicsTopicIdIndexRoute: TopicsTopicIdIndexRoute,
   TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
 }
@@ -174,6 +196,7 @@ export const routeTree = rootRoute
         "/",
         "/auth/callback",
         "/auth/login",
+        "/auth/profile-complete",
         "/topics/$topicId/",
         "/topics/$topicId/events/$eventId"
       ]
@@ -186,6 +209,9 @@ export const routeTree = rootRoute
     },
     "/auth/login": {
       "filePath": "auth/login.tsx"
+    },
+    "/auth/profile-complete": {
+      "filePath": "auth/profile-complete.tsx"
     },
     "/topics/$topicId/": {
       "filePath": "topics/$topicId/index.tsx"

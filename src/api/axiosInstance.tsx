@@ -1,5 +1,6 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import {storage} from "@/lib/stoarge.ts";
+import { isTokenExpired } from "@/lib/jwt-utils.ts";
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,

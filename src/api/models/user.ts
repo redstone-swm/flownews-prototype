@@ -19,7 +19,9 @@ export interface User {
   deviceToken?: string;
   birthDate?: string;
   gender?: UserGender;
+  isProfileComplete: boolean;
   createdAt: string;
   modifiedAt: string;
   bookmarks: Bookmark[];
+  profileComplete?: boolean;
 }

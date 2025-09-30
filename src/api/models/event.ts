@@ -16,6 +16,7 @@ export interface Event {
   imageUrl: string;
   eventTime: string;
   viewCount: number;
+  embedding?: number[];
   articles: Article[];
   topicEvents: TopicEvent[];
   reactions: Reaction[];

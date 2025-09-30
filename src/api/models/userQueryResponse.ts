@@ -11,4 +11,5 @@ export interface UserQueryResponse {
   email: string;
   profileUrl?: string;
   role: string;
+  isProfileComplete: boolean;
 }
