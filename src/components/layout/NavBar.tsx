@@ -1,53 +1,55 @@
-import {Link, useRouter} from "@tanstack/react-router";
+import {Link} from "@tanstack/react-router";
 import NavbarAvatar from "@/components/layout/NavbarAvatar.tsx";
-import {ThemeToggle} from "@/components/ui/theme-toggle";
+import {Search} from "lucide-react";
+import {Badge, Input} from "@/components/ui";
+import {NavBarBadge} from "@/components/layout/NavBarBadge.tsx";
 
-interface NavBarProps {
-    variant?: 'default' | 'transparent-fixed';
-}
-
-export default function NavBar({variant = 'default'}: NavBarProps) {
-    const router = useRouter();
-    const currentPath = router.state.location.pathname;
-    const isTopicPage = /^\/topics\/[^\/]+$/.test(currentPath);
-
-    const headerClasses = variant === 'transparent-fixed'
-        ? "w-full h-14 bg-transparent backdrop-blur-sm fixed top-0 z-50 border-b border-white/10"
-        : "w-full h-14 bg-primary-foreground sticky top-0 z-50 border-b border-gray";
+export default function NavBar() {
+    const headerClasses =
+        "w-full bg-gradient-to-r from-[#323b86] to-[#3f1f76] sticky top-0 z-50 border-b border-gray";
 
     return (
         <header className={headerClasses}>
             <div
-                className={`py-4 h-full mx-auto flex gap-4 items-center justify-between ${variant === 'transparent-fixed' ? 'px-4' : 'px-4 max-w-screen-lg'} `}>
-                <div className="">
-                    <Link to="/">
-                        <img
-                            src="/logo.png"
-                            alt="logo"
-                            className={`h-12 w-auto object-contain ${variant === 'transparent-fixed' ? 'hidden' : 'dark:hidden'}`}
-                        />
-                        <img
-                            src="/logo-dark.png"
-                            alt="logo dark"
-                            className={`h-12 w-auto object-contain ${variant === 'transparent-fixed' ? 'block' : 'hidden dark:block'}`}
-                        />
-                    </Link>
+                className="flex flex-col items-center justify-between mx-auto  w-full h-full max-w-screen-lg gap-6 pb-6">
+                <div className='w-full h-[52px] flex gap-4 items-center justify-between px-3'>
+                    <div className="py-1.5">
+                        <Link to="/">
+                            <img
+                                src="/logo2-dark.png"
+                                alt="logo"
+                                className={`h-10 w-auto  dark:hidden`}
+                            />
+                        </Link>
+                    </div>
+                    <div className="py-2.5 h-full flex items-center gap-1 max-w-xs lg:max-w-md">
+                        <div className="h-full flex justify-center">
+                            <div className="h-full relative w-full">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white"/>
+                                <Input
+                                    placeholder="오늘도 시점과 함께!"
+                                    className="h-full w-full pl-10 rounded-xl text-[12px] text-white bg-white/30 border-[1px] border-white/30 placeholder:text-white"
+                                />
+                            </div>
+                        </div>
+                        <div className='p-2'>
+                            <NavbarAvatar/>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex flex-grow justify-center w-full">
-                    {/*<div className="relative w-full">*/}
-                    {/*    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-500"/>*/}
-                    {/*    <Input*/}
-                    {/*        type="text"*/}
-                    {/*        placeholder="검색어를 입력하세요"*/}
-                    {/*        className="pl-10 rounded-full"*/}
-                    {/*    />*/}
-                    {/*</div>*/}
-                </div>
-                <div className={`flex items-center justify-center gap-3`}>
-                    {!isTopicPage && <ThemeToggle/>}
-                    <NavbarAvatar/>
+                <div className="w-full flex flex-col gap-3 px-3">
+                    <div className="text-white font-semibold text-[14px]">실시간 토픽 TOP 5</div>
+                    <div className="flex gap-2 overflow-x-auto flex-nowrap scrollbar-hide">
+                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                    </div>
                 </div>
             </div>
+
         </header>
     );
 }

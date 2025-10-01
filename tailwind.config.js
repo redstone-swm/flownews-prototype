@@ -10,6 +10,16 @@ export default {
             fontFamily: {
                 sans: ["Pretendard", "ui-sans-serif", "system-ui"],
             },
+            fontSmoothing: {
+                'antialiased': {
+                    '-webkit-font-smoothing': 'antialiased',
+                    '-moz-osx-font-smoothing': 'grayscale',
+                },
+                'subpixel-antialiased': {
+                    '-webkit-font-smoothing': 'auto',
+                    '-moz-osx-font-smoothing': 'auto',
+                }
+            },
             borderRadius: {
                 lg: 'var(--radius)',
                 md: 'calc(var(--radius) - 2px)',
