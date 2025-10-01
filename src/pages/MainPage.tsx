@@ -11,7 +11,7 @@ export default function MainPage() {
     };
 
     if (isLoading || !data) {
-        return (<>Loading...</>);
+        return;
     }
 
     console.log(data)

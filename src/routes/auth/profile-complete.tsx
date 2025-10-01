@@ -48,7 +48,7 @@ function ProfileCompleteComponent() {
     const [month, setMonth] = useState<number | null>(null) // 1-12
     const [day, setDay] = useState<number | null>(null)
 
-    const currentYear = new Date().getFullYear()
+    const currentYear = new Date().getFullYear() - 10
 
     const years = useMemo(() => {
         // 1900 ~ current year descending
@@ -73,7 +73,7 @@ function ProfileCompleteComponent() {
         mutation: {
             onSuccess: async () => {
                 await refreshUser()
-                navigate({to: '/'})
+                navigate({to: '/auth/topic-selection'})
             },
             onError: (error) => {
                 console.error('프로필 완성 오류:', error)
@@ -192,36 +192,44 @@ function ProfileCompleteComponent() {
                         {/* Gender */}
                         <div className="space-y-2">
                             <label className="block text-sm font-medium text-foreground">성별</label>
-                            <div className="flex gap-6">
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="gender"
-                                        value={UserProfileUpdateRequestGender.MALE}
-                                        checked={profileData.gender === UserProfileUpdateRequestGender.MALE}
-                                        onChange={(e) => setProfileData(prev => ({
-                                            ...prev,
-                                            gender: e.target.value as UserProfileUpdateRequestGender
-                                        }))}
-                                        className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
-                                    />
-                                    <span className="text-sm text-foreground">남성</span>
-                                </label>
-                                <label className="flex items-center gap-2 cursor-pointer">
-                                    <input
-                                        type="radio"
-                                        name="gender"
-                                        value={UserProfileUpdateRequestGender.FEMALE}
-                                        checked={profileData.gender === UserProfileUpdateRequestGender.FEMALE}
-                                        onChange={(e) => setProfileData(prev => ({
-                                            ...prev,
-                                            gender: e.target.value as UserProfileUpdateRequestGender
-                                        }))}
-                                        className="h-4 w-4 text-primary border-gray-300 focus:ring-primary"
-                                    />
-                                    <span className="text-sm text-foreground">여성</span>
-                                </label>
-                            </div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button type="button" variant="outline" role="combobox"
+                                            className="justify-between w-full">
+                                        {profileData.gender === UserProfileUpdateRequestGender.MALE ? '남성' :
+                                            profileData.gender === UserProfileUpdateRequestGender.FEMALE ? '여성' :
+                                                profileData.gender === UserProfileUpdateRequestGender.NON_BINARY ? '논-바이너리' :
+                                                    profileData.gender === UserProfileUpdateRequestGender.PREFER_NOT_TO_SAY ? '밝히고 싶지 않음' :
+                                                        '성별 선택'}
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-full">
+                                    <DropdownMenuItem onClick={() => setProfileData(prev => ({
+                                        ...prev,
+                                        gender: UserProfileUpdateRequestGender.MALE
+                                    }))}>
+                                        남성
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setProfileData(prev => ({
+                                        ...prev,
+                                        gender: UserProfileUpdateRequestGender.FEMALE
+                                    }))}>
+                                        여성
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setProfileData(prev => ({
+                                        ...prev,
+                                        gender: UserProfileUpdateRequestGender.NON_BINARY
+                                    }))}>
+                                        논-바이너리
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setProfileData(prev => ({
+                                        ...prev,
+                                        gender: UserProfileUpdateRequestGender.PREFER_NOT_TO_SAY
+                                    }))}>
+                                        밝히고 싶지 않음
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
 
                         <div className="h-px bg-muted"/>

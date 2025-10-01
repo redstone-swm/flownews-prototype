@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthTopicSelectionImport } from './routes/auth/topic-selection'
 import { Route as AuthProfileCompleteImport } from './routes/auth/profile-complete'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthCallbackImport } from './routes/auth/callback'
@@ -23,6 +24,12 @@ import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topi
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthTopicSelectionRoute = AuthTopicSelectionImport.update({
+  id: '/auth/topic-selection',
+  path: '/auth/topic-selection',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -90,6 +97,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthProfileCompleteImport
       parentRoute: typeof rootRoute
     }
+    '/auth/topic-selection': {
+      id: '/auth/topic-selection'
+      path: '/auth/topic-selection'
+      fullPath: '/auth/topic-selection'
+      preLoaderRoute: typeof AuthTopicSelectionImport
+      parentRoute: typeof rootRoute
+    }
     '/topics/$topicId/': {
       id: '/topics/$topicId/'
       path: '/topics/$topicId'
@@ -114,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
+  '/auth/topic-selection': typeof AuthTopicSelectionRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -123,6 +138,7 @@ export interface FileRoutesByTo {
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
+  '/auth/topic-selection': typeof AuthTopicSelectionRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -133,6 +149,7 @@ export interface FileRoutesById {
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
+  '/auth/topic-selection': typeof AuthTopicSelectionRoute
   '/topics/$topicId/': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -144,6 +161,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/auth/login'
     | '/auth/profile-complete'
+    | '/auth/topic-selection'
     | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
@@ -152,6 +170,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/auth/login'
     | '/auth/profile-complete'
+    | '/auth/topic-selection'
     | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   id:
@@ -160,6 +179,7 @@ export interface FileRouteTypes {
     | '/auth/callback'
     | '/auth/login'
     | '/auth/profile-complete'
+    | '/auth/topic-selection'
     | '/topics/$topicId/'
     | '/topics/$topicId/events/$eventId'
   fileRoutesById: FileRoutesById
@@ -170,6 +190,7 @@ export interface RootRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthProfileCompleteRoute: typeof AuthProfileCompleteRoute
+  AuthTopicSelectionRoute: typeof AuthTopicSelectionRoute
   TopicsTopicIdIndexRoute: typeof TopicsTopicIdIndexRoute
   TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -179,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthProfileCompleteRoute: AuthProfileCompleteRoute,
+  AuthTopicSelectionRoute: AuthTopicSelectionRoute,
   TopicsTopicIdIndexRoute: TopicsTopicIdIndexRoute,
   TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
 }
@@ -197,6 +219,7 @@ export const routeTree = rootRoute
         "/auth/callback",
         "/auth/login",
         "/auth/profile-complete",
+        "/auth/topic-selection",
         "/topics/$topicId/",
         "/topics/$topicId/events/$eventId"
       ]
@@ -212,6 +235,9 @@ export const routeTree = rootRoute
     },
     "/auth/profile-complete": {
       "filePath": "auth/profile-complete.tsx"
+    },
+    "/auth/topic-selection": {
+      "filePath": "auth/topic-selection.tsx"
     },
     "/topics/$topicId/": {
       "filePath": "topics/$topicId/index.tsx"
