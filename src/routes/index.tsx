@@ -1,7 +1,7 @@
 import {createFileRoute} from '@tanstack/react-router'
-import MainPage from "@/pages/MainPage.tsx";
+import FeedPageMain from "@/pages/FeedPageMain.tsx";
 
 export const Route = createFileRoute('/')({
-    component: MainPage,
+    component: FeedPageMain,
 })
 
