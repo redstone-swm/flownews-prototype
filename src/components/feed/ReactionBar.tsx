@@ -5,7 +5,7 @@ import type {ReactionSummaryResponse} from "@/api/models";
 import {ReactionItem} from "@/components/feed/ReactionItem.tsx";
 import {ReactionIcons} from "@/constants/ReactionIcons.tsx";
 import {Button} from "@/components/ui";
-import {TopicFollowButton} from "@/components/feed/topic-follow-button.tsx";
+import {TopicFollowButton} from "@/components/feed/TopicFollowButton.tsx";
 
 
 export interface ReactionBarProps extends React.HTMLAttributes<HTMLDivElement> {
