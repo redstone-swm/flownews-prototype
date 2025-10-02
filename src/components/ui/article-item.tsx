@@ -3,7 +3,7 @@
 import * as React from "react"
 import {cn} from "@/lib/utils"
 import {NewsArticleReference} from "../feed/news-article-reference.tsx"
-import {ReactionBar, type ReactionsProps} from "../feed/reaction-bar.tsx"
+import {ReactionBar, type ReactionsProps} from "../feed/ReactionBar.tsx"
 
 
 export interface ArticleProps {

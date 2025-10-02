@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from "@storybook/react";
 import "../styles.css";
-import {EventFeed, type EventFeedProps} from "@/components/feed/event-feed.tsx";
+import {EventFeed, type EventFeedProps} from "@/components/feed/EventFeed.tsx";
 
 const meta = {
     title: "Sijeom/EventFeed",

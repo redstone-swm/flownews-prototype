@@ -37,13 +37,12 @@ export default function NavBar() {
                         </div>
                     </div>
                 </div>
-                <div className="w-full flex flex-col gap-3 px-3">
-                    <div className="text-white font-semibold text-[14px]">실시간 토픽 TOP 5</div>
-                    <div className="flex gap-2 overflow-x-auto flex-nowrap scrollbar-hide">
-                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
-                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
-                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
-                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                <div className="w-full flex flex-col gap-3 ">
+                    <div className="px-3 text-white font-semibold text-[14px]">실시간 토픽 TOP 5</div>
+                    <div className="px-3 flex  gap-2 overflow-x-auto flex-nowrap scrollbar-hide">
+                        <NavBarBadge text={"국내 부동산 시장 동향"}/>
+                        <NavBarBadge text={"뉴진스 2025년 활동"}/>
+                        <NavBarBadge text={"우주 탐사 경쟁 심화"}/>
                         <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
                         <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
                     </div>

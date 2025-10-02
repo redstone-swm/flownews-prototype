@@ -1,10 +1,11 @@
 import * as React from "react"
-import {useState} from "react"
 import {Button} from "@/components/ui/button.tsx"
 import {useSubscribeTopic, useUnsubscribeTopic} from "@/api/topic-subscribe-api/topic-subscribe-api"
 import type {UserDeviceTokenUpdateRequest} from "@/api/models"
 import {cn} from "@/lib/utils.ts";
 import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
+import {Check, Plus} from "lucide-react";
+import {toast} from "sonner";
 
 export interface TopicFollowButtonProps {
     topicId: number
@@ -25,6 +26,7 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
     const subscribeTopicMutation = useSubscribeTopic({
         mutation: {
             onSuccess: () => {
+                toast.success("관련 소식을 빠르게 알려드릴게요!",)
                 onFollowStateChange?.()
             },
             onError: (error) => {
@@ -81,15 +83,19 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
     return (
         <Button
             onClick={isFollowing ? handleUnfollow : handleFollow}
-            rounded={true}
-            size="sm"
-            variant={isFollowing ? "outline" : "default"}
+            className={cn("border-r py-3 px-2 text-sm w-full  font-semibold", className)}
             disabled={subscribeTopicMutation.isPending || unsubscribeTopicMutation.isPending}
-            className={cn(className)}
-        >
-            {isFollowing
-                ? "팔로잉"
-                : "팔로우"
+            variant="ghost">
+            {
+                isFollowing ? (
+                    <span className="text-muted-foreground flex items-center gap-1">
+                        <Check size={16}/>
+                        소식 받는 중
+                    </span>) : (
+                    <span className="text-primary flex items-center gap-1">
+                        <Plus size={16}/>
+                        관심 토픽에 추가
+                    </span>)
             }
         </Button>
     )

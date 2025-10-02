@@ -1,6 +1,6 @@
 import type {Meta, StoryObj} from "@storybook/react"
 import "../styles.css"
-import {ReactionBar, type ReactionsProps} from "@/components/feed/reaction-bar.tsx"
+import {ReactionBar, type ReactionsProps} from "@/components/feed/ReactionBar.tsx"
 
 const meta: Meta<typeof ReactionBar> = {
     title: "Sijeom/ReactionBar",

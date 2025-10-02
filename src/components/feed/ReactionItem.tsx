@@ -2,6 +2,7 @@ import * as React from "react";
 import {cn} from "@/lib/utils.ts";
 import {Heart} from "lucide-react";
 import {useToggleReaction} from "@/api/event-reactions/event-reactions.ts";
+import {Button} from "@/components/ui";
 
 export interface ReactionItemProps {
     reactionTypeId: number
@@ -45,27 +46,21 @@ const ReactionItem: React.FC<ReactionItemProps> = ({
     }
 
     return (
-        <div
+        <Button
+            variant="ghost"
             className={cn(
-                "inline-flex items-center gap-1 px-1.5 sm:px-2 py-1 rounded-md",
+                "w-[72px] shrink-0 text-muted-foreground",
                 "transition-colors select-none cursor-pointer",
-                "",
-                isActive && "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400",
+                isActive && " text-red-600 dark:text-red-400",
                 !isActive && className
             )}
             onClick={handleReaction}
         >
-      <span className={cn(
-          "shrink-0 w-5 h-5"
-      )}>
-          {icon}
-      </span>
-            <span className={cn(
-                "font-medium tracking-[-0.28px] text-xs"
-            )}>
-        {count}
-      </span>
-        </div>
+            {icon}
+            <span>
+                {count}
+            </span>
+        </Button>
     )
 }
 
