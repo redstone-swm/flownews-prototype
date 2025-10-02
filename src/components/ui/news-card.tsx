@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from '@tanstack/react-router';
+import { useNavigate, Link } from '@tanstack/react-router';
 
 import imgUnion from '/assets/heart.svg';
 const imgLineRoundedPlus = "http://localhost:3845/assets/68fe320cd3a650824a3a82594fa9b83406c2dc34.svg";
@@ -39,14 +39,16 @@ export function NewsCard({
 }: NewsCardProps) {
   const navigate = useNavigate();
 
-  const handleCardClick = () => {
-    navigate({ 
-      to: '/topics/$topicId', 
-      params: { topicId } 
-    });
-  };
+  console.log('NewsCard - Received topicId prop:', topicId);
+  const targetTopicId = topicId || '1';
+  console.log('NewsCard - Using targetTopicId:', targetTopicId);
+  
   return (
-    <div className="bg-white relative rounded-[20px] w-full max-w-[351px] sm:max-w-[400px] md:max-w-none transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer" onClick={handleCardClick}>
+    <Link 
+      to="/topics/$topicId" 
+      params={{ topicId: targetTopicId }}
+      className="bg-white relative rounded-[20px] w-full max-w-[351px] sm:max-w-[400px] md:max-w-none transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer block"
+    >
       <div className="flex flex-col w-full">
         <div className="flex flex-col gap-[16px] p-[12px] w-full">
           <div className="flex flex-col gap-[12px] w-full">
@@ -152,6 +154,6 @@ export function NewsCard({
         </div>
       </div>
       <div aria-hidden="true" className="absolute border border-[rgba(0,0,0,0.1)] border-solid inset-0 pointer-events-none rounded-[20px]" />
-    </div>
+    </Link>
   );
 }
