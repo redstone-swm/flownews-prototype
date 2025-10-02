@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface TabNavigationProps {
   activeTab?: string;
@@ -20,17 +20,17 @@ export function TabNavigation({ activeTab = 'articles', onTabChange }: TabNaviga
   };
 
   return (
-    <div className="content-stretch flex items-center relative shrink-0 w-[375px]">
+    <div className="flex items-center relative w-full bg-white shadow-sm border-b border-gray-100">
       {tabs.map((tab) => {
         const isActive = currentTab === tab.id;
         return (
           <div 
             key={tab.id}
-            className="basis-0 grow min-h-px min-w-px relative shrink-0 cursor-pointer"
+            className="flex-1 relative cursor-pointer"
             onClick={() => handleTabClick(tab.id)}
           >
-            <div className="box-border content-stretch flex gap-[10px] items-center justify-center overflow-clip px-[28px] py-[12px] relative w-full">
-              <p className={`font-sans font-semibold leading-[1.4] not-italic overflow-ellipsis overflow-hidden relative shrink-0 text-[14px] text-nowrap tracking-[-0.35px] whitespace-pre ${
+            <div className="flex items-center justify-center px-[16px] sm:px-[24px] md:px-[28px] py-[12px] w-full transition-all duration-200 hover:bg-gray-50">
+              <p className={`font-sans font-semibold leading-[1.4] not-italic overflow-ellipsis overflow-hidden relative shrink-0 text-[12px] sm:text-[13px] md:text-[14px] text-nowrap tracking-[-0.35px] whitespace-pre transition-colors duration-200 ${
                 isActive ? 'text-[#111121]' : 'text-[#767676]'
               }`}>
                 {tab.label}

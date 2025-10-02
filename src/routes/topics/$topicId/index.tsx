@@ -1,5 +1,5 @@
 import {createFileRoute, useParams} from '@tanstack/react-router'
-import TopicHistoryPage from "@/pages/TopicHistoryPage.tsx";
+import TopicDetailPage from "@/pages/TopicDetailPage.tsx";
 
 export const Route = createFileRoute('/topics/$topicId/')({
     component: () => {
@@ -8,6 +8,6 @@ export const Route = createFileRoute('/topics/$topicId/')({
             select: (params) => params.topicId,
         })
 
-        return <TopicHistoryPage key={topicId}/>
+        return <TopicDetailPage key={topicId}/>
     },
 })

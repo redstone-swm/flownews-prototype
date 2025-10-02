@@ -33,7 +33,7 @@ export function CategoryFilter({ categories = defaultCategories, onCategoryChang
   };
 
   return (
-    <div className="bg-white box-border content-stretch flex gap-[8px] items-center pl-[12px] pr-0 py-[12px] relative shrink-0 w-full overflow-x-auto">
+    <div className="bg-white flex gap-[8px] items-center px-[12px] py-[12px] w-full overflow-x-auto sm:justify-center md:flex-wrap md:overflow-x-visible md:justify-start lg:justify-center">
       {categories.map((category) => {
         const isSelected = selectedCategory === category.id;
         const isInterest = category.id === 'interest';
@@ -41,7 +41,7 @@ export function CategoryFilter({ categories = defaultCategories, onCategoryChang
         return (
           <div 
             key={category.id}
-            className={`bg-white box-border content-stretch flex gap-[6px] items-center px-[8px] py-[6px] relative rounded-[20px] shrink-0 cursor-pointer ${
+            className={`bg-white flex gap-[6px] items-center px-[8px] py-[6px] relative rounded-[20px] flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 ${
               isSelected && !isInterest ? 'shadow-sm' : ''
             }`}
             onClick={() => handleCategoryClick(category.id)}

@@ -26,9 +26,8 @@ export default function FeedPageMain() {
   };
 
   return (
-      <div>
-     {/*<div className="bg-neutral-100 overflow-clip relative rounded-[24px]">*/}
-      <div className="absolute content-stretch flex flex-col items-start left-1/2 top-0 translate-x-[-50%] w-[375px]">
+    <div className="min-h-screen bg-neutral-100">
+      <div className="w-full relative flex flex-col">
         {/* Top Section with Gradient Background */}
         <div
           className="box-border content-stretch flex flex-col gap-[24px] items-center overflow-clip pb-[24px] pt-0 px-0 relative shrink-0 w-full"
@@ -36,26 +35,31 @@ export default function FeedPageMain() {
             background: 'linear-gradient(180deg, #323B86 0%, #3A2B7D 25%, #3A2A7C 50%, #3F1F76 100%)'
           }}
         >
-
-          <div className="content-stretch flex flex-col items-start relative shrink-0 w-full">
+          <div className="w-full max-w-[375px] sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] mx-auto">
             <Header />
           </div>
-          <TopicTags />
+          <div className="w-full max-w-[375px] sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] mx-auto">
+            <TopicTags />
+          </div>
         </div>
 
-         {/*Main Content Area*/}
+        {/*Main Content Area*/}
         <div className="content-stretch flex flex-col items-center justify-center relative shrink-0 w-full">
-          <TabNavigation
-            activeTab="articles"
-            onTabChange={handleTabChange}
-          />
-          <div className="content-stretch flex flex-col gap-[12px] items-center justify-center relative shrink-0 w-full">
-            <CategoryFilter onCategoryChange={handleCategoryChange} />
-            <NewsFeed
-              onAddToInterest={handleAddToInterest}
-              onLike={handleLike}
-              onShare={handleShare}
+          <div className="w-full max-w-[375px] sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] mx-auto">
+            <TabNavigation
+              activeTab="articles"
+              onTabChange={handleTabChange}
             />
+          </div>
+          <div className="w-full max-w-[375px] sm:max-w-[640px] md:max-w-[768px] lg:max-w-[1024px] xl:max-w-[1280px] mx-auto px-3 md:px-6">
+            <div className="content-stretch flex flex-col gap-[12px] items-center justify-center relative shrink-0 w-full">
+              <CategoryFilter onCategoryChange={handleCategoryChange} />
+              <NewsFeed
+                onAddToInterest={handleAddToInterest}
+                onLike={handleLike}
+                onShare={handleShare}
+              />
+            </div>
           </div>
         </div>
       </div>

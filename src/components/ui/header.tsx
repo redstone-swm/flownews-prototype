@@ -1,21 +1,21 @@
-import React from 'react';
 
-const imgLogo = "http://localhost:3845/assets/166a8c79dcf245ada728c3c86c0ad0cc96480634.svg";
-const searchIcon = "http://localhost:3845/assets/12e20ddb25dc9cebf4692c0e467181ce3429d1ee.svg";
-const bellIcon = "http://localhost:3845/assets/6cc08df69196148a4ed61936c29ce7c270405a3b.svg";
+
+import imgLogo from '/assets/logo.svg';
+import searchIcon from '/assets/search_icon.svg';
+import bellIcon from '/assets/bell_icon.svg';
 
 export function Header() {
   return (
-    <div className="h-[52px] overflow-clip relative shrink-0 w-[375px]">
+    <div className="h-[52px] overflow-clip relative shrink-0 w-full">
       {/* Logo */}
-      <div className="absolute h-[24px] left-[12px] top-1/2 translate-y-[-50%] w-[83px]">
+      <div className="absolute h-[32px] left-[12px] top-1/2 translate-y-[-50%] w-[110px]">
         <img alt="SIJEOM" className="block max-w-none size-full" src={imgLogo} />
       </div>
       
       {/* Right side controls */}
       <div className="absolute content-stretch flex gap-[4px] items-center right-[12px] top-[10px]">
         {/* Search bar */}
-        <div className="bg-[rgba(255,255,255,0.3)] box-border content-stretch flex gap-[8px] h-[32px] items-center p-[10px] relative rounded-[10px] shrink-0 w-[175px]">
+        <div className="bg-[rgba(255,255,255,0.3)] box-border content-stretch flex gap-[8px] h-[32px] items-center p-[10px] relative rounded-[10px] shrink-0 w-[175px] md:w-[250px] lg:w-[300px]">
           <div aria-hidden="true" className="absolute border border-[rgba(255,255,255,0.3)] border-solid inset-0 pointer-events-none rounded-[10px]" />
           <div className="overflow-clip relative shrink-0 size-[20px]">
             <div className="absolute inset-[12.5%]">
@@ -32,7 +32,7 @@ export function Header() {
         </div>
         
         {/* Bell icon with notification */}
-        <div className="relative shrink-0 size-[32px]">
+        <div className="relative shrink-0 size-[40px]">
           <div className="absolute inset-[21.88%_28.13%]">
             <div className="absolute inset-[-4.17%_-5.36%]">
               <img alt="notifications" className="block max-w-none size-full" src={bellIcon} />
