@@ -8,6 +8,7 @@ import {Check, Plus} from "lucide-react";
 import {toast} from "sonner";
 
 export interface TopicFollowButtonProps {
+    variant: "default" | "ghost"
     topicId: number
     isFollowing: boolean
     onFollowStateChange?: () => void
@@ -20,7 +21,8 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                                                                         isFollowing,
                                                                         onFollowStateChange,
                                                                         className,
-                                                                        eventId
+                                                                        eventId,
+                                                                        variant = "ghost",
                                                                     }) => {
     const {trackTopicFollowed} = useInteractionTracking();
     const subscribeTopicMutation = useSubscribeTopic({
@@ -85,14 +87,15 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
             onClick={isFollowing ? handleUnfollow : handleFollow}
             className={cn("border-r py-3 px-2 text-sm w-full  font-semibold", className)}
             disabled={subscribeTopicMutation.isPending || unsubscribeTopicMutation.isPending}
-            variant="ghost">
+            variant={variant}>
             {
                 isFollowing ? (
                     <span className="text-muted-foreground flex items-center gap-1">
                         <Check size={16}/>
                         소식 받는 중
                     </span>) : (
-                    <span className="text-primary flex items-center gap-1">
+                    <span
+                        className={`${variant === "default" ? "text-background" : "text-primary"} flex items-center gap-1`}>
                         <Plus size={16}/>
                         관심 토픽에 추가
                     </span>)

@@ -1,10 +1,10 @@
 import {Link} from "@tanstack/react-router";
 import NavbarAvatar from "@/components/layout/NavbarAvatar.tsx";
-import {Search} from "lucide-react";
+import {Bell, Search} from "lucide-react";
 import {Badge, Input} from "@/components/ui";
-import {NavBarBadge} from "@/components/layout/NavBarBadge.tsx";
+import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
 
-export default function NavBar() {
+export default function Navbar() {
     const headerClasses =
         "w-full bg-gradient-to-r from-[#323b86] to-[#3f1f76] sticky top-0 z-50 border-b border-gray";
 
@@ -33,6 +33,7 @@ export default function NavBar() {
                             </div>
                         </div>
                         <div className='p-2'>
+                            {/*<Bell size={18} color="white"/>*/}
                             <NavbarAvatar/>
                         </div>
                     </div>
@@ -40,11 +41,11 @@ export default function NavBar() {
                 <div className="w-full flex flex-col gap-3 ">
                     <div className="px-3 text-white font-semibold text-[14px]">실시간 토픽 TOP 5</div>
                     <div className="px-3 flex  gap-2 overflow-x-auto flex-nowrap scrollbar-hide">
-                        <NavBarBadge text={"국내 부동산 시장 동향"}/>
-                        <NavBarBadge text={"뉴진스 2025년 활동"}/>
-                        <NavBarBadge text={"우주 탐사 경쟁 심화"}/>
-                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
-                        <NavBarBadge text={"ㅁㄴㅇㄹ"}/>
+                        <NavbarBadge text={"국내 부동산 시장 동향"}/>
+                        <NavbarBadge text={"뉴진스 2025년 활동"}/>
+                        <NavbarBadge text={"우주 탐사 경쟁 심화"}/>
+                        <NavbarBadge text={"ㅁㄴㅇㄹ"}/>
+                        <NavbarBadge text={"ㅁㄴㅇㄹ"}/>
                     </div>
                 </div>
             </div>

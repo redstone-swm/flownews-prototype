@@ -76,13 +76,13 @@
 
 @layer base {
     * {
-        @apply border-border;
+        @apply border-border ;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
 
     body {
-        @apply bg-background text-foreground tracking-tight;
+        @apply bg-background text-foreground tracking-tight leading-relaxed;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }

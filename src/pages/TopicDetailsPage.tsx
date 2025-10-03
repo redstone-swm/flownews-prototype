@@ -1,5 +1,5 @@
-import {createFileRoute, useNavigate} from '@tanstack/react-router'
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
+import {useParams, useNavigate} from "@tanstack/react-router";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {
     Carousel,
@@ -52,16 +52,11 @@ const mockTopics =
         ]
     };
 
-export const Route = createFileRoute('/topics/$topicId/events/$eventId')({
-    component: TopicDetailsPage,
-})
 
-function TopicDetailsPage() {
+const TopicDetailsPage = () => {
     const navigate = useNavigate();
-    const {topicId, eventId} = Route.useParams();
-    const topicIdNumber = parseInt(topicId);
-    const eventIdNumber = parseInt(eventId);
-
+    const params = useParams({from: '/topics/$topicId/'});
+    const topicId = parseInt(params.topicId);
     // const {data, isLoading, refetch} = useGetTopicDetails(
     //     parseInt(topicId),
     // )
@@ -73,11 +68,6 @@ function TopicDetailsPage() {
     const [count, setCount] = useState(0);
     const [showNav, setShowNav] = useState(false);
     const hideTimerRef = useRef<number | null>(null);
-
-    // 현재 eventId에 해당하는 이벤트의 인덱스 찾기
-    const initialEventIndex = data.events.findIndex(event => event.id === eventIdNumber);
-    const currentEventIndex = Math.max(0, current - 1);
-    const currentEvent = data.events[currentEventIndex];
 
     const scheduleHide = (delay = 1500) => {
         if (hideTimerRef.current) {
@@ -108,40 +98,23 @@ function TopicDetailsPage() {
     useEffect(() => {
         if (!api) return;
         setCount(api.scrollSnapList().length);
-
-        // 초기 eventId에 해당하는 슬라이드로 이동
-        if (initialEventIndex >= 0) {
-            api.scrollTo(initialEventIndex);
-            setCurrent(initialEventIndex + 1);
-        } else {
-            setCurrent(api.selectedScrollSnap() + 1);
-        }
-
+        setCurrent(api.selectedScrollSnap() + 1);
         api.on("select", () => {
-            const newIndex = api.selectedScrollSnap();
-            setCurrent(newIndex + 1);
-
-            // URL의 eventId 업데이트
-            const newEvent = data.events[newIndex];
-            if (newEvent && newEvent.id !== eventIdNumber) {
-                navigate({
-                    to: '/topics/$topicId/events/$eventId',
-                    params: {topicId, eventId: newEvent.id.toString()},
-                    replace: true
-                });
-            }
-
+            setCurrent(api.selectedScrollSnap() + 1);
             // 슬라이드 변경 시 버튼을 잠깐 보여줬다가 숨김
             handleUserActivity();
         });
-    }, [api, initialEventIndex, eventIdNumber, topicId, navigate, data.events]);
+    }, [api]);
+
+    // 현재 인덱스(0-based) 계산 - api가 준비되기 전에는 0으로 안전 가드
+    const currentIndex = Math.max(0, current - 1);
 
     const handleBackClick = () => {
         navigate({to: '/'});
     };
 
     if (isLoading || !data) {
-        return null;
+        return;
     }
 
     return (
@@ -166,19 +139,19 @@ function TopicDetailsPage() {
             <div className="flex items-center justify-center px-4 py-8 min-h-[calc(100vh-52px)]">
                 <div className="w-full max-w-md">
                     {/* 타임라인(Date + 선) - Carousel 밖으로 이동 */}
-                    {data.events?.length > 0 && currentEvent && (
+                    {data.events?.length > 0 && (
                         <div className="w-full flex flex-col justify-center items-center gap-1 mb-3">
                             <span className="font-sm font-semibold text-white">
-                                {format(new Date(currentEvent.eventTime), 'yyyy년 M월 d일 a h:mm', {locale: ko})}
+                                {format(new Date(data.events[currentIndex]?.eventTime ?? data.events[0].eventTime), 'yyyy년 M월 d일 a h:mm', {locale: ko})}
                             </span>
                             <div className="w-full flex items-center relative py-1">
                                 {/* 첫 번째가 아닌 경우에만 왼쪽 선 표시 - 컨테이너 왼쪽 끝까지 */}
-                                {currentEventIndex > 0 && (
+                                {currentIndex > 0 && (
                                     <div
                                         className="absolute left-0 right-1/2 top-1/2 -translate-y-1/2 h-px bg-white/30"></div>
                                 )}
                                 {/* 마지막이 아닌 경우에만 오른쪽 선 표시 - 컨테이너 오른쪽 끝까지 */}
-                                {currentEventIndex < data.events.length - 1 && (
+                                {currentIndex < data.events.length - 1 && (
                                     <div
                                         className="absolute left-1/2 right-0 top-1/2 -translate-y-1/2 h-px bg-white/30"></div>
                                 )}
@@ -217,7 +190,7 @@ function TopicDetailsPage() {
                                                     <ReactionItem reactionTypeId={1} eventId={event.id}
                                                                   icon={ReactionIcons[1]}
                                                                   count={1}/>
-                                                    <TopicFollowButton topicId={topicIdNumber} isFollowing={false}
+                                                    <TopicFollowButton topicId={topicId} isFollowing={false}
                                                                        variant="default"/>
                                                 </div>
                                             </Card>
@@ -225,6 +198,8 @@ function TopicDetailsPage() {
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
+                            {/*<CarouselPrevious className="text-white border-white hover:bg-white hover:text-gray-900"/>*/}
+                            {/*<CarouselNext className="text-white border-white hover:bg-white hover:text-gray-900"/>*/}
                         </Carousel>
 
                         {/* 모바일 전용 좌/우 버튼 - 유저 활동 시 잠시 표시 */}
@@ -236,7 +211,7 @@ function TopicDetailsPage() {
                                 api?.scrollPrev();
                                 handleUserActivity();
                             }}
-                            disabled={currentEventIndex === 0}
+                            disabled={currentIndex === 0}
                             className={`md:hidden absolute left-2 top-1/2 -translate-y-1/2 z-10 rounded-full p-3 bg-black/30 text-white shadow-lg backdrop-blur-sm transition-opacity duration-300 ${showNav ? 'opacity-100 disabled:opacity-40' : 'opacity-0 pointer-events-none'}`}
                         >
                             <ChevronLeft size={20}/>
@@ -249,7 +224,7 @@ function TopicDetailsPage() {
                                 api?.scrollNext();
                                 handleUserActivity();
                             }}
-                            disabled={currentEventIndex === (data.events.length - 1)}
+                            disabled={currentIndex === (data.events.length - 1)}
                             className={`md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full p-3 bg-black/30 text-white shadow-lg backdrop-blur-sm transition-opacity duration-300 ${showNav ? 'opacity-100 disabled:opacity-40' : 'opacity-0 pointer-events-none'}`}
                         >
                             <ChevronRight size={20}/>
@@ -260,3 +235,5 @@ function TopicDetailsPage() {
         </div>
     )
 }
+
+export default TopicDetailsPage;
