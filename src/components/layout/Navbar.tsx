@@ -1,10 +1,16 @@
 import {Link} from "@tanstack/react-router";
 import NavbarAvatar from "@/components/layout/NavbarAvatar.tsx";
-import {Bell, Search} from "lucide-react";
-import {Badge, Input} from "@/components/ui";
+import {Search} from "lucide-react";
+import {Input} from "@/components/ui";
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
+import type {TopicTopKQueryResponse} from "@/api/models";
 
-export default function Navbar() {
+interface NavbarProps {
+    topKTopics?: TopicTopKQueryResponse[];
+    topKLoading?: boolean;
+}
+
+export default function Navbar({topKTopics, topKLoading}: NavbarProps) {
     const headerClasses =
         "w-full bg-gradient-to-r from-[#323b86] to-[#3f1f76] sticky top-0 z-50 border-b border-gray";
 
@@ -41,11 +47,12 @@ export default function Navbar() {
                 <div className="w-full flex flex-col gap-3 ">
                     <div className="px-3 text-white font-semibold text-[14px]">실시간 토픽 TOP 5</div>
                     <div className="px-3 flex  gap-2 overflow-x-auto flex-nowrap scrollbar-hide">
-                        <NavbarBadge text={"국내 부동산 시장 동향"}/>
-                        <NavbarBadge text={"뉴진스 2025년 활동"}/>
-                        <NavbarBadge text={"우주 탐사 경쟁 심화"}/>
-                        <NavbarBadge text={"ㅁㄴㅇㄹ"}/>
-                        <NavbarBadge text={"ㅁㄴㅇㄹ"}/>
+                        {!topKLoading && topKTopics && topKTopics.length > 0 ?
+                            topKTopics.map((topic) => (
+                                <Link key={topic.id} to="/topics/$topicId" params={{ topicId: topic.id.toString() }}>
+                                    <NavbarBadge text={topic.title}/>
+                                </Link>
+                            )) : []}
                     </div>
                 </div>
             </div>

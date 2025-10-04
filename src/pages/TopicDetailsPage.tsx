@@ -55,7 +55,7 @@ const mockTopics =
 
 const TopicDetailsPage = () => {
     const navigate = useNavigate();
-    const params = useParams({from: '/topics/$topicId/'});
+    const params = useParams({from: '/topics/$topicId'});
     const topicId = parseInt(params.topicId);
     // const {data, isLoading, refetch} = useGetTopicDetails(
     //     parseInt(topicId),

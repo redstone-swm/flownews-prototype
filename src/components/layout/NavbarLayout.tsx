@@ -1,10 +1,16 @@
 import Navbar from "@/components/layout/Navbar.tsx";
-import {CategoryBar} from "@/components/feed/CategoryBar.tsx";
+import type {TopicTopKQueryResponse} from "@/api/models";
 
-export default function NavbarLayout({children}: { children: React.ReactNode }) {
+interface NavbarLayoutProps {
+    children: React.ReactNode;
+    topKTopics?: TopicTopKQueryResponse[];
+    topKLoading?: boolean;
+}
+
+export default function NavbarLayout({children, topKTopics, topKLoading}: NavbarLayoutProps) {
     return (
         <div className="flex flex-col items-center min-h-svh">
-            <Navbar/>
+            <Navbar topKTopics={topKTopics} topKLoading={topKLoading}/>
             <main className=" flex-1  overflow-y-auto w-full max-w-screen-lg">
                 {children}
             </main>
