@@ -5,6 +5,7 @@
  * OpenAPI spec version: v1
  */
 import type { TopicEvent } from './topicEvent';
+import type { Event } from './event';
 
 export interface Topic {
   id?: number;
@@ -14,4 +15,6 @@ export interface Topic {
   topicEvents: TopicEvent[];
   createdAt: string;
   modifiedAt: string;
+  events: Event[];
+  lastEvent?: Event;
 }

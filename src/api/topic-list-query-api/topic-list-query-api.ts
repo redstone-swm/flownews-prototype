@@ -20,7 +20,10 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  TopicSummaryResponse
+  GetAllTopicsParams,
+  GetTopKTopicsParams,
+  TopicSummaryResponse,
+  TopicTopKQueryResponse
 } from '.././models';
 
 import { axiosInstance } from '.././axiosInstance';
@@ -31,33 +34,34 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 export const getAllTopics = (
-    
+    params?: GetAllTopicsParams,
  options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
       
       
       return axiosInstance<TopicSummaryResponse[]>(
-      {url: `/topics`, method: 'GET', signal
+      {url: `/topics`, method: 'GET',
+        params, signal
     },
       options);
     }
   
 
-export const getGetAllTopicsQueryKey = () => {
-    return [`/topics`] as const;
+export const getGetAllTopicsQueryKey = (params?: GetAllTopicsParams,) => {
+    return [`/topics`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getGetAllTopicsQueryOptions = <TData = Awaited<ReturnType<typeof getAllTopics>>, TError = string>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+export const getGetAllTopicsQueryOptions = <TData = Awaited<ReturnType<typeof getAllTopics>>, TError = string>(params?: GetAllTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAllTopicsQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetAllTopicsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllTopics>>> = ({ signal }) => getAllTopics(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAllTopics>>> = ({ signal }) => getAllTopics(params, requestOptions, signal);
 
       
 
@@ -71,7 +75,7 @@ export type GetAllTopicsQueryError = string
 
 
 export function useGetAllTopics<TData = Awaited<ReturnType<typeof getAllTopics>>, TError = string>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>> & Pick<
+ params: undefined |  GetAllTopicsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAllTopics>>,
           TError,
@@ -81,7 +85,7 @@ export function useGetAllTopics<TData = Awaited<ReturnType<typeof getAllTopics>>
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllTopics<TData = Awaited<ReturnType<typeof getAllTopics>>, TError = string>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>> & Pick<
+ params?: GetAllTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAllTopics>>,
           TError,
@@ -91,16 +95,98 @@ export function useGetAllTopics<TData = Awaited<ReturnType<typeof getAllTopics>>
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetAllTopics<TData = Awaited<ReturnType<typeof getAllTopics>>, TError = string>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ params?: GetAllTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetAllTopics<TData = Awaited<ReturnType<typeof getAllTopics>>, TError = string>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ params?: GetAllTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAllTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetAllTopicsQueryOptions(options)
+  const queryOptions = getGetAllTopicsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+export const getTopKTopics = (
+    params?: GetTopKTopicsParams,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<TopicTopKQueryResponse[]>(
+      {url: `/topics/topk`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+export const getGetTopKTopicsQueryKey = (params?: GetTopKTopicsParams,) => {
+    return [`/topics/topk`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetTopKTopicsQueryOptions = <TData = Awaited<ReturnType<typeof getTopKTopics>>, TError = string>(params?: GetTopKTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTopKTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetTopKTopicsQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTopKTopics>>> = ({ signal }) => getTopKTopics(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn,   staleTime: 300000, refetchOnWindowFocus: false,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getTopKTopics>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetTopKTopicsQueryResult = NonNullable<Awaited<ReturnType<typeof getTopKTopics>>>
+export type GetTopKTopicsQueryError = string
+
+
+export function useGetTopKTopics<TData = Awaited<ReturnType<typeof getTopKTopics>>, TError = string>(
+ params: undefined |  GetTopKTopicsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTopKTopics>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTopKTopics>>,
+          TError,
+          Awaited<ReturnType<typeof getTopKTopics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTopKTopics<TData = Awaited<ReturnType<typeof getTopKTopics>>, TError = string>(
+ params?: GetTopKTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTopKTopics>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getTopKTopics>>,
+          TError,
+          Awaited<ReturnType<typeof getTopKTopics>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetTopKTopics<TData = Awaited<ReturnType<typeof getTopKTopics>>, TError = string>(
+ params?: GetTopKTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTopKTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetTopKTopics<TData = Awaited<ReturnType<typeof getTopKTopics>>, TError = string>(
+ params?: GetTopKTopicsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTopKTopics>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetTopKTopicsQueryOptions(params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

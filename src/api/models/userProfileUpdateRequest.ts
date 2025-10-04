@@ -9,4 +9,5 @@ import type { UserProfileUpdateRequestGender } from './userProfileUpdateRequestG
 export interface UserProfileUpdateRequest {
   birthDate: string;
   gender: UserProfileUpdateRequestGender;
+  userId: number;
 }

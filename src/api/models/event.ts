@@ -6,7 +6,6 @@
  */
 import type { Article } from './article';
 import type { TopicEvent } from './topicEvent';
-import type { Reaction } from './reaction';
 import type { Bookmark } from './bookmark';
 
 export interface Event {
@@ -19,8 +18,8 @@ export interface Event {
   embedding?: number[];
   articles: Article[];
   topicEvents: TopicEvent[];
-  reactions: Reaction[];
   bookmarks: Bookmark[];
+  totalReactionsCount: number;
   createdAt: string;
   modifiedAt: string;
 }

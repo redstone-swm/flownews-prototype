@@ -15,8 +15,6 @@ export interface TopicSummaryResponse {
   title: string;
   /** 토픽 설명 */
   description: string;
-  /** 토픽 이미지 URL */
-  imageUrl: string;
   /** 사용자가 이 토픽을 팔로우하는지 여부 */
   isFollowing: boolean;
 }

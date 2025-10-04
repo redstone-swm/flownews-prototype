@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as TopicsTopicIdImport } from './routes/topics/$topicId'
 import { Route as AuthTopicSelectionImport } from './routes/auth/topic-selection'
 import { Route as AuthProfileCompleteImport } from './routes/auth/profile-complete'
 import { Route as AuthLoginImport } from './routes/auth/login'
@@ -23,6 +24,12 @@ import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topi
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TopicsTopicIdRoute = TopicsTopicIdImport.update({
+  id: '/topics/$topicId',
+  path: '/topics/$topicId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -52,9 +59,9 @@ const AuthCallbackRoute = AuthCallbackImport.update({
 
 const TopicsTopicIdEventsEventIdRoute = TopicsTopicIdEventsEventIdImport.update(
   {
-    id: '/topics/$topicId/events/$eventId',
-    path: '/topics/$topicId/events/$eventId',
-    getParentRoute: () => rootRoute,
+    id: '/events/$eventId',
+    path: '/events/$eventId',
+    getParentRoute: () => TopicsTopicIdRoute,
   } as any,
 )
 
@@ -97,17 +104,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthTopicSelectionImport
       parentRoute: typeof rootRoute
     }
+    '/topics/$topicId': {
+      id: '/topics/$topicId'
+      path: '/topics/$topicId'
+      fullPath: '/topics/$topicId'
+      preLoaderRoute: typeof TopicsTopicIdImport
+      parentRoute: typeof rootRoute
+    }
     '/topics/$topicId/events/$eventId': {
       id: '/topics/$topicId/events/$eventId'
-      path: '/topics/$topicId/events/$eventId'
+      path: '/events/$eventId'
       fullPath: '/topics/$topicId/events/$eventId'
       preLoaderRoute: typeof TopicsTopicIdEventsEventIdImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof TopicsTopicIdImport
     }
   }
 }
 
 // Create and export the route tree
+
+interface TopicsTopicIdRouteChildren {
+  TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
+}
+
+const TopicsTopicIdRouteChildren: TopicsTopicIdRouteChildren = {
+  TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
+}
+
+const TopicsTopicIdRouteWithChildren = TopicsTopicIdRoute._addFileChildren(
+  TopicsTopicIdRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -115,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
+  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
@@ -124,6 +151,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
+  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
@@ -134,6 +162,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
+  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
@@ -145,6 +174,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/profile-complete'
     | '/auth/topic-selection'
+    | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -153,6 +183,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/profile-complete'
     | '/auth/topic-selection'
+    | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   id:
     | '__root__'
@@ -161,6 +192,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/profile-complete'
     | '/auth/topic-selection'
+    | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   fileRoutesById: FileRoutesById
 }
@@ -171,7 +203,7 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthProfileCompleteRoute: typeof AuthProfileCompleteRoute
   AuthTopicSelectionRoute: typeof AuthTopicSelectionRoute
-  TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
+  TopicsTopicIdRoute: typeof TopicsTopicIdRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -180,7 +212,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthProfileCompleteRoute: AuthProfileCompleteRoute,
   AuthTopicSelectionRoute: AuthTopicSelectionRoute,
-  TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
+  TopicsTopicIdRoute: TopicsTopicIdRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -198,7 +230,7 @@ export const routeTree = rootRoute
         "/auth/login",
         "/auth/profile-complete",
         "/auth/topic-selection",
-        "/topics/$topicId/events/$eventId"
+        "/topics/$topicId"
       ]
     },
     "/": {
@@ -216,8 +248,15 @@ export const routeTree = rootRoute
     "/auth/topic-selection": {
       "filePath": "auth/topic-selection.tsx"
     },
+    "/topics/$topicId": {
+      "filePath": "topics/$topicId.tsx",
+      "children": [
+        "/topics/$topicId/events/$eventId"
+      ]
+    },
     "/topics/$topicId/events/$eventId": {
-      "filePath": "topics/$topicId/events/$eventId.tsx"
+      "filePath": "topics/$topicId/events/$eventId.tsx",
+      "parent": "/topics/$topicId"
     }
   }
 }

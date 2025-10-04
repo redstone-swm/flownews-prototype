@@ -16,8 +16,7 @@ import type {
 
 import type {
   SubscribeTopic200,
-  UnsubscribeTopic200,
-  UserDeviceTokenUpdateRequest
+  UnsubscribeTopic200
 } from '.././models';
 
 import { axiosInstance } from '.././axiosInstance';
@@ -85,15 +84,12 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
     }
     export const subscribeTopic = (
     topicId: number,
-    userDeviceTokenUpdateRequest: UserDeviceTokenUpdateRequest,
  options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
       
       
       return axiosInstance<SubscribeTopic200>(
-      {url: `/topics/${topicId}/subscribe`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: userDeviceTokenUpdateRequest, signal
+      {url: `/topics/${topicId}/subscribe`, method: 'POST', signal
     },
       options);
     }
@@ -101,8 +97,8 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
 export const getSubscribeTopicMutationOptions = <TError = string,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number;data: UserDeviceTokenUpdateRequest}, TContext>, request?: SecondParameter<typeof axiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number;data: UserDeviceTokenUpdateRequest}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number}, TContext> => {
 
 const mutationKey = ['subscribeTopic'];
 const {mutation: mutationOptions, request: requestOptions} = options ?
@@ -114,10 +110,10 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof subscribeTopic>>, {topicId: number;data: UserDeviceTokenUpdateRequest}> = (props) => {
-          const {topicId,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof subscribeTopic>>, {topicId: number}> = (props) => {
+          const {topicId} = props ?? {};
 
-          return  subscribeTopic(topicId,data,requestOptions)
+          return  subscribeTopic(topicId,requestOptions)
         }
 
         
@@ -126,15 +122,15 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
   return  { mutationFn, ...mutationOptions }}
 
     export type SubscribeTopicMutationResult = NonNullable<Awaited<ReturnType<typeof subscribeTopic>>>
-    export type SubscribeTopicMutationBody = UserDeviceTokenUpdateRequest
+    
     export type SubscribeTopicMutationError = string
 
     export const useSubscribeTopic = <TError = string,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number;data: UserDeviceTokenUpdateRequest}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof subscribeTopic>>,
         TError,
-        {topicId: number;data: UserDeviceTokenUpdateRequest},
+        {topicId: number},
         TContext
       > => {
 
