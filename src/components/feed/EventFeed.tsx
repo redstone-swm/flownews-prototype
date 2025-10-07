@@ -28,7 +28,7 @@ const EventFeed = ({
     }
 
     return (
-        <Card className={cn("flex flex-col gap-4 rounded-[20px] overflow-hidden", className)} {...props}>
+        eventSummary.topics.length > 0 ? (<Card className={cn("flex flex-col gap-4 rounded-[20px] overflow-hidden", className)} {...props}>
             <CardContent className="p-3">
                 <Link
                     to="/topics/$topicId/events/$eventId"
@@ -83,7 +83,7 @@ const EventFeed = ({
                              topicId={eventSummary.topics[0].id}
                              isFollowing={eventSummary.topics[0].isFollowing}/>
             </CardFooter>
-        </Card>
+        </Card>) : null
     )
 }
 
