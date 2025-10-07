@@ -1,6 +1,5 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 import {storage} from "@/lib/stoarge.ts";
-import { isTokenExpired } from "@/lib/jwt-utils.ts";
 
 const instance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -38,20 +37,19 @@ instance.interceptors.response.use(
 
 // Orval mutator function
 export const axiosInstance = <T = any>(
-  config: AxiosRequestConfig,
-  options?: AxiosRequestConfig,
+    config: AxiosRequestConfig,
+    options?: AxiosRequestConfig & { signal?: AbortSignal },
 ): Promise<T> => {
-  const source = axios.CancelToken.source();
-  const promise = instance({ ...config, ...options, cancelToken: source.token }).then(
-    ({ data }) => data,
-  );
+    const controller = new AbortController();
+    const signal = options?.signal ?? controller.signal;
 
-  // @ts-ignore
-  promise.cancel = () => {
-    source.cancel('Query was cancelled');
-  };
+    const promise: any = instance({ ...config, ...options, signal }).then(
+        ({ data }) => data as T,
+    );
 
-  return promise;
+    promise.cancel = () => controller.abort();
+
+    return promise;
 };
 
 export default instance;
