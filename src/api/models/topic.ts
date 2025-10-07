@@ -11,7 +11,6 @@ export interface Topic {
   id?: number;
   title: string;
   description: string;
-  imageUrl: string;
   topicEvents: TopicEvent[];
   createdAt: string;
   modifiedAt: string;

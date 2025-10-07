@@ -4,12 +4,13 @@
  * FlowNews API
  * OpenAPI spec version: v1
  */
+import type { TopicEventId } from './topicEventId';
 import type { Topic } from './topic';
+import type { Event } from './event';
 
 export interface TopicEvent {
-  id?: number;
+  id: TopicEventId;
   topic: Topic;
-  event: unknown;
+  event: Event;
   createdAt: string;
-  modifiedAt: string;
 }

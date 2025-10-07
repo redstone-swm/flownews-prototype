@@ -9,6 +9,8 @@ export interface Article {
   id?: number;
   event: unknown;
   title: string;
+  category?: string;
+  summary?: string;
   source: string;
   url: string;
 }
