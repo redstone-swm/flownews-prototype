@@ -15,53 +15,15 @@ import {ko} from "date-fns/locale";
 import {TopicFollowButton} from "@/components/feed/TopicFollowButton.tsx";
 import {ReactionItem} from "@/components/feed/ReactionItem.tsx";
 import {ReactionIcons} from "@/constants/ReactionIcons.tsx";
+import {useGetTopic} from "@/api/topics/topics.ts";
 
-const mockTopics =
-    {
-        id: 1,
-        title: '2025년 뉴진스 활동',
-        events: [
-            {
-                id: 1,
-                eventTime: '2025-09-23T11:16:00',
-                title: '뉴진스가 새로운 앨범(어텐션) 발표',
-                description: "걸그룹 뉴진스(NewJeans)가 새로운 앨범 Attention을 발표했습니다. 이번 앨범은 뉴진스 특유의 청량하고 자유로운 감성을 담아내",
-                imageUrl: 'https://picsum.photos/240/160?random=1',
-                likes: 841,
-                isLiked: true
-            },
-            {
-                id: 2,
-                eventTime: '2025-09-24T11:16:00',
-                title: '뉴진스가 새로운 앨범(어텐션) ㅁㄴㅇㄹ',
-                description: "걸그룹 뉴진스(NewJeans)가 새로운 앨범 Attention을 발표했습니다. 이번 앨범은 뉴진스 특유의 청량하고 자유로운 감성을 담아내",
-                imageUrl: 'https://picsum.photos/240/160?random=2',
-                likes: 841,
-                isLiked: true
-            },
-            {
-                id: 3,
-                eventTime: '2025-09-25T11:16:00',
-                title: '뉴진스가 새로운 앨범(어텐션) ㅁㄴㅇㄹ',
-                description: "걸그룹 뉴진스(NewJeans)가 새로운 앨범 Attention을 발표했습니다. 이번 앨범은 뉴진스 특유의 청량하고 자유로운 감성을 담아내",
-                imageUrl: 'https://picsum.photos/240/160?random=3',
-                likes: 841,
-                isLiked: true
-            },
-
-        ]
-    };
 
 
 const TopicDetailsPage = () => {
     const navigate = useNavigate();
     const params = useParams({from: '/topics/$topicId'});
     const topicId = parseInt(params.topicId);
-    // const {data, isLoading, refetch} = useGetTopicDetails(
-    //     parseInt(topicId),
-    // )
-    const data = mockTopics;
-    const isLoading = false;
+    const {data, isLoading} = useGetTopic(topicId);
 
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
@@ -139,7 +101,7 @@ const TopicDetailsPage = () => {
             <div className="flex items-center justify-center px-4 py-8 min-h-[calc(100vh-52px)]">
                 <div className="w-full max-w-md">
                     {/* 타임라인(Date + 선) - Carousel 밖으로 이동 */}
-                    {data.events?.length > 0 && (
+                    {data?.events?.length > 0 && (
                         <div className="w-full flex flex-col justify-center items-center gap-1 mb-3">
                             <span className="font-sm font-semibold text-white">
                                 {format(new Date(data.events[currentIndex]?.eventTime ?? data.events[0].eventTime), 'yyyy년 M월 d일 a h:mm', {locale: ko})}
@@ -151,7 +113,7 @@ const TopicDetailsPage = () => {
                                         className="absolute left-0 right-1/2 top-1/2 -translate-y-1/2 h-px bg-white/30"></div>
                                 )}
                                 {/* 마지막이 아닌 경우에만 오른쪽 선 표시 - 컨테이너 오른쪽 끝까지 */}
-                                {currentIndex < data.events.length - 1 && (
+                                {currentIndex < (data?.events?.length ?? 0) - 1 && (
                                     <div
                                         className="absolute left-1/2 right-0 top-1/2 -translate-y-1/2 h-px bg-white/30"></div>
                                 )}
@@ -174,7 +136,7 @@ const TopicDetailsPage = () => {
                     >
                         <Carousel setApi={setApi} className="w-full max-w-md">
                             <CarouselContent>
-                                {data.events.map((event) => (
+                                {data?.events?.map((event) => (
                                     <CarouselItem key={event.id} className="basis-[95%]">
                                         <div className="flex flex-col gap-3">
                                             {/* 아이템 내부 타임라인 제거 */}
@@ -184,13 +146,13 @@ const TopicDetailsPage = () => {
                                                 </h3>
                                                 <EventImage imageUrl={event.imageUrl} title={event.title}/>
                                                 <p className="text-muted-foreground text-sm leading-relaxed flex-grow">
-                                                    {event.description}
+                                                    {event.content}
                                                 </p>
                                                 <div className="flex gap-2.5 items-center justify-center">
                                                     <ReactionItem reactionTypeId={1} eventId={event.id}
                                                                   icon={ReactionIcons[1]}
-                                                                  count={1}/>
-                                                    <TopicFollowButton topicId={topicId} isFollowing={false}
+                                                                  count={event.likeCount}/>
+                                                    <TopicFollowButton topicId={topicId} isFollowing={data?.isFollowing ?? false}
                                                                        variant="default"/>
                                                 </div>
                                             </Card>
@@ -224,7 +186,7 @@ const TopicDetailsPage = () => {
                                 api?.scrollNext();
                                 handleUserActivity();
                             }}
-                            disabled={currentIndex === (data.events.length - 1)}
+                            disabled={currentIndex === ((data?.events?.length ?? 0) - 1)}
                             className={`md:hidden absolute right-2 top-1/2 -translate-y-1/2 z-10 rounded-full p-3 bg-black/30 text-white shadow-lg backdrop-blur-sm transition-opacity duration-300 ${showNav ? 'opacity-100 disabled:opacity-40' : 'opacity-0 pointer-events-none'}`}
                         >
                             <ChevronRight size={20}/>
