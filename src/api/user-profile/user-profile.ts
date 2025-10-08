@@ -15,6 +15,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  UserDeviceTokenUpdateRequest,
   UserProfileUpdateRequest
 } from '.././models';
 
@@ -87,6 +88,71 @@ export const useUpdateProfile = <TError = string,
       > => {
 
       const mutationOptions = getUpdateProfileMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
+ * 사용자의 FCM 토큰을 업데이트합니다.
+ * @summary 사용자 FCM 토큰 업데이트
+ */
+export const updateDeviceToken = (
+    userDeviceTokenUpdateRequest: UserDeviceTokenUpdateRequest,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<null>(
+      {url: `/api/users/device-token`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userDeviceTokenUpdateRequest, signal
+    },
+      options);
+    }
+  
+
+
+export const getUpdateDeviceTokenMutationOptions = <TError = string,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDeviceToken>>, TError,{data: UserDeviceTokenUpdateRequest}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateDeviceToken>>, TError,{data: UserDeviceTokenUpdateRequest}, TContext> => {
+
+const mutationKey = ['updateDeviceToken'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateDeviceToken>>, {data: UserDeviceTokenUpdateRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updateDeviceToken(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateDeviceTokenMutationResult = NonNullable<Awaited<ReturnType<typeof updateDeviceToken>>>
+    export type UpdateDeviceTokenMutationBody = UserDeviceTokenUpdateRequest
+    export type UpdateDeviceTokenMutationError = string
+
+    /**
+ * @summary 사용자 FCM 토큰 업데이트
+ */
+export const useUpdateDeviceToken = <TError = string,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateDeviceToken>>, TError,{data: UserDeviceTokenUpdateRequest}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateDeviceToken>>,
+        TError,
+        {data: UserDeviceTokenUpdateRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getUpdateDeviceTokenMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

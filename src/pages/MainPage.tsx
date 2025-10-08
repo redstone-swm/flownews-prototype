@@ -6,6 +6,7 @@ import {EventFeed} from "@/components/feed/EventFeed.tsx";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {useEffect} from "react";
 import {useGetTopKTopics} from "@/api/topic-list-query-api/topic-list-query-api.ts";
+import {useFirebaseMessaging} from "@/firebase.ts";
 
 
 export default function MainPage() {
@@ -21,6 +22,8 @@ export default function MainPage() {
             enabled: isAuthenticated
         }
     });
+
+    useFirebaseMessaging();
 
     useEffect(() => {
         if (!authLoading && !isAuthenticated) {
