@@ -9,14 +9,14 @@ import {useGetTopKTopics} from "@/api/topic-list-query-api/topic-list-query-api.
 
 
 export default function MainPage() {
-    const { isAuthenticated, isLoading: authLoading } = useAuth();
+    const {isAuthenticated, isLoading: authLoading} = useAuth();
     const {data, isLoading, refetch} = useGetUserEventFeed({
         query: {
             enabled: isAuthenticated
         }
     });
-    
-    const {data: topKTopics, isLoading: topKLoading} = useGetTopKTopics({ limit: 5 }, {
+
+    const {data: topKTopics, isLoading: topKLoading} = useGetTopKTopics({limit: 5}, {
         query: {
             enabled: isAuthenticated
         }
@@ -28,16 +28,12 @@ export default function MainPage() {
         }
     }, [isAuthenticated, authLoading]);
 
-    const handleRefresh = async () => {
-        await refetch();
-    };
-
     if (authLoading || !isAuthenticated) {
-        return <div>로딩 중...</div>;
+        return;
     }
 
     if (isLoading || !data) {
-        return <div>피드 로딩 중...</div>;
+        return;
     }
 
     console.log(data)
