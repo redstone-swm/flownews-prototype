@@ -6,5 +6,6 @@
  */
 
 export interface UserDeviceTokenUpdateRequest {
+  userId: number;
   deviceToken: string;
 }
