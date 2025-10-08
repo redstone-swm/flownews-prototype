@@ -13,4 +13,6 @@ export interface ReactionToggleResponse {
   isActive: boolean;
   /** 응답 메시지 */
   message: string;
+  /** 해당 반응의 총 개수 */
+  count: number;
 }

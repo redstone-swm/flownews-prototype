@@ -8,14 +8,10 @@ import {
 } from "@/components/ui/carousel";
 import {useState, useEffect, useRef} from "react";
 import type {CarouselApi} from "@/components/ui/carousel";
-import {Card} from "@/components/ui";
-import {EventImage} from "@/components/feed/EventImage.tsx";
 import {format} from "date-fns";
 import {ko} from "date-fns/locale";
-import {TopicFollowButton} from "@/components/feed/TopicFollowButton.tsx";
-import {ReactionItem} from "@/components/feed/ReactionItem.tsx";
-import {ReactionIcons} from "@/constants/ReactionIcons.tsx";
 import {useGetTopic} from "@/api/topics/topics.ts";
+import {EventDetailCard} from "@/components/event/EventDetailCard.tsx";
 
 
 
@@ -29,6 +25,7 @@ const TopicDetailsPage = () => {
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
     const [showNav, setShowNav] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
     const hideTimerRef = useRef<number | null>(null);
 
     const scheduleHide = (delay = 1500) => {
@@ -43,6 +40,10 @@ const TopicDetailsPage = () => {
     const handleUserActivity = () => {
         setShowNav(true);
         scheduleHide(1500);
+    };
+
+    const handleFollowStateChange = (newIsFollowing: boolean) => {
+        setIsFollowing(newIsFollowing);
     };
 
     useEffect(() => {
@@ -67,6 +68,12 @@ const TopicDetailsPage = () => {
             handleUserActivity();
         });
     }, [api]);
+
+    useEffect(() => {
+        if (data?.isFollowing !== undefined) {
+            setIsFollowing(data.isFollowing);
+        }
+    }, [data?.isFollowing]);
 
     // 현재 인덱스(0-based) 계산 - api가 준비되기 전에는 0으로 안전 가드
     const currentIndex = Math.max(0, current - 1);
@@ -139,23 +146,12 @@ const TopicDetailsPage = () => {
                                 {data?.events?.map((event) => (
                                     <CarouselItem key={event.id} className="basis-[95%]">
                                         <div className="flex flex-col gap-3">
-                                            {/* 아이템 내부 타임라인 제거 */}
-                                            <Card className="h-[560px] p-4 flex flex-col gap-3">
-                                                <h3 className="text-lg font-bold mb-0.5">
-                                                    {event.title}
-                                                </h3>
-                                                <EventImage imageUrl={event.imageUrl} title={event.title}/>
-                                                <p className="text-muted-foreground text-sm leading-relaxed flex-grow">
-                                                    {event.content}
-                                                </p>
-                                                <div className="flex gap-2.5 items-center justify-center">
-                                                    <ReactionItem reactionTypeId={1} eventId={event.id}
-                                                                  icon={ReactionIcons[1]}
-                                                                  count={event.likeCount}/>
-                                                    <TopicFollowButton topicId={topicId} isFollowing={data?.isFollowing ?? false}
-                                                                       variant="default"/>
-                                                </div>
-                                            </Card>
+                                            <EventDetailCard 
+                                                event={event}
+                                                topicId={topicId}
+                                                isFollowing={isFollowing}
+                                                onFollowStateChange={handleFollowStateChange}
+                                            />
                                         </div>
                                     </CarouselItem>
                                 ))}

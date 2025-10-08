@@ -62,9 +62,6 @@ function TopicDetailsPage() {
     const topicIdNumber = parseInt(topicId);
     const eventIdNumber = parseInt(eventId);
 
-    // const {data, isLoading, refetch} = useGetTopicDetails(
-    //     parseInt(topicId),
-    // )
     const data = mockTopics;
     const isLoading = false;
 
@@ -72,11 +69,11 @@ function TopicDetailsPage() {
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
     const [showNav, setShowNav] = useState(false);
+    const [currentEventIndex, setCurrentEventIndex] = useState(0);
     const hideTimerRef = useRef<number | null>(null);
 
     // 현재 eventId에 해당하는 이벤트의 인덱스 찾기
     const initialEventIndex = data.events.findIndex(event => event.id === eventIdNumber);
-    const currentEventIndex = Math.max(0, current - 1);
     const currentEvent = data.events[currentEventIndex];
 
     const scheduleHide = (delay = 1500) => {
@@ -113,13 +110,17 @@ function TopicDetailsPage() {
         if (initialEventIndex >= 0) {
             api.scrollTo(initialEventIndex);
             setCurrent(initialEventIndex + 1);
+            setCurrentEventIndex(initialEventIndex);
         } else {
-            setCurrent(api.selectedScrollSnap() + 1);
+            const currentIndex = api.selectedScrollSnap();
+            setCurrent(currentIndex + 1);
+            setCurrentEventIndex(currentIndex);
         }
 
         api.on("select", () => {
             const newIndex = api.selectedScrollSnap();
             setCurrent(newIndex + 1);
+            setCurrentEventIndex(newIndex);
 
             // URL의 eventId 업데이트
             const newEvent = data.events[newIndex];
@@ -135,6 +136,13 @@ function TopicDetailsPage() {
             handleUserActivity();
         });
     }, [api, initialEventIndex, eventIdNumber, topicId, navigate, data.events]);
+
+    // URL의 eventId가 변경되었을 때 상태 동기화
+    useEffect(() => {
+        if (initialEventIndex >= 0 && initialEventIndex !== currentEventIndex) {
+            setCurrentEventIndex(initialEventIndex);
+        }
+    }, [eventIdNumber, initialEventIndex, currentEventIndex]);
 
     const handleBackClick = () => {
         navigate({to: '/'});

@@ -1,7 +1,6 @@
 import * as React from "react"
 import {Button} from "@/components/ui/button.tsx"
-import {useSubscribeTopic, useUnsubscribeTopic} from "@/api/topic-subscribe-api/topic-subscribe-api"
-import type {UserDeviceTokenUpdateRequest} from "@/api/models"
+import {useToggleSubscription} from "@/api/topic-subscriptions/topic-subscriptions"
 import {cn} from "@/lib/utils.ts";
 import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
 import {Check, Plus} from "lucide-react";
@@ -11,7 +10,7 @@ export interface TopicFollowButtonProps {
     variant: "default" | "ghost"
     topicId: number
     isFollowing: boolean
-    onFollowStateChange?: () => void
+    onFollowStateChange?: (newIsFollowing: boolean) => void
     className?: string
     eventId?: number
 }
@@ -25,72 +24,43 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                                                                         variant = "ghost",
                                                                     }) => {
     const {trackTopicFollowed} = useInteractionTracking();
-    const subscribeTopicMutation = useSubscribeTopic({
+    const toggleSubscriptionMutation = useToggleSubscription({
         mutation: {
-            onSuccess: () => {
-                toast.success("관련 소식을 빠르게 알려드릴게요!",)
-                onFollowStateChange?.()
+            onSuccess: (response) => {
+                const newIsFollowing = response.isSubscribed;
+                if (newIsFollowing) {
+                    toast.success("관련 소식을 빠르게 알려드릴게요!");
+                }
+                onFollowStateChange?.(newIsFollowing);
             },
             onError: (error) => {
-                console.error('Failed to subscribe to topic:', error)
+                console.error('Failed to toggle subscription:', error);
             }
         }
     })
 
-    const unsubscribeTopicMutation = useUnsubscribeTopic({
-        mutation: {
-            onSuccess: () => {
-                onFollowStateChange?.()
-            },
-            onError: (error) => {
-                console.error('Failed to unsubscribe to topic:', error)
-            }
-        }
-    })
-
-    const handleFollow = async () => {
-        if (isFollowing) {
-            return
-        }
-
+    const handleToggle = async () => {
         // Track the topic followed interaction
         if (eventId) {
             trackTopicFollowed(eventId, JSON.stringify({
                 topicId,
-                action: 'follow',
+                action: isFollowing ? 'unfollow' : 'follow',
                 wasFollowing: isFollowing
             }));
         }
 
-        const deviceToken = localStorage.getItem('fcm-device-token') || ''
-
-        const subscribeData: UserDeviceTokenUpdateRequest = {
-            deviceToken
-        }
-
-        subscribeTopicMutation.mutate({
-            topicId,
-            data: subscribeData
-        })
-    }
-
-    const handleUnfollow = async () => {
-        if (!isFollowing) {
-            return
-        }
-
-        unsubscribeTopicMutation.mutate({topicId})
+        toggleSubscriptionMutation.mutate({topicId});
     }
 
     return (
         <Button
-            onClick={isFollowing ? handleUnfollow : handleFollow}
+            onClick={handleToggle}
             className={cn("border-r py-3 px-2 text-sm w-full  font-semibold", className)}
-            disabled={subscribeTopicMutation.isPending || unsubscribeTopicMutation.isPending}
-            variant={variant}>
+            disabled={toggleSubscriptionMutation.isPending}
+            variant={isFollowing ? "ghost" : variant}>
             {
                 isFollowing ? (
-                    <span className="text-muted-foreground flex items-center gap-1">
+                    <span className={cn("text-muted-foreground flex items-center gap-1")}>
                         <Check size={16}/>
                         소식 받는 중
                     </span>) : (

@@ -39,6 +39,7 @@ export * from './topicHistoryRecordRequest';
 export * from './topicQueryResponse';
 export * from './topicSectionListItem';
 export * from './topicSectionListQueryResponse';
+export * from './topicSubscriptionToggleResponse';
 export * from './topicSummaryResponse';
 export * from './topicTopKQueryResponse';
 export * from './unsubscribeTopic200';

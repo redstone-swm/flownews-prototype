@@ -4,7 +4,7 @@
  * FlowNews API
  * OpenAPI spec version: v1
  */
-import type { EventItemQueryResponse } from './eventItemQueryResponse';
+import type { EventSummaryResponse } from './eventSummaryResponse';
 
 /**
  * 토픽 상세 조회 응답
@@ -17,7 +17,7 @@ export interface TopicQueryResponse {
   /** 토픽 설명 */
   description: string;
   /** 토픽에 포함된 이벤트 목록 */
-  events: EventItemQueryResponse[];
+  events: EventSummaryResponse[];
   /** 사용자의 토픽 팔로우 여부 */
   isFollowing: boolean;
 }
