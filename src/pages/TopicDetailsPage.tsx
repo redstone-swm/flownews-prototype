@@ -1,5 +1,5 @@
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
-import {useParams, useNavigate} from "@tanstack/react-router";
+import {useNavigate} from "@tanstack/react-router";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {
     Carousel,
@@ -14,11 +14,14 @@ import {useGetTopic} from "@/api/topics/topics.ts";
 import {EventDetailCard} from "@/components/event/EventDetailCard.tsx";
 
 
+type TopicDetailsPageProps = {
+    topicId: number;
+    eventId?: number; // 선택적
+}
 
-const TopicDetailsPage = () => {
+const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
-    const params = useParams({from: '/topics/$topicId'});
-    const topicId = parseInt(params.topicId);
+    const eventIdParam = eventId;
     const {data, isLoading} = useGetTopic(topicId);
 
     const [api, setApi] = useState<CarouselApi>();
@@ -46,6 +49,7 @@ const TopicDetailsPage = () => {
         setIsFollowing(newIsFollowing);
     };
 
+    // 초기 진입 시 버튼 잠깐 표시 및 리소스 정리
     useEffect(() => {
         if (!api) return;
         // 초기 진입 시 잠깐 보여주기
@@ -58,16 +62,69 @@ const TopicDetailsPage = () => {
         };
     }, [api]);
 
+    // 캐러셀 API 준비 시 count, current 설정 및 select 이벤트 동기화
     useEffect(() => {
         if (!api) return;
         setCount(api.scrollSnapList().length);
         setCurrent(api.selectedScrollSnap() + 1);
-        api.on("select", () => {
-            setCurrent(api.selectedScrollSnap() + 1);
+
+        const onSelect = () => {
+            const selectedIndex = api.selectedScrollSnap();
+            setCurrent(selectedIndex + 1);
             // 슬라이드 변경 시 버튼을 잠깐 보여줬다가 숨김
             handleUserActivity();
-        });
-    }, [api]);
+
+            // 현재 선택된 이벤트 id를 URL에 반영 (변경된 경우에만)
+            const events = data?.events ?? [];
+            const currentEvent = events[selectedIndex];
+            if (currentEvent && currentEvent.id !== undefined && currentEvent.id !== eventIdParam) {
+                navigate({
+                    to: '/topics/$topicId/events/$eventId',
+                    params: {topicId: String(topicId), eventId: String(currentEvent.id)},
+                });
+            }
+        };
+
+        api.on("select", onSelect);
+        return () => {
+            api.off("select", onSelect);
+        };
+        // data?.events와 eventIdParam을 의존성에 넣어 URL 동기화의 최신값을 참조
+    }, [api, data?.events, navigate, eventIdParam, topicId]);
+
+    // eventId가 없는 경로로 진입한 경우, 데이터 로드 후 첫 이벤트로 URL 보정
+    useEffect(() => {
+        if (!data?.events?.length) return;
+        if (eventIdParam == null || Number.isNaN(eventIdParam)) {
+            const first = data.events[0];
+            if (first?.id !== undefined) {
+                navigate({
+                    to: '/topics/$topicId/events/$eventId',
+                    params: {topicId: String(topicId), eventId: String(first.id)},
+                    replace: true,
+                });
+            }
+        }
+    }, [data?.events, eventIdParam, navigate, topicId]);
+
+    // API/데이터 준비 후, URL의 eventId에 맞춰 초기/외부 변경 시 스크롤 이동
+    useEffect(() => {
+        if (!api || !data?.events?.length) return;
+        const events = data.events;
+        // eventId가 숫자가 아니면 0번으로
+        const targetIndex = Math.max(0, events.findIndex((e) => Number(e.id) === Number(eventIdParam)));
+        const safeIndex = targetIndex === -1 ? 0 : targetIndex;
+
+        // 현재 선택과 다를 때만 이동 (루프 방지)
+        const selected = api.selectedScrollSnap();
+        if (selected !== safeIndex) {
+            api.scrollTo(safeIndex);
+        }
+        // count는 데이터 기준으로도 보정
+        if (count !== events.length) {
+            setCount(events.length);
+        }
+    }, [api, data?.events, eventIdParam]);
 
     useEffect(() => {
         if (data?.isFollowing !== undefined) {
@@ -83,7 +140,7 @@ const TopicDetailsPage = () => {
     };
 
     if (isLoading || !data) {
-        return;
+        return null;
     }
 
     return (
@@ -146,7 +203,7 @@ const TopicDetailsPage = () => {
                                 {data?.events?.map((event) => (
                                     <CarouselItem key={event.id} className="basis-[95%]">
                                         <div className="flex flex-col gap-3">
-                                            <EventDetailCard 
+                                            <EventDetailCard
                                                 event={event}
                                                 topicId={topicId}
                                                 isFollowing={isFollowing}
