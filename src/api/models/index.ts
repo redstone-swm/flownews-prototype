@@ -18,6 +18,7 @@ export * from './getAllTopicsParams';
 export * from './getInteractionCountForEventInteractionType';
 export * from './getInteractionCountForEventParams';
 export * from './getTopKTopicsParams';
+export * from './getUserEventFeedParams';
 export * from './getUserInteractionsByTypeInteractionType';
 export * from './getUserInteractionsByTypeParams';
 export * from './interactionCountResponse';

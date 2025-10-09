@@ -1,20 +1,15 @@
 import NavbarLayout from "@/components/layout/NavbarLayout.tsx";
-import {useGetUserEventFeed} from "@/api/event-feed/event-feed.ts";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 import {CategoryBar} from "@/components/feed/CategoryBar.tsx";
-import {EventFeed} from "@/components/feed/EventFeed.tsx";
+import {EventFeedList} from "@/components/feed/EventFeedList.tsx";
 import {useAuth} from "@/contexts/AuthContext.tsx";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useGetTopKTopics} from "@/api/topic-list-query-api/topic-list-query-api.ts";
 
 
 export default function MainPage() {
     const {isAuthenticated, isLoading: authLoading} = useAuth();
-    const {data, isLoading, refetch} = useGetUserEventFeed({
-        query: {
-            enabled: isAuthenticated
-        }
-    });
+    const [activeCategory, setActiveCategory] = useState('MY');
 
     const {data: topKTopics, isLoading: topKLoading} = useGetTopKTopics({limit: 5}, {
         query: {
@@ -31,12 +26,6 @@ export default function MainPage() {
     if (authLoading || !isAuthenticated) {
         return;
     }
-
-    if (isLoading || !data) {
-        return;
-    }
-
-    console.log(data)
     return (
         <NavbarLayout topKTopics={topKTopics} topKLoading={topKLoading}>
             {/*<PullToRefresh onRefresh={handleRefresh}>*/}
@@ -66,12 +55,11 @@ export default function MainPage() {
                 </TabsList>
                 <TabsContent value="feed">
                     <div className="flex flex-col gap-4">
-                        <CategoryBar/>
-                        <div className="px-3 flex flex-col gap-4">
-                            {data.eventIds.map((e) => (
-                                <EventFeed key={e || Math.random()} eventId={e}/>
-                            ))}
-                        </div>
+                        <CategoryBar 
+                            activeCategory={activeCategory}
+                            setActiveCategory={setActiveCategory}
+                        />
+                        <EventFeedList activeCategory={activeCategory} />
                     </div>
                 </TabsContent>
                 <TabsContent value="dashboard">
