@@ -3,6 +3,7 @@ import NavbarAvatar from "@/components/layout/NavbarAvatar.tsx";
 import {Search} from "lucide-react";
 import {Input} from "@/components/ui";
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
+import {Skeleton} from "@/components/ui/skeleton";
 import type {TopicTopKQueryResponse} from "@/api/models";
 
 interface NavbarProps {
@@ -47,12 +48,20 @@ export default function Navbar({topKTopics, topKLoading}: NavbarProps) {
                 <div className="w-full flex flex-col gap-3 ">
                     <div className="px-3 text-white font-semibold text-[14px]">실시간 토픽 TOP 5</div>
                     <div className="px-3 flex  gap-2 overflow-x-auto flex-nowrap scrollbar-hide">
-                        {!topKLoading && topKTopics && topKTopics.length > 0 ?
+                        {topKLoading ? (
+                            Array.from({length: 5}).map((_, index) => (
+                                <Skeleton
+                                    key={index}
+                                    className="h-9  rounded-full bg-white/20"
+                                />
+                            ))
+                        ) : topKTopics && topKTopics.length > 0 ? (
                             topKTopics.map((topic) => (
-                                <Link key={topic.id} to="/topics/$topicId" params={{ topicId: topic.id.toString() }}>
+                                <Link key={topic.id} to="/topics/$topicId" params={{topicId: topic.id.toString()}}>
                                     <NavbarBadge text={topic.title}/>
                                 </Link>
-                            )) : []}
+                            ))
+                        ) : null}
                     </div>
                 </div>
             </div>

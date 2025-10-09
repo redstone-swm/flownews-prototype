@@ -12,6 +12,7 @@ import {format} from "date-fns";
 import {ko} from "date-fns/locale";
 import {useGetTopic} from "@/api/topics/topics.ts";
 import {EventDetailCard} from "@/components/event/EventDetailCard.tsx";
+import {Spinner} from "@/components/ui/spinner";
 
 
 type TopicDetailsPageProps = {
@@ -140,7 +141,12 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     };
 
     if (isLoading || !data) {
-        return null;
+        return (
+            <div
+                className="min-h-screen w-full overflow-x-hidden bg-gradient-to-r from-[#323b86] to-[#3f1f76] flex items-center justify-center">
+                <Spinner className="size-8 text-white"/>
+            </div>
+        );
     }
 
     return (
