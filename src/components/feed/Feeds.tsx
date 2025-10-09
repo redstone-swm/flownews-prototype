@@ -4,6 +4,7 @@ import {useAuth} from "@/contexts/AuthContext.tsx";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {CategoryBar} from "@/components/feed/CategoryBar.tsx";
 import {EventFeed} from "@/components/feed/EventFeed.tsx";
+import {Spinner} from "@/components/ui/spinner";
 
 export const Feeds = () => {
     const {isAuthenticated, isLoading: authLoading} = useAuth();
@@ -78,7 +79,7 @@ export const Feeds = () => {
                 dataLength={items.length}
                 next={fetchMore}
                 hasMore={hasMore}
-                loader={<div className="py-4 text-center text-sm text-muted-foreground">Loading…</div>}
+                loader={<div className="py-4 flex justify-center"><Spinner className="size-5"/></div>}
                 endMessage={
                     <div className="py-4 text-center text-xs text-muted-foreground">
                         더 볼 항목이 없어요
