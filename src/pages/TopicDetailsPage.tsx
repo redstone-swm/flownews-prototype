@@ -140,7 +140,11 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     };
 
     if (isLoading || !data) {
-        return null;
+        return (
+            <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-r from-[#323b86] to-[#3f1f76]">
+                
+            </div>
+        );
     }
 
     return (
