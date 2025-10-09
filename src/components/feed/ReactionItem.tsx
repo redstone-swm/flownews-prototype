@@ -1,6 +1,6 @@
 import * as React from "react";
+import {useState} from "react";
 import {cn} from "@/lib/utils.ts";
-import {Heart} from "lucide-react";
 import {useToggleReaction} from "@/api/event-reactions/event-reactions.ts";
 import {Button} from "@/components/ui";
 
@@ -11,23 +11,27 @@ export interface ReactionItemProps {
     count: string | number
     isActive?: boolean
     className?: string
-    onChange?: () => void
+    onChange?: (isActive: boolean, count: number) => void
 }
 
 const ReactionItem: React.FC<ReactionItemProps> = ({
                                                        reactionTypeId,
                                                        eventId,
                                                        icon,
-                                                       count,
-                                                       isActive = false,
+                                                       count: initialCount,
+                                                       isActive: initialIsActive = false,
                                                        className,
                                                        onChange,
                                                    }) => {
+    const [localCount, setLocalCount] = useState(initialCount);
+    const [localIsActive, setLocalIsActive] = useState(initialIsActive);
     const toggleReactionMutation = useToggleReaction(
         {
             mutation: {
-                onSuccess: () => {
-                    onChange?.()
+                onSuccess: (response) => {
+                    setLocalIsActive(response.isActive);
+                    setLocalCount(response.count);
+                    onChange?.(response.isActive, response.count);
                 },
                 onError: (error) => {
                     console.error('Failed to add reaction:', error)
@@ -51,14 +55,14 @@ const ReactionItem: React.FC<ReactionItemProps> = ({
             className={cn(
                 "w-[72px] shrink-0 text-muted-foreground",
                 "transition-colors select-none cursor-pointer",
-                isActive && " text-red-600 dark:text-red-400",
-                !isActive && className
+                localIsActive && " text-red-600 dark:text-red-400",
+                !localIsActive && className
             )}
             onClick={handleReaction}
         >
             {icon}
             <span>
-                {count}
+                {localCount}
             </span>
         </Button>
     )

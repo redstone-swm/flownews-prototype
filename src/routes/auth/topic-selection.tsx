@@ -6,6 +6,7 @@ import {useGetAllTopics} from '@/api/topic-list-query-api/topic-list-query-api'
 import {useSubscribeTopic} from '@/api/topic-subscribe-api/topic-subscribe-api'
 import {useAuth} from '@/contexts/AuthContext'
 import type {TopicSummaryResponse, UserDeviceTokenUpdateRequest} from "@/api/models";
+import {useToggleSubscription} from "@/api/topic-subscriptions/topic-subscriptions.ts";
 
 export const Route = createFileRoute('/auth/topic-selection')({
     component: TopicSelectionComponent,
@@ -19,7 +20,7 @@ function TopicSelectionComponent() {
 
     const {data: topics, isLoading, error} = useGetAllTopics()
 
-    const subscribeTopicMutation = useSubscribeTopic()
+    const subscribeTopicMutation = useToggleSubscription()
 
     const handleTopicToggle = (topicId: number) => {
         setSelectedTopics(prev =>

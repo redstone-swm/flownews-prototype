@@ -12,11 +12,11 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as TopicsTopicIdImport } from './routes/topics/$topicId'
 import { Route as AuthTopicSelectionImport } from './routes/auth/topic-selection'
 import { Route as AuthProfileCompleteImport } from './routes/auth/profile-complete'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthCallbackImport } from './routes/auth/callback'
+import { Route as TopicsTopicIdIndexImport } from './routes/topics/$topicId/index'
 import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topicId/events/$eventId'
 
 // Create/Update Routes
@@ -24,12 +24,6 @@ import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topi
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const TopicsTopicIdRoute = TopicsTopicIdImport.update({
-  id: '/topics/$topicId',
-  path: '/topics/$topicId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -57,11 +51,17 @@ const AuthCallbackRoute = AuthCallbackImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const TopicsTopicIdIndexRoute = TopicsTopicIdIndexImport.update({
+  id: '/topics/$topicId/',
+  path: '/topics/$topicId/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const TopicsTopicIdEventsEventIdRoute = TopicsTopicIdEventsEventIdImport.update(
   {
-    id: '/events/$eventId',
-    path: '/events/$eventId',
-    getParentRoute: () => TopicsTopicIdRoute,
+    id: '/topics/$topicId/events/$eventId',
+    path: '/topics/$topicId/events/$eventId',
+    getParentRoute: () => rootRoute,
   } as any,
 )
 
@@ -104,36 +104,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthTopicSelectionImport
       parentRoute: typeof rootRoute
     }
-    '/topics/$topicId': {
-      id: '/topics/$topicId'
+    '/topics/$topicId/': {
+      id: '/topics/$topicId/'
       path: '/topics/$topicId'
       fullPath: '/topics/$topicId'
-      preLoaderRoute: typeof TopicsTopicIdImport
+      preLoaderRoute: typeof TopicsTopicIdIndexImport
       parentRoute: typeof rootRoute
     }
     '/topics/$topicId/events/$eventId': {
       id: '/topics/$topicId/events/$eventId'
-      path: '/events/$eventId'
+      path: '/topics/$topicId/events/$eventId'
       fullPath: '/topics/$topicId/events/$eventId'
       preLoaderRoute: typeof TopicsTopicIdEventsEventIdImport
-      parentRoute: typeof TopicsTopicIdImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
-
-interface TopicsTopicIdRouteChildren {
-  TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
-}
-
-const TopicsTopicIdRouteChildren: TopicsTopicIdRouteChildren = {
-  TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
-}
-
-const TopicsTopicIdRouteWithChildren = TopicsTopicIdRoute._addFileChildren(
-  TopicsTopicIdRouteChildren,
-)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -141,7 +129,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
-  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
@@ -151,7 +139,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
-  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
@@ -162,7 +150,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
-  '/topics/$topicId': typeof TopicsTopicIdRouteWithChildren
+  '/topics/$topicId/': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
 
@@ -192,7 +180,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/profile-complete'
     | '/auth/topic-selection'
-    | '/topics/$topicId'
+    | '/topics/$topicId/'
     | '/topics/$topicId/events/$eventId'
   fileRoutesById: FileRoutesById
 }
@@ -203,7 +191,8 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthProfileCompleteRoute: typeof AuthProfileCompleteRoute
   AuthTopicSelectionRoute: typeof AuthTopicSelectionRoute
-  TopicsTopicIdRoute: typeof TopicsTopicIdRouteWithChildren
+  TopicsTopicIdIndexRoute: typeof TopicsTopicIdIndexRoute
+  TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -212,7 +201,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthProfileCompleteRoute: AuthProfileCompleteRoute,
   AuthTopicSelectionRoute: AuthTopicSelectionRoute,
-  TopicsTopicIdRoute: TopicsTopicIdRouteWithChildren,
+  TopicsTopicIdIndexRoute: TopicsTopicIdIndexRoute,
+  TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -230,7 +220,8 @@ export const routeTree = rootRoute
         "/auth/login",
         "/auth/profile-complete",
         "/auth/topic-selection",
-        "/topics/$topicId"
+        "/topics/$topicId/",
+        "/topics/$topicId/events/$eventId"
       ]
     },
     "/": {
@@ -248,15 +239,11 @@ export const routeTree = rootRoute
     "/auth/topic-selection": {
       "filePath": "auth/topic-selection.tsx"
     },
-    "/topics/$topicId": {
-      "filePath": "topics/$topicId.tsx",
-      "children": [
-        "/topics/$topicId/events/$eventId"
-      ]
+    "/topics/$topicId/": {
+      "filePath": "topics/$topicId/index.tsx"
     },
     "/topics/$topicId/events/$eventId": {
-      "filePath": "topics/$topicId/events/$eventId.tsx",
-      "parent": "/topics/$topicId"
+      "filePath": "topics/$topicId/events/$eventId.tsx"
     }
   }
 }

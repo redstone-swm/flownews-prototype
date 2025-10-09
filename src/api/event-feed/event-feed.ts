@@ -20,7 +20,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  EventFeedResponse
+  EventFeedResponse,
+  GetUserEventFeedParams
 } from '.././models';
 
 import { axiosInstance } from '.././axiosInstance';
@@ -35,33 +36,34 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
  * @summary 사용자별 이벤트 피드 조회
  */
 export const getUserEventFeed = (
-    
+    params?: GetUserEventFeedParams,
  options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
 ) => {
       
       
       return axiosInstance<EventFeedResponse>(
-      {url: `/events/feed`, method: 'GET', signal
+      {url: `/events/feed`, method: 'GET',
+        params, signal
     },
       options);
     }
   
 
-export const getGetUserEventFeedQueryKey = () => {
-    return [`/events/feed`] as const;
+export const getGetUserEventFeedQueryKey = (params?: GetUserEventFeedParams,) => {
+    return [`/events/feed`, ...(params ? [params]: [])] as const;
     }
 
     
-export const getGetUserEventFeedQueryOptions = <TData = Awaited<ReturnType<typeof getUserEventFeed>>, TError = string>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+export const getGetUserEventFeedQueryOptions = <TData = Awaited<ReturnType<typeof getUserEventFeed>>, TError = string>(params?: GetUserEventFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetUserEventFeedQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetUserEventFeedQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserEventFeed>>> = ({ signal }) => getUserEventFeed(requestOptions, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserEventFeed>>> = ({ signal }) => getUserEventFeed(params, requestOptions, signal);
 
       
 
@@ -75,7 +77,7 @@ export type GetUserEventFeedQueryError = string
 
 
 export function useGetUserEventFeed<TData = Awaited<ReturnType<typeof getUserEventFeed>>, TError = string>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>> & Pick<
+ params: undefined |  GetUserEventFeedParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUserEventFeed>>,
           TError,
@@ -85,7 +87,7 @@ export function useGetUserEventFeed<TData = Awaited<ReturnType<typeof getUserEve
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserEventFeed<TData = Awaited<ReturnType<typeof getUserEventFeed>>, TError = string>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>> & Pick<
+ params?: GetUserEventFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getUserEventFeed>>,
           TError,
@@ -95,7 +97,7 @@ export function useGetUserEventFeed<TData = Awaited<ReturnType<typeof getUserEve
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserEventFeed<TData = Awaited<ReturnType<typeof getUserEventFeed>>, TError = string>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ params?: GetUserEventFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -103,11 +105,11 @@ export function useGetUserEventFeed<TData = Awaited<ReturnType<typeof getUserEve
  */
 
 export function useGetUserEventFeed<TData = Awaited<ReturnType<typeof getUserEventFeed>>, TError = string>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
+ params?: GetUserEventFeedParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getUserEventFeed>>, TError, TData>>, request?: SecondParameter<typeof axiosInstance>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetUserEventFeedQueryOptions(options)
+  const queryOptions = getGetUserEventFeedQueryOptions(params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

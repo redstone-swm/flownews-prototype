@@ -1,5 +1,5 @@
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
-import {useParams, useNavigate} from "@tanstack/react-router";
+import {useNavigate} from "@tanstack/react-router";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {
     Carousel,
@@ -8,27 +8,28 @@ import {
 } from "@/components/ui/carousel";
 import {useState, useEffect, useRef} from "react";
 import type {CarouselApi} from "@/components/ui/carousel";
-import {Card} from "@/components/ui";
-import {EventImage} from "@/components/feed/EventImage.tsx";
 import {format} from "date-fns";
 import {ko} from "date-fns/locale";
-import {TopicFollowButton} from "@/components/feed/TopicFollowButton.tsx";
-import {ReactionItem} from "@/components/feed/ReactionItem.tsx";
-import {ReactionIcons} from "@/constants/ReactionIcons.tsx";
 import {useGetTopic} from "@/api/topics/topics.ts";
+import {EventDetailCard} from "@/components/event/EventDetailCard.tsx";
+import {Spinner} from "@/components/ui/spinner";
 
 
+type TopicDetailsPageProps = {
+    topicId: number;
+    eventId?: number; // 선택적
+}
 
-const TopicDetailsPage = () => {
+const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
-    const params = useParams({from: '/topics/$topicId'});
-    const topicId = parseInt(params.topicId);
+    const eventIdParam = eventId;
     const {data, isLoading} = useGetTopic(topicId);
 
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
     const [showNav, setShowNav] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
     const hideTimerRef = useRef<number | null>(null);
 
     const scheduleHide = (delay = 1500) => {
@@ -45,6 +46,11 @@ const TopicDetailsPage = () => {
         scheduleHide(1500);
     };
 
+    const handleFollowStateChange = (newIsFollowing: boolean) => {
+        setIsFollowing(newIsFollowing);
+    };
+
+    // 초기 진입 시 버튼 잠깐 표시 및 리소스 정리
     useEffect(() => {
         if (!api) return;
         // 초기 진입 시 잠깐 보여주기
@@ -57,16 +63,75 @@ const TopicDetailsPage = () => {
         };
     }, [api]);
 
+    // 캐러셀 API 준비 시 count, current 설정 및 select 이벤트 동기화
     useEffect(() => {
         if (!api) return;
         setCount(api.scrollSnapList().length);
         setCurrent(api.selectedScrollSnap() + 1);
-        api.on("select", () => {
-            setCurrent(api.selectedScrollSnap() + 1);
+
+        const onSelect = () => {
+            const selectedIndex = api.selectedScrollSnap();
+            setCurrent(selectedIndex + 1);
             // 슬라이드 변경 시 버튼을 잠깐 보여줬다가 숨김
             handleUserActivity();
-        });
-    }, [api]);
+
+            // 현재 선택된 이벤트 id를 URL에 반영 (변경된 경우에만)
+            const events = data?.events ?? [];
+            const currentEvent = events[selectedIndex];
+            if (currentEvent && currentEvent.id !== undefined && currentEvent.id !== eventIdParam) {
+                navigate({
+                    to: '/topics/$topicId/events/$eventId',
+                    params: {topicId: String(topicId), eventId: String(currentEvent.id)},
+                });
+            }
+        };
+
+        api.on("select", onSelect);
+        return () => {
+            api.off("select", onSelect);
+        };
+        // data?.events와 eventIdParam을 의존성에 넣어 URL 동기화의 최신값을 참조
+    }, [api, data?.events, navigate, eventIdParam, topicId]);
+
+    // eventId가 없는 경로로 진입한 경우, 데이터 로드 후 첫 이벤트로 URL 보정
+    useEffect(() => {
+        if (!data?.events?.length) return;
+        if (eventIdParam == null || Number.isNaN(eventIdParam)) {
+            const first = data.events[0];
+            if (first?.id !== undefined) {
+                navigate({
+                    to: '/topics/$topicId/events/$eventId',
+                    params: {topicId: String(topicId), eventId: String(first.id)},
+                    replace: true,
+                });
+            }
+        }
+    }, [data?.events, eventIdParam, navigate, topicId]);
+
+    // API/데이터 준비 후, URL의 eventId에 맞춰 초기/외부 변경 시 스크롤 이동
+    useEffect(() => {
+        if (!api || !data?.events?.length) return;
+        const events = data.events;
+        // eventId가 숫자가 아니면 0번으로
+        const targetIndex = Math.max(0, events.findIndex((e) => Number(e.id) === Number(eventIdParam)));
+        const safeIndex = targetIndex === -1 ? 0 : targetIndex;
+
+        // 현재 선택과 다를 때만 이동 (루프 방지)
+        const selected = api.selectedScrollSnap();
+        if (selected !== safeIndex) {
+            api.scrollTo(safeIndex);
+        }
+        // count는 데이터 기준으로도 보정
+        if (count !== events.length) {
+            setCount(events.length);
+        }
+    }, [api, data?.events, eventIdParam]);
+
+    useEffect(() => {
+        if (data?.isFollowing !== undefined) {
+            setIsFollowing(data.isFollowing);
+        }
+    }, [data?.isFollowing]);
 
     // 현재 인덱스(0-based) 계산 - api가 준비되기 전에는 0으로 안전 가드
     const currentIndex = Math.max(0, current - 1);
@@ -76,7 +141,12 @@ const TopicDetailsPage = () => {
     };
 
     if (isLoading || !data) {
-        return;
+        return (
+            <div
+                className="min-h-screen w-full overflow-x-hidden bg-gradient-to-r from-[#323b86] to-[#3f1f76] flex items-center justify-center">
+                <Spinner className="size-8 text-white"/>
+            </div>
+        );
     }
 
     return (
@@ -139,23 +209,12 @@ const TopicDetailsPage = () => {
                                 {data?.events?.map((event) => (
                                     <CarouselItem key={event.id} className="basis-[95%]">
                                         <div className="flex flex-col gap-3">
-                                            {/* 아이템 내부 타임라인 제거 */}
-                                            <Card className="h-[560px] p-4 flex flex-col gap-3">
-                                                <h3 className="text-lg font-bold mb-0.5">
-                                                    {event.title}
-                                                </h3>
-                                                <EventImage imageUrl={event.imageUrl} title={event.title}/>
-                                                <p className="text-muted-foreground text-sm leading-relaxed flex-grow">
-                                                    {event.content}
-                                                </p>
-                                                <div className="flex gap-2.5 items-center justify-center">
-                                                    <ReactionItem reactionTypeId={1} eventId={event.id}
-                                                                  icon={ReactionIcons[1]}
-                                                                  count={event.likeCount}/>
-                                                    <TopicFollowButton topicId={topicId} isFollowing={data?.isFollowing ?? false}
-                                                                       variant="default"/>
-                                                </div>
-                                            </Card>
+                                            <EventDetailCard
+                                                event={event}
+                                                topicId={topicId}
+                                                isFollowing={isFollowing}
+                                                onFollowStateChange={handleFollowStateChange}
+                                            />
                                         </div>
                                     </CarouselItem>
                                 ))}
