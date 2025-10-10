@@ -20,9 +20,9 @@ export function useFirebaseMessaging() {
         });
 
         const actionListener = await PushNotifications.addListener('pushNotificationActionPerformed', ({notification}) => {
-            const {topicId} = notification?.data;
-            if (topicId) {
-                router.navigate({to: `/topics/${topicId}`});
+            const {topicId, eventId} = notification?.data;
+            if (topicId && eventId) {
+                router.navigate({to: `/topics/${topicId}/events/${eventId}`});
             }
         });
 
