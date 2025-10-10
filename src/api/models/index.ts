@@ -25,6 +25,7 @@ export * from './interactionCountResponse';
 export * from './interactionRecordRequest';
 export * from './interactionRecordRequestInteractionType';
 export * from './interactionRecordResponse';
+export * from './notificationResponse';
 export * from './pushMessageSendRequest';
 export * from './reaction';
 export * from './reactionSummaryResponse';
