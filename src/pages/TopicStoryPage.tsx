@@ -161,6 +161,9 @@ const TopicStoryPage: React.FC<TopicStoryPageProps> = ({
         <footer className="px-4 sm:px-6 md:px-8 lg:px-12 pb-6 sm:pb-8">
           <div className="max-w-4xl mx-auto">
             <ReactionBar 
+              eventId={0}
+              topicId={0}
+              isFollowing={false}
               reactions={mockReactions} 
               className="bg-black/40 backdrop-blur-md border-white/20"
             />

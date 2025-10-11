@@ -3,7 +3,8 @@
 import * as React from "react"
 import {cn} from "@/lib/utils"
 import {NewsArticleReference} from "../feed/news-article-reference.tsx"
-import {ReactionBar, type ReactionsProps} from "../feed/ReactionBar.tsx"
+import {ReactionBar} from "../feed/ReactionBar.tsx"
+import type {ReactionSummaryResponse} from "@/api/models"
 
 
 export interface ArticleProps {
@@ -17,7 +18,10 @@ export interface ArticleProps {
 
 export interface ArticleItemProps extends React.HTMLAttributes<HTMLDivElement> {
     articles: ArticleProps[]
-    reactions: ReactionsProps
+    reactions: ReactionSummaryResponse[]
+    eventId: number
+    topicId: number
+    isFollowing: boolean
     showTimeline?: boolean
 }
 
@@ -25,6 +29,9 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                                                      className,
                                                      articles,
                                                      reactions,
+                                                     eventId,
+                                                     topicId,
+                                                     isFollowing,
                                                      showTimeline = true,
                                                      ...props
                                                  }) => {
@@ -49,6 +56,9 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
 
             <footer className="pl-5 pr-4">
                 <ReactionBar
+                    eventId={eventId}
+                    topicId={topicId}
+                    isFollowing={isFollowing}
                     reactions={reactions}
                     className="border-t border-gray-100"
                 />

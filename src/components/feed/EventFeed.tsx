@@ -79,9 +79,13 @@ const EventFeed = ({
             </CardContent>
             <CardFooter
                 className="flex w-full h-full justify-center items-center mt-0 p-0 bg-gray-100">
-                <ReactionBar eventId={eventId} reactions={eventSummary.reactions} onReactionChange={refetch}
-                             topicId={eventSummary.topics[0].id}
-                             isFollowing={eventSummary.topics[0].isFollowing}/>
+                <ReactionBar 
+                    eventId={eventId} 
+                    reactions={eventSummary.reactions} 
+                    onReactionChange={refetch}
+                    topicId={eventSummary.topics[0].id}
+                    isFollowing={eventSummary.topics[0].isFollowing}
+                />
             </CardFooter>
         </Card>) : null
     )
