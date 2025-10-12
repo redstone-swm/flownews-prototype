@@ -56,17 +56,20 @@ export function useFirebaseMessaging() {
 
     useEffect(() => {
         const loadDeviceToken = async () => {
+            if (deviceToken) return;
+
             const token = await storage.get(DEVICE_TOKEN_KEY);
             setDeviceToken(token);
         }
 
         loadDeviceToken();
+    }, [user?.id, updateDeviceToken]);
 
+    useEffect(() => {
         if(!deviceToken || !user?.id) return;
 
         updateDeviceToken.mutate({
             data: { deviceToken, userId: user?.id },
         });
-
-    }, [user?.id, deviceToken, updateDeviceToken]);
+    }, [deviceToken, user?.id, updateDeviceToken]);
 }
