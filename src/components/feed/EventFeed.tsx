@@ -63,9 +63,14 @@ const EventFeed = ({
                                 <h3 className="text-lg font-bold   truncate">
                                     {eventSummary.title}
                                 </h3>
-                                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
-                                    {eventSummary.description}
-                                </p>
+                                <div className="relative">
+                                    <p className="text-sm text-muted-foreground line-clamp-2">
+                                        {eventSummary.description}
+                                    </p>
+                                    <div className="text-right ">
+                                        <span className="text-blue-500 text-sm">자세히 보기</span>
+                                    </div>
+                                </div>
 
                             </div>
 

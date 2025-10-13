@@ -3,14 +3,13 @@ import {Bell} from "lucide-react";
 import {Button} from "@/components/ui";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui";
 import {ScrollArea, Separator} from "@/components/ui";
-import * as React from "react";
 import {formatDistanceToNow} from "date-fns";
 import {ko} from "date-fns/locale";
 import {useGetNotifications} from "@/api/notification-api/notification-api.ts";
 
 
 export function NavbarNotifications() {
-    const {data: items, isLoading, refetch} = useGetNotifications();
+    const {data: items} = useGetNotifications();
 
     return (
         <Popover>
@@ -30,19 +29,19 @@ export function NavbarNotifications() {
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-80 p-0">
-                <div className="p-3">
+                <div className="p-2">
                     <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold">알림</p>
                         {/*<button className="text-xs text-muted-foreground hover:underline">모두 읽음</button>*/}
                     </div>
                 </div>
                 <Separator/>
-                {items?.length === 0 ? (
+                {!items || items.length === 0 ? (
                     <div className="p-6 text-center text-sm text-muted-foreground">알림이 없습니다.</div>
                 ) : (
                     <ScrollArea className="max-h-80">
                         <ul className="divide-y">
-                            {items?.map((item, i) => (
+                            {items.map((item, i) => (
                                 <li key={i} className="p-3 hover:bg-accent/40">
                                     <div className="flex items-start gap-3">
                                         <div className="min-w-0 flex-1">
