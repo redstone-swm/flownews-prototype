@@ -5,6 +5,7 @@ import {Input} from "@/components/ui";
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
 import {Skeleton} from "@/components/ui/skeleton";
 import type {TopicTopKQueryResponse} from "@/api/models";
+import {NavbarNotifications} from "@/components/layout/NavbarNotifications";
 
 interface NavbarProps {
     topKTopics?: TopicTopKQueryResponse[];
@@ -29,7 +30,7 @@ export default function Navbar({topKTopics, topKLoading}: NavbarProps) {
                             />
                         </Link>
                     </div>
-                    <div className="py-2.5 h-full flex items-center gap-1 max-w-xs lg:max-w-md">
+                    <div className="py-2.5 h-full flex items-center  max-w-xs lg:max-w-md">
                         <div className="h-full flex justify-center">
                             <div className="h-full relative w-full">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white"/>
@@ -40,7 +41,9 @@ export default function Navbar({topKTopics, topKLoading}: NavbarProps) {
                             </div>
                         </div>
                         <div className='p-2'>
-                            {/*<Bell size={18} color="white"/>*/}
+                            <NavbarNotifications/>
+                        </div>
+                        <div className=''>
                             <NavbarAvatar/>
                         </div>
                     </div>
