@@ -21,12 +21,12 @@ export default function Navbar({topKTopics, topKLoading}: NavbarProps) {
             <div
                 className="flex flex-col items-center justify-between mx-auto  w-full h-full max-w-screen-lg gap-6 pb-6">
                 <div className='w-full h-[52px] flex gap-4 items-center justify-between px-3'>
-                    <div className="py-1.5">
+                    <div className="py-1.5 flex-shrink-0">
                         <Link to="/">
                             <img
                                 src="/logo2-dark.png"
                                 alt="logo"
-                                className={`h-10 w-auto  dark:hidden`}
+                                className={`h-10 w-auto dark:hidden`}
                             />
                         </Link>
                     </div>
