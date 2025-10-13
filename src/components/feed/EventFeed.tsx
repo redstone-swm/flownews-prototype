@@ -29,7 +29,7 @@ const EventFeed = ({
 
     return (
         eventSummary.topics.length > 0 ? (
-            <Card className={cn("flex flex-col gap-4 rounded-[20px] overflow-hidden", className)} {...props}>
+            <Card className={cn("mx-3 flex flex-col gap-4 rounded-[20px] overflow-hidden", className)} {...props}>
                 <CardContent className="p-3">
                     <Link
                         to="/topics/$topicId/events/$eventId"
