@@ -1,5 +1,7 @@
 import {Button} from "@/components/ui/button";
 import {useAuth} from "@/contexts/AuthContext.tsx";
+import capacitorConfig from "../../capacitor.config.ts";
+import {Capacitor} from "@capacitor/core";
 
 export default function LoginPage() {
     const {isAuthenticated} = useAuth();
@@ -11,7 +13,8 @@ export default function LoginPage() {
 
     const handleGoogleLogin = () => {
         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-        window.location.href = `${apiBaseUrl}/oauth2/authorization/google`;
+        if (!Capacitor.isNativePlatform()) window.location.href = `${apiBaseUrl}/oauth2/authorization/google`;
+        else window.location.href = `${apiBaseUrl}/oauth2/authorization/google-mobile`;
     };
 
     const handleAppleLogin = () => {
