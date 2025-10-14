@@ -21,7 +21,7 @@ export const EventDetailCard = ({event, topicId, isFollowing, onFollowStateChang
                 {event.title}
             </h3>
             <EventImage imageUrl={event.imageUrl} title={event.title}/>
-            <p className="text-muted-foreground text-sm leading-relaxed flex-grow">
+            <p className="text-muted-foreground text-sm leading-relaxed flex-grow whitespace-pre-wrap break-words">
                 {event.description}
             </p>
             <div className="flex gap-2.5 items-center justify-center">
