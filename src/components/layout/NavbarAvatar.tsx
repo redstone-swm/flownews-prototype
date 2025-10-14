@@ -47,10 +47,10 @@ export default function NavbarAvatar() {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator/>
                         {/*<Link to="/likes" className="cursor-pointer">*/}
-                        <DropdownMenuItem>
-                            <Heart className="w-4 h-4 mr-2"/>
-                            <span>좋아요한 기사 보기</span>
-                        </DropdownMenuItem>
+                        {/*<DropdownMenuItem>*/}
+                        {/*    <Heart className="w-4 h-4 mr-2"/>*/}
+                        {/*    <span>좋아요한 기사 보기</span>*/}
+                        {/*</DropdownMenuItem>*/}
                         {/*</Link>*/}
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
@@ -60,13 +60,14 @@ export default function NavbarAvatar() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-                <Button
-                    variant="outline"
-                    className="rounded-full"
-                    onClick={() => setIsLoginModalOpen(true)}
-                >
-                    로그인
-                </Button>
+                <Link to={"/auth/login"}>
+                    <Button
+                        variant="outline"
+                        className="rounded-full"
+                    >
+                        로그인
+                    </Button>
+                </Link>
             )}
 
             <LoginModal

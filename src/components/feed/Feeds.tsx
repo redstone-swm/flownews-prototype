@@ -10,11 +10,11 @@ export const Feeds = () => {
     const {isAuthenticated, isLoading: authLoading} = useAuth();
     const [activeCategory, setActiveCategory] = useState('MY');
 
-    const params = activeCategory === 'MY' ? undefined : { category: activeCategory };
+    const params = activeCategory === 'MY' ? undefined : {category: activeCategory};
     const {data, isLoading, refetch} = useGetUserEventFeed(
-        params,{
-        query: {enabled: isAuthenticated}
-    });
+        params, {
+            // query: {enabled: isAuthenticated}
+        });
 
     // 누적 아이템, 추가 로딩 여부, 더 불러올 수 있는지 여부
     const [items, setItems] = useState<number[]>([]);
@@ -58,13 +58,13 @@ export const Feeds = () => {
         try {
             const next = await getUserEventFeed(params);
             const nextIds = next?.eventIds ?? [];
-            
+
             // 새로운 데이터가 없으면 무한 스크롤 중지
             if (nextIds.length === 0) {
                 setHasMore(false);
                 return;
             }
-            
+
             setItems(prev => {
                 if (prev.length === 0) {
                     // 첫 번째 로드인 경우
@@ -73,16 +73,16 @@ export const Feeds = () => {
                     }
                     return nextIds;
                 }
-                
+
                 const seen = new Set(prev);
                 const append = nextIds.filter(id => !seen.has(id));
-                
+
                 // 새로운 아이템이 없으면 무한 스크롤 중지
                 if (append.length === 0) {
                     setHasMore(false);
                     return prev;
                 }
-                
+
                 return [...prev, ...append];
             });
         } catch (e) {

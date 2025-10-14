@@ -61,9 +61,9 @@ export function AuthProvider({children}: AuthProviderProps) {
         if (userData) {
             setUser(userData);
             console.log(userData);
-            
+
             // 프로필 완성 여부 체크 - profile-complete 페이지가 아닌 경우만
-            if (userData.isProfileComplete === false && 
+            if (userData.isProfileComplete === false &&
                 !window.location.pathname.includes('/auth/profile-complete')) {
                 window.location.href = '/auth/profile-complete';
                 return;
@@ -79,10 +79,11 @@ export function AuthProvider({children}: AuthProviderProps) {
     };
 
     const login = async (token: string) => {
+
         await storage.set('accessToken', token);
-        
+
         // 사용자 정보를 조회하여 프로필 완성 여부를 확인
-        refetchUser();
+        await refetchUser();
         window.location.href = '/';
     };
 

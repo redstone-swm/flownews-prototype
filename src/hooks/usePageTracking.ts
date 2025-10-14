@@ -18,7 +18,7 @@ export const usePageTracking = () => {
     const location = useLocation();
     const entryTimeRef = useRef<number>(Date.now());
     const currentPageRef = useRef<string>(location.pathname);
-    const {user} = useAuth();
+    const {user, isAuthenticated} = useAuth();
     const currentIpRef = useRef<string>('unknown');
     const isFirstLoadRef = useRef<boolean>(true);
 
@@ -142,4 +142,8 @@ export const usePageTracking = () => {
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [location.pathname, user]);
+
+    if (!isAuthenticated) {
+        return;
+    }
 };

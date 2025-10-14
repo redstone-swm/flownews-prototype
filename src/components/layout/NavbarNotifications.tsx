@@ -6,10 +6,16 @@ import {ScrollArea, Separator} from "@/components/ui";
 import {formatDistanceToNow} from "date-fns";
 import {ko} from "date-fns/locale";
 import {useGetNotifications} from "@/api/notification-api/notification-api.ts";
+import {useAuth} from "@/contexts/AuthContext.tsx";
 
 
 export function NavbarNotifications() {
-    const {data: items} = useGetNotifications();
+    const {isAuthenticated} = useAuth();
+    const {data: items} = useGetNotifications({
+        query: {
+            enabled: isAuthenticated
+        }
+    });
 
     return (
         <Popover>
@@ -36,7 +42,7 @@ export function NavbarNotifications() {
                     </div>
                 </div>
                 <Separator/>
-                {!items || items.length === 0 ? (
+                {(!isAuthenticated || !items || items.length === 0) ? (
                     <div className="p-6 text-center text-sm text-muted-foreground">알림이 없습니다.</div>
                 ) : (
                     <ScrollArea className="max-h-80">

@@ -14,6 +14,7 @@ function RouteComponent() {
         // URL에서 token 파라미터 추출
         const urlParams = new URLSearchParams(window.location.search)
         const token = urlParams.get('token')
+        console.log("asdfdsfA")
 
         if (token) {
             login(token)
@@ -22,7 +23,7 @@ function RouteComponent() {
             console.error('토큰을 찾을 수 없습니다')
             navigate({to: '/auth/login'})
         }
-    }, [navigate, login])
+    }, [navigate])
 
     return (
         <div className="flex items-center justify-center min-h-screen">

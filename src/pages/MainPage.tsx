@@ -16,15 +16,15 @@ export default function MainPage() {
 
     useFirebaseMessaging();
 
-    useEffect(() => {
-        if (!authLoading && !isAuthenticated) {
-            window.location.href = "/auth/login";
-        }
-    }, [isAuthenticated, authLoading]);
+    // useEffect(() => {
+    //     if (!authLoading && !isAuthenticated) {
+    //         window.location.href = "/auth/login";
+    //     }
+    // }, [isAuthenticated, authLoading]);
 
-    if (authLoading || !isAuthenticated) {
-        return null;
-    }
+    // if (authLoading || !isAuthenticated) {
+    //     return null;
+    // }
 
     return (
         <NavbarLayout topKTopics={topKTopics} topKLoading={topKLoading}>
