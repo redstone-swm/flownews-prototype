@@ -2,6 +2,7 @@ import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {useGATracking} from "@/hooks/useGATracking.ts";
+import {Capacitor} from "@capacitor/core";
 
 interface LoginModalProps {
     open: boolean;
@@ -20,7 +21,8 @@ export default function LoginModal({open, onOpenChange}: LoginModalProps) {
     const handleGoogleLogin = () => {
         trackLoginClick();
         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-        window.location.href = `${apiBaseUrl}/oauth2/authorization/google`;
+        if (!Capacitor.isNativePlatform()) window.location.href = `${apiBaseUrl}/oauth2/authorization/google`;
+        else window.location.href = `${apiBaseUrl}/oauth2/authorization/google-mobile`;
     };
 
     const handleAppleLogin = () => {
