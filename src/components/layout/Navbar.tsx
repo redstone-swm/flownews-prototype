@@ -19,7 +19,7 @@ export default function Navbar({topKTopics, topKLoading}: NavbarProps) {
     return (
         <header className={headerClasses}>
             <div
-                className="flex flex-col items-center justify-between mx-auto  w-full h-full max-w-screen-lg gap-6 pb-6">
+                className="flex flex-col items-center justify-between mx-auto   w-full h-full max-w-screen-lg gap-6 pb-6">
                 <div className='w-full h-[52px] flex gap-4 items-center justify-between px-3'>
                     <div className="py-1.5 flex-shrink-0">
                         <Link to="/">
