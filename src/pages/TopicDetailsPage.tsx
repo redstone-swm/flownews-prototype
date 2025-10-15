@@ -16,6 +16,7 @@ import {Spinner} from "@/components/ui/spinner";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {storage} from "@/lib/stoarge.ts";
 import LoginModal from "@/components/auth/LoginModal.tsx";
+import {useGATracking} from "@/hooks/useGATracking.ts";
 
 
 type TopicDetailsPageProps = {
@@ -28,6 +29,7 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const eventIdParam = eventId;
     const {data, isLoading} = useGetTopic(topicId, {query: {enabled: topicId !== undefined && topicId !== null}});
     const {isAuthenticated} = useAuth();
+    const {trackLoginModalShown} = useGATracking();
 
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
@@ -154,6 +156,7 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                 const hasShownModal = await storage.get('login_modal_shown');
                 if (!isAuthenticated && newViewCount >= 2 && !hasShownModal) {
                     setShowLoginModal(true);
+                    trackLoginModalShown();
                     await storage.set('login_modal_shown', 'true');
                 }
             } catch (error) {

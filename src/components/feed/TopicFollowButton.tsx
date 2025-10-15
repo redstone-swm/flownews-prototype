@@ -8,6 +8,7 @@ import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/compon
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import LoginModal from "@/components/auth/LoginModal.tsx";
 import {useState} from "react";
+import {useGATracking} from "@/hooks/useGATracking.ts";
 
 export interface TopicFollowButtonProps {
     variant: "default" | "ghost"
@@ -17,6 +18,8 @@ export interface TopicFollowButtonProps {
     onFollowStateChange?: (newIsFollowing: boolean) => void
     className?: string
     eventId?: number
+    topicTitle?: string
+    isFromFeed?: boolean
     // Tooltip을 특정 컨테이너(예: Card) 내부로 마운트하고 싶을 때 전달
     tooltipContainer?: HTMLElement | null
 
@@ -28,12 +31,15 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                                                                         onFollowStateChange,
                                                                         className,
                                                                         eventId,
+                                                                        topicTitle,
+                                                                        isFromFeed = false,
                                                                         variant = "ghost",
                                                                         showTooltip = false,
                                                                         tooltipContainer,
                                                                     }) => {
     const {trackTopicFollowed} = useInteractionTracking();
     const {isAuthenticated} = useAuth();
+    const {trackTopicFollow, trackTopicFollowFromFeed} = useGATracking();
     const [showLoginModal, setShowLoginModal] = useState(false);
     const toggleSubscriptionMutation = useToggleSubscription({
         mutation: {
@@ -63,6 +69,13 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                 action: isFollowing ? 'unfollow' : 'follow',
                 wasFollowing: isFollowing
             }));
+        }
+
+        // GA4 이벤트 트래킹
+        if (isFromFeed) {
+            trackTopicFollowFromFeed(topicId, topicTitle, !isFollowing);
+        } else {
+            trackTopicFollow(topicId, topicTitle, !isFollowing);
         }
 
         toggleSubscriptionMutation.mutate({topicId});

@@ -7,9 +7,11 @@ import {useFirebaseMessaging} from "@/hooks/useFirebaseMessaging.ts";
 import {Feeds} from "@/components/feed/Feeds.tsx";
 import {storage} from "@/lib/stoarge.ts";
 import LoginModal from "@/components/auth/LoginModal.tsx";
+import {useGATracking} from "@/hooks/useGATracking.ts";
 
 export default function MainPage() {
     const {isAuthenticated, isLoading: authLoading} = useAuth();
+    const {trackLoginModalShown} = useGATracking();
     const [showLoginModal, setShowLoginModal] = useState(false);
 
     const {data: topKTopics, isLoading: topKLoading} = useGetTopKTopics(
@@ -29,6 +31,7 @@ export default function MainPage() {
                 // 비로그인 상태이면서 view_count >= 2이고 모달을 보여준 적이 없다면 표시
                 if (!isAuthenticated && viewCount >= 2 && !hasShownModal) {
                     setShowLoginModal(true);
+                    trackLoginModalShown();
                     await storage.set('login_modal_shown', 'true');
                 }
             } catch (error) {

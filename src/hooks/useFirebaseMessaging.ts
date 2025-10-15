@@ -5,10 +5,12 @@ import {storage} from "@/lib/stoarge.ts";
 import {useUpdateDeviceToken} from "@/api/user-profile/user-profile.ts";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {useEffect, useState} from 'react';
+import {useGATracking} from "@/hooks/useGATracking.ts";
 
 export function useFirebaseMessaging() {
     const router = useRouter();
     const { user } = useAuth();
+    const {trackNewEventPushClick} = useGATracking();
     const updateDeviceToken = useUpdateDeviceToken();
     const DEVICE_TOKEN_KEY = 'deviceToken';
     const [deviceToken, setDeviceToken] = useState<string | null>(null);
@@ -22,6 +24,8 @@ export function useFirebaseMessaging() {
         const actionListener = await PushNotifications.addListener('pushNotificationActionPerformed', ({notification}) => {
             const {topicId, eventId} = notification?.data;
             if (topicId && eventId) {
+                // GA4 이벤트 트래킹
+                trackNewEventPushClick(Number(eventId), Number(topicId));
                 router.navigate({to: `/topics/${topicId}/events/${eventId}`});
             }
         });

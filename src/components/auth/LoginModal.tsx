@@ -1,6 +1,7 @@
 import {Button} from "@/components/ui/button";
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
 import {useAuth} from "@/contexts/AuthContext.tsx";
+import {useGATracking} from "@/hooks/useGATracking.ts";
 
 interface LoginModalProps {
     open: boolean;
@@ -9,6 +10,7 @@ interface LoginModalProps {
 
 export default function LoginModal({open, onOpenChange}: LoginModalProps) {
     const {isAuthenticated} = useAuth();
+    const {trackLoginClick} = useGATracking();
 
     if (isAuthenticated) {
         onOpenChange(false);
@@ -16,6 +18,7 @@ export default function LoginModal({open, onOpenChange}: LoginModalProps) {
     }
 
     const handleGoogleLogin = () => {
+        trackLoginClick();
         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
         window.location.href = `${apiBaseUrl}/oauth2/authorization/google`;
     };

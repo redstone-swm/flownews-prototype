@@ -7,6 +7,7 @@ import {useSubscribeTopic} from '@/api/topic-subscribe-api/topic-subscribe-api'
 import {useAuth} from '@/contexts/AuthContext'
 import type {TopicSummaryResponse, UserDeviceTokenUpdateRequest} from "@/api/models";
 import {useToggleSubscription} from "@/api/topic-subscriptions/topic-subscriptions.ts";
+import {useGATracking} from "@/hooks/useGATracking.ts";
 
 export const Route = createFileRoute('/auth/topic-selection')({
     component: TopicSelectionComponent,
@@ -15,6 +16,7 @@ export const Route = createFileRoute('/auth/topic-selection')({
 function TopicSelectionComponent() {
     const navigate = useNavigate()
     const {refreshUser} = useAuth()
+    const {trackInterestedTopicClick} = useGATracking()
     const [selectedTopics, setSelectedTopics] = useState<number[]>([])
     const [isCompleting, setIsCompleting] = useState(false)
 
@@ -34,6 +36,9 @@ function TopicSelectionComponent() {
         setIsCompleting(true)
 
         try {
+            // GA4 이벤트 트래킹
+            trackInterestedTopicClick(selectedTopics)
+
             const deviceToken = localStorage.getItem('fcm-device-token') || ''
             const subscribeData: UserDeviceTokenUpdateRequest = {
                 deviceToken
