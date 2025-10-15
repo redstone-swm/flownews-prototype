@@ -52,7 +52,6 @@ export default function NavbarAvatar() {
                         {/*    <span>좋아요한 기사 보기</span>*/}
                         {/*</DropdownMenuItem>*/}
                         {/*</Link>*/}
-                        <DropdownMenuSeparator/>
                         <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                             <LogOut className="w-4 h-4 mr-2"/>
                             로그아웃

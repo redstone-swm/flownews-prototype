@@ -31,15 +31,15 @@ export default function Navbar({topKTopics, topKLoading}: NavbarProps) {
                         </Link>
                     </div>
                     <div className="py-2.5 h-full flex items-center  max-w-xs lg:max-w-md">
-                        <div className="h-full flex justify-center">
-                            <div className="h-full relative w-full">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white"/>
-                                <Input
-                                    placeholder="오늘도 시점과 함께!"
-                                    className="h-full w-full pl-10 rounded-xl text-[12px] text-white bg-white/30 border-[1px] border-white/30 placeholder:text-white"
-                                />
-                            </div>
-                        </div>
+                        {/*<div className="h-full flex justify-center">*/}
+                        {/*    <div className="h-full relative w-full">*/}
+                        {/*        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-white"/>*/}
+                        {/*        <Input*/}
+                        {/*            placeholder="오늘도 시점과 함께!"*/}
+                        {/*            className="h-full w-full pl-10 rounded-xl text-[12px] text-white bg-white/30 border-[1px] border-white/30 placeholder:text-white"*/}
+                        {/*        />*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                         <div className='p-2'>
                             <NavbarNotifications/>
                         </div>
