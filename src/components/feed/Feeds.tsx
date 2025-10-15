@@ -1,17 +1,19 @@
 import {getUserEventFeed, useGetUserEventFeed} from "@/api/event-feed/event-feed.ts";
 import {useEffect, useState} from "react";
+import React from "react";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import InfiniteScroll from "react-infinite-scroll-component";
 import {CategoryBar} from "@/components/feed/CategoryBar.tsx";
 import {EventFeed} from "@/components/feed/EventFeed.tsx";
+import {AdFeed} from "@/components/feed/AdFeed.tsx";
 import {Spinner} from "@/components/ui/spinner";
 
 export const Feeds = () => {
-    const {isAuthenticated, isLoading: authLoading} = useAuth();
+    const {isAuthenticated} = useAuth();
     const [activeCategory, setActiveCategory] = useState('MY');
 
     const params = activeCategory === 'MY' ? undefined : {category: activeCategory};
-    const {data, isLoading, refetch} = useGetUserEventFeed(
+    const {data, refetch} = useGetUserEventFeed(
         params, {
             // query: {enabled: isAuthenticated}
         });
@@ -132,8 +134,11 @@ export const Feeds = () => {
                         activeCategory={activeCategory}
                         setActiveCategory={setActiveCategory}
                     />
-                    {items.map((e) => (
-                        <EventFeed key={e || Math.random()} eventId={e}/>
+                    {items.map((e, index) => (
+                        <React.Fragment key={e || Math.random()}>
+                            <EventFeed eventId={e}/>
+                            {index === 1 && <AdFeed/>}
+                        </React.Fragment>
                     ))}
                 </div>
             </InfiniteScroll>
