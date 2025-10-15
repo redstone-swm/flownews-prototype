@@ -26,27 +26,29 @@ export const EventDetailCard = ({
     const likeReaction = event.reactions.find(reaction => reaction.reactionTypeId === 1);
     const cardRef = React.useRef<HTMLDivElement | null>(null);
 
-    // 사용자 상호작용 시(특히 터치) 툴팁을 닫기 위한 dismiss 상태
     const [isTooltipDismissed, setIsTooltipDismissed] = React.useState(false);
     React.useEffect(() => {
-        const onPointerDown = (e: PointerEvent) => {
-            if (e.pointerType === 'touch') {
-                setIsTooltipDismissed(true);
-            }
-        };
-        const onTouchStart = () => {
-            setIsTooltipDismissed(true);
-        };
-        // document 레벨에서 터치 감지
-        document.addEventListener('pointerdown', onPointerDown, {passive: true});
-        document.addEventListener('touchstart', onTouchStart, {passive: true});
+        const dismiss = () => setIsTooltipDismissed(true);
+        // 전역 상호작용 감지 (캡처 단계에서 등록하여 stopPropagation 영향 최소화)
+        const opts: AddEventListenerOptions = {passive: true, capture: true};
+        window.addEventListener('touchstart', dismiss, opts);
+        window.addEventListener('pointerdown', dismiss, opts);
+        window.addEventListener('mousedown', dismiss, opts);
         return () => {
-            document.removeEventListener('pointerdown', onPointerDown as unknown as EventListener);
-            document.removeEventListener('touchstart', onTouchStart as unknown as EventListener);
+            window.removeEventListener('touchstart', dismiss, opts);
+            window.removeEventListener('pointerdown', dismiss, opts);
+            window.removeEventListener('mousedown', dismiss, opts);
         };
     }, []);
 
-    // 부모 제어와 dismiss 상태를 결합해 실제 툴팁 오픈 여부를 계산
+    // 외부에서 showTooltip을 다시 true로 올릴 때 이전 해제 상태를 초기화
+    React.useEffect(() => {
+        if (!showTooltip) {
+            // 다음번 표시를 위해 해제 상태 초기화
+            setIsTooltipDismissed(false);
+        }
+    }, [showTooltip]);
+
     const effectiveShowTooltip = !!showTooltip && !isTooltipDismissed;
 
     return (
