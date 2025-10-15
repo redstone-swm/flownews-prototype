@@ -23,7 +23,7 @@ type TopicDetailsPageProps = {
 const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
     const eventIdParam = eventId;
-    const {data, isLoading} = useGetTopic(topicId);
+    const {data, isLoading} = useGetTopic(topicId, {query: {enabled: topicId !== undefined && topicId !== null}});
 
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
