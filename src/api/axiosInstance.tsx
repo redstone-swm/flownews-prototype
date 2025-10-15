@@ -29,7 +29,7 @@ instance.interceptors.response.use(
         if (error.response?.status === 401) {
             // 토큰 만료
             storage.remove('accessToken');
-            window.location.href = '/auth/login';
+            // window.location.href = '/auth/login';
         }
         return Promise.reject(error);
     }

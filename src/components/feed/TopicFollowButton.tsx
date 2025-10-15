@@ -6,6 +6,8 @@ import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
 import {Check, Plus} from "lucide-react";
 import {toast} from "sonner";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
+import {useAuth} from "@/contexts/AuthContext.tsx";
+import LoginModal from "@/components/auth/LoginModal.tsx";
 
 export interface TopicFollowButtonProps {
     variant: "default" | "ghost"
@@ -31,6 +33,8 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                                                                         tooltipContainer,
                                                                     }) => {
     const {trackTopicFollowed} = useInteractionTracking();
+    const {isAuthenticated} = useAuth();
+    const [showLoginModal, setShowLoginModal] = React.useState(false);
     const toggleSubscriptionMutation = useToggleSubscription({
         mutation: {
             onSuccess: (response) => {
@@ -47,6 +51,11 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
     })
 
     const handleToggle = async () => {
+        if (!isAuthenticated) {
+            setShowLoginModal(true);
+            return;
+        }
+
         // Track the topic followed interaction
         if (eventId) {
             trackTopicFollowed(eventId, JSON.stringify({
@@ -60,33 +69,36 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
     }
 
     return (
-        <TooltipProvider>
-            <Tooltip open={showTooltip && !isFollowing}>
-                <TooltipTrigger asChild>
-                    <Button
-                        onClick={handleToggle}
-                        className={cn("border-r py-3 px-2 text-sm w-full  font-semibold", className)}
-                        disabled={toggleSubscriptionMutation.isPending}
-                        variant={isFollowing ? "ghost" : variant}>
-                        {
-                            isFollowing ? (
-                                <span className={cn("text-muted-foreground flex items-center gap-1")}>
-                                    <Check size={16}/>
-                                    소식 받는 중
-                                </span>) : (
-                                <span
-                                    className={`${variant === "default" ? "text-background" : "text-primary"} flex items-center gap-1`}>
-                                    <Plus size={16}/>
-                                    관심 토픽에 추가
-                                </span>)
-                        }
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent side="top" align="center" className="z-10" container={tooltipContainer ?? undefined}>
-                    토픽을 팔로우하고 후속기사 알림을 받아보세요!
-                </TooltipContent>
-            </Tooltip>
-        </TooltipProvider>
+        <>
+            <TooltipProvider>
+                <Tooltip open={showTooltip && !isFollowing}>
+                    <TooltipTrigger asChild>
+                        <Button
+                            onClick={handleToggle}
+                            className={cn("border-r py-3 px-2 text-sm w-full  font-semibold", className)}
+                            disabled={toggleSubscriptionMutation.isPending}
+                            variant={isFollowing ? "ghost" : variant}>
+                            {
+                                isFollowing ? (
+                                    <span className={cn("text-muted-foreground flex items-center gap-1")}>
+                                        <Check size={16}/>
+                                        소식 받는 중
+                                    </span>) : (
+                                    <span
+                                        className={`${variant === "default" ? "text-background" : "text-primary"} flex items-center gap-1`}>
+                                        <Plus size={16}/>
+                                        관심 토픽에 추가
+                                    </span>)
+                            }
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top" align="center" className="z-10" container={tooltipContainer ?? undefined}>
+                        토픽을 팔로우하고 후속기사 알림을 받아보세요!
+                    </TooltipContent>
+                </Tooltip>
+            </TooltipProvider>
+            <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} />
+        </>
     )
 }
 
