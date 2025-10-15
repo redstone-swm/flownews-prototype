@@ -60,14 +60,13 @@ export default function NavbarAvatar() {
                     </DropdownMenuContent>
                 </DropdownMenu>
             ) : (
-                <Link to={"/auth/login"}>
-                    <Button
-                        variant="outline"
-                        className="rounded-full"
-                    >
-                        로그인
-                    </Button>
-                </Link>
+                <Button
+                    variant="outline"
+                    className="rounded-full"
+                    onClick={() => setIsLoginModalOpen(true)}
+                >
+                    로그인
+                </Button>
             )}
 
             <LoginModal
