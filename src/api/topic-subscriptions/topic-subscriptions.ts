@@ -15,9 +15,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  SubscribeTopic200,
-  TopicSubscriptionToggleResponse,
-  UnsubscribeTopic200
+  TopicSubscriptionToggleResponse
 } from '.././models';
 
 import { axiosInstance } from '.././axiosInstance';
@@ -27,63 +25,7 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
-export const unsubscribeTopic = (
-    topicId: number,
- options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<UnsubscribeTopic200>(
-      {url: `/topics/${topicId}/unsubscribe`, method: 'POST', signal
-    },
-      options);
-    }
-  
-
-
-export const getUnsubscribeTopicMutationOptions = <TError = string,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unsubscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof unsubscribeTopic>>, TError,{topicId: number}, TContext> => {
-
-const mutationKey = ['unsubscribeTopic'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof unsubscribeTopic>>, {topicId: number}> = (props) => {
-          const {topicId} = props ?? {};
-
-          return  unsubscribeTopic(topicId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UnsubscribeTopicMutationResult = NonNullable<Awaited<ReturnType<typeof unsubscribeTopic>>>
-    
-    export type UnsubscribeTopicMutationError = string
-
-    export const useUnsubscribeTopic = <TError = string,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof unsubscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof unsubscribeTopic>>,
-        TError,
-        {topicId: number},
-        TContext
-      > => {
-
-      const mutationOptions = getUnsubscribeTopicMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    /**
+/**
  * 토픽 구독 상태를 토글합니다. 구독 중이면 해제하고, 구독하지 않았으면 구독합니다.
  * @summary 토픽 구독 토글
  */
@@ -143,62 +85,6 @@ export const useToggleSubscription = <TError = string,
       > => {
 
       const mutationOptions = getToggleSubscriptionMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    export const subscribeTopic = (
-    topicId: number,
- options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
-) => {
-      
-      
-      return axiosInstance<SubscribeTopic200>(
-      {url: `/topics/${topicId}/subscribe`, method: 'POST', signal
-    },
-      options);
-    }
-  
-
-
-export const getSubscribeTopicMutationOptions = <TError = string,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number}, TContext> => {
-
-const mutationKey = ['subscribeTopic'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof subscribeTopic>>, {topicId: number}> = (props) => {
-          const {topicId} = props ?? {};
-
-          return  subscribeTopic(topicId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type SubscribeTopicMutationResult = NonNullable<Awaited<ReturnType<typeof subscribeTopic>>>
-    
-    export type SubscribeTopicMutationError = string
-
-    export const useSubscribeTopic = <TError = string,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof subscribeTopic>>, TError,{topicId: number}, TContext>, request?: SecondParameter<typeof axiosInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof subscribeTopic>>,
-        TError,
-        {topicId: number},
-        TContext
-      > => {
-
-      const mutationOptions = getSubscribeTopicMutationOptions(options);
 
       return useMutation(mutationOptions , queryClient);
     }

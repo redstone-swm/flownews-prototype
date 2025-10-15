@@ -14,4 +14,5 @@ export const GetInteractionCountForEventInteractionType = {
   ARTICLE_CLICKED: 'ARTICLE_CLICKED',
   TOPIC_VIEWED: 'TOPIC_VIEWED',
   TOPIC_FOLLOWED: 'TOPIC_FOLLOWED',
+  TOPIC_UNFOLLOWED: 'TOPIC_UNFOLLOWED',
 } as const;
