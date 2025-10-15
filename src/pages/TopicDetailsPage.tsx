@@ -206,14 +206,15 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                     >
                         <Carousel setApi={setApi} className="w-full max-w-md">
                             <CarouselContent>
-                                {data?.events?.map((event) => (
-                                    <CarouselItem key={event.id} className="basis-[95%]">
+                                {data?.events?.map((event, idx) => (
+                                    <CarouselItem key={event.id} className="basis-[90%]">
                                         <div className="flex flex-col gap-3">
                                             <EventDetailCard
                                                 event={event}
                                                 topicId={topicId}
                                                 isFollowing={isFollowing}
                                                 onFollowStateChange={handleFollowStateChange}
+                                                showTooltip={idx === currentIndex}
                                             />
                                         </div>
                                     </CarouselItem>
