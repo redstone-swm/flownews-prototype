@@ -1,4 +1,3 @@
-import * as React from "react"
 import {Button} from "@/components/ui/button.tsx"
 import {useToggleSubscription} from "@/api/topic-subscriptions/topic-subscriptions"
 import {cn} from "@/lib/utils.ts";
@@ -8,6 +7,7 @@ import {toast} from "sonner";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import LoginModal from "@/components/auth/LoginModal.tsx";
+import {useState} from "react";
 
 export interface TopicFollowButtonProps {
     variant: "default" | "ghost"
@@ -34,7 +34,7 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                                                                     }) => {
     const {trackTopicFollowed} = useInteractionTracking();
     const {isAuthenticated} = useAuth();
-    const [showLoginModal, setShowLoginModal] = React.useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
     const toggleSubscriptionMutation = useToggleSubscription({
         mutation: {
             onSuccess: (response) => {
