@@ -10,8 +10,7 @@ export default function MainPage() {
     const {isAuthenticated, isLoading: authLoading} = useAuth();
 
     const {data: topKTopics, isLoading: topKLoading} = useGetTopKTopics(
-        {limit: 5},
-        {query: {enabled: isAuthenticated}}
+        {limit: 5}
     );
 
     useFirebaseMessaging();
