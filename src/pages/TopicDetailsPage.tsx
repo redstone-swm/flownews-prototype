@@ -13,6 +13,9 @@ import {ko} from "date-fns/locale";
 import {useGetTopic} from "@/api/topics/topics.ts";
 import {EventDetailCard} from "@/components/event/EventDetailCard.tsx";
 import {Spinner} from "@/components/ui/spinner";
+import {useAuth} from "@/contexts/AuthContext.tsx";
+import {storage} from "@/lib/stoarge.ts";
+import LoginModal from "@/components/auth/LoginModal.tsx";
 
 
 type TopicDetailsPageProps = {
@@ -24,12 +27,14 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
     const eventIdParam = eventId;
     const {data, isLoading} = useGetTopic(topicId, {query: {enabled: topicId !== undefined && topicId !== null}});
+    const {isAuthenticated} = useAuth();
 
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
     const [showNav, setShowNav] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
     const hideTimerRef = useRef<number | null>(null);
 
     const scheduleHide = (delay = 1500) => {
@@ -132,6 +137,32 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
             setIsFollowing(data.isFollowing);
         }
     }, [data?.isFollowing]);
+
+    // 토픽 상세 페이지 진입 시 view_count 증가 및 로그인 모달 체크
+    useEffect(() => {
+        if (!topicId) return;
+
+        const incrementViewCount = async () => {
+            try {
+                const currentCount = await storage.get('view_count');
+                const viewCount = currentCount ? parseInt(currentCount, 10) : 0;
+                const newViewCount = viewCount + 1;
+                
+                await storage.set('view_count', String(newViewCount));
+                
+                // 비로그인 상태이면서 두 번째 조회부터 로그인 모달 표시 (최초 한번만)
+                const hasShownModal = await storage.get('login_modal_shown');
+                if (!isAuthenticated && newViewCount >= 2 && !hasShownModal) {
+                    setShowLoginModal(true);
+                    await storage.set('login_modal_shown', 'true');
+                }
+            } catch (error) {
+                console.error('Failed to update view count:', error);
+            }
+        };
+
+        incrementViewCount();
+    }, [topicId, isAuthenticated]);
 
     // 현재 인덱스(0-based) 계산 - api가 준비되기 전에는 0으로 안전 가드
     const currentIndex = Math.max(0, current - 1);
@@ -254,6 +285,7 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                     </div>
                 </div>
             </div>
+            <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} />
         </div>
     )
 }
