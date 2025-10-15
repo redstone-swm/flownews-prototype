@@ -34,10 +34,12 @@ export const EventDetailCard = ({
         window.addEventListener('touchstart', dismiss, opts);
         window.addEventListener('pointerdown', dismiss, opts);
         window.addEventListener('mousedown', dismiss, opts);
+        window.addEventListener('click', dismiss, opts);
         return () => {
             window.removeEventListener('touchstart', dismiss, opts);
             window.removeEventListener('pointerdown', dismiss, opts);
             window.removeEventListener('mousedown', dismiss, opts);
+            window.removeEventListener('click', dismiss, opts);
         };
     }, []);
 
