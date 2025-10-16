@@ -6,7 +6,7 @@ import {Capacitor} from "@capacitor/core";
 
 interface LoginModalProps {
     open: boolean;
-    onOpenChange: (open: boolean) => void;
+    onOpenChange?: (open: boolean) => void; // optional로 변경
 }
 
 export default function LoginModal({open, onOpenChange}: LoginModalProps) {
@@ -14,13 +14,15 @@ export default function LoginModal({open, onOpenChange}: LoginModalProps) {
     const {trackLoginClick} = useGATracking();
 
     if (isAuthenticated) {
-        onOpenChange(false);
+        onOpenChange?.(false);
         return null;
     }
 
     const handleGoogleLogin = () => {
         trackLoginClick();
         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+
+        onOpenChange?.(false);
         if (!Capacitor.isNativePlatform()) window.location.href = `${apiBaseUrl}/oauth2/authorization/google`;
         else window.location.href = `${apiBaseUrl}/oauth2/authorization/google-mobile`;
     };
@@ -28,7 +30,6 @@ export default function LoginModal({open, onOpenChange}: LoginModalProps) {
     const handleAppleLogin = () => {
         // const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
         // const appleOAuthUrl = `${apiBaseUrl}/oauth2/authorization/apple`;
-
         // TODO: 애플 로그인은 현재 개발 중입니다.
     };
 

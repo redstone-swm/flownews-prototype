@@ -149,9 +149,9 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                 const currentCount = await storage.get('view_count');
                 const viewCount = currentCount ? parseInt(currentCount, 10) : 0;
                 const newViewCount = viewCount + 1;
-                
+
                 await storage.set('view_count', String(newViewCount));
-                
+
                 // 비로그인 상태이면서 두 번째 조회부터 로그인 모달 표시 (최초 한번만)
                 const hasShownModal = await storage.get('login_modal_shown');
                 if (!isAuthenticated && newViewCount >= 2 && !hasShownModal) {
@@ -288,7 +288,7 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                     </div>
                 </div>
             </div>
-            <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} />
+            <LoginModal open={showLoginModal}/>
         </div>
     )
 }

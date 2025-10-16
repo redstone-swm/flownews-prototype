@@ -70,7 +70,6 @@ export default function NavbarAvatar() {
 
             <LoginModal
                 open={isLoginModalOpen}
-                onOpenChange={setIsLoginModalOpen}
             />
         </>
     )

@@ -27,7 +27,7 @@ export default function MainPage() {
                 const currentCount = await storage.get('view_count');
                 const viewCount = currentCount ? parseInt(currentCount, 10) : 0;
                 const hasShownModal = await storage.get('login_modal_shown');
-                
+
                 // 비로그인 상태이면서 view_count >= 2이고 모달을 보여준 적이 없다면 표시
                 if (!isAuthenticated && viewCount >= 2 && !hasShownModal) {
                     setShowLoginModal(true);
@@ -79,7 +79,7 @@ export default function MainPage() {
 
                 <Feeds/>
             </NavbarLayout>
-            <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} />
+            <LoginModal open={showLoginModal}/>
         </>
     );
 }

@@ -105,12 +105,13 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                             }
                         </Button>
                     </TooltipTrigger>
-                    <TooltipContent side="top" align="center" className="z-10" container={tooltipContainer ?? undefined}>
+                    <TooltipContent side="top" align="center" className="z-10"
+                                    container={tooltipContainer ?? undefined}>
                         토픽을 팔로우하고 후속기사 알림을 받아보세요!
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-            <LoginModal open={showLoginModal} onOpenChange={setShowLoginModal} />
+            <LoginModal open={showLoginModal}/>
         </>
     )
 }
