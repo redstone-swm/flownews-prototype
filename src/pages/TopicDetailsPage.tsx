@@ -15,8 +15,7 @@ import {EventDetailCard} from "@/components/event/EventDetailCard.tsx";
 import {Spinner} from "@/components/ui/spinner";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {storage} from "@/lib/stoarge.ts";
-import LoginModal from "@/components/auth/LoginModal.tsx";
-import {useGATracking} from "@/hooks/useGATracking.ts";
+import {useLoginModal} from "@/contexts/ModalContext.tsx";
 
 
 type TopicDetailsPageProps = {
@@ -29,14 +28,13 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const eventIdParam = eventId;
     const {data, isLoading} = useGetTopic(topicId, {query: {enabled: topicId !== undefined && topicId !== null}});
     const {isAuthenticated} = useAuth();
-    const {trackLoginModalShown} = useGATracking();
+    const {open: openLoginModal} = useLoginModal();
 
     const [api, setApi] = useState<CarouselApi>();
     const [current, setCurrent] = useState(0);
     const [count, setCount] = useState(0);
     const [showNav, setShowNav] = useState(false);
     const [isFollowing, setIsFollowing] = useState(false);
-    const [showLoginModal, setShowLoginModal] = useState(false);
     const hideTimerRef = useRef<number | null>(null);
 
     const scheduleHide = (delay = 1500) => {
@@ -155,8 +153,7 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                 // 비로그인 상태이면서 두 번째 조회부터 로그인 모달 표시 (최초 한번만)
                 const hasShownModal = await storage.get('login_modal_shown');
                 if (!isAuthenticated && newViewCount >= 2 && !hasShownModal) {
-                    setShowLoginModal(true);
-                    trackLoginModalShown();
+                    openLoginModal();
                     await storage.set('login_modal_shown', 'true');
                 }
             } catch (error) {
@@ -288,7 +285,6 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                     </div>
                 </div>
             </div>
-            <LoginModal open={showLoginModal}/>
         </div>
     )
 }

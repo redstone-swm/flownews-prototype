@@ -6,9 +6,8 @@ import {Check, Plus} from "lucide-react";
 import {toast} from "sonner";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip.tsx";
 import {useAuth} from "@/contexts/AuthContext.tsx";
-import LoginModal from "@/components/auth/LoginModal.tsx";
-import {useState} from "react";
 import {useGATracking} from "@/hooks/useGATracking.ts";
+import {useLoginModal} from "@/contexts/ModalContext.tsx";
 
 export interface TopicFollowButtonProps {
     variant: "default" | "ghost"
@@ -40,7 +39,7 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
     const {trackTopicFollowed} = useInteractionTracking();
     const {isAuthenticated} = useAuth();
     const {trackTopicFollow, trackTopicFollowFromFeed} = useGATracking();
-    const [showLoginModal, setShowLoginModal] = useState(false);
+    const {open: openLoginModal} = useLoginModal();
     const toggleSubscriptionMutation = useToggleSubscription({
         mutation: {
             onSuccess: (response) => {
@@ -58,7 +57,7 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
 
     const handleToggle = async () => {
         if (!isAuthenticated) {
-            setShowLoginModal(true);
+            openLoginModal();
             return;
         }
 
@@ -111,7 +110,6 @@ export const TopicFollowButton: React.FC<TopicFollowButtonProps> = ({
                     </TooltipContent>
                 </Tooltip>
             </TooltipProvider>
-            <LoginModal open={showLoginModal}/>
         </>
     )
 }

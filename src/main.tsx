@@ -10,6 +10,7 @@ import reportWebVitals from './reportWebVitals.ts'
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ThemeProvider} from "@/components/theme-provider.tsx";
 import {AuthProvider} from "@/contexts/AuthContext.tsx";
+import {LoginModalProvider} from "@/contexts/ModalContext.tsx";
 
 // Create a new router instance
 const router = createRouter({
@@ -39,9 +40,11 @@ if (rootElement && !rootElement.innerHTML) {
         <StrictMode>
             <QueryClientProvider client={queryClient}>
                 <AuthProvider>
-                    <ThemeProvider defaultTheme="light">
-                        <RouterProvider router={router}/>
-                    </ThemeProvider>
+                    <LoginModalProvider>
+                        <ThemeProvider defaultTheme="light">
+                            <RouterProvider router={router}/>
+                        </ThemeProvider>
+                    </LoginModalProvider>
                 </AuthProvider>
             </QueryClientProvider>
         </StrictMode>,
