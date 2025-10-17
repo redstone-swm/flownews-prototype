@@ -1,4 +1,4 @@
-import {Heart, LogOut} from "lucide-react";
+import {Heart, LogOut, User} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
@@ -46,12 +46,12 @@ export default function NavbarAvatar() {
                             </div>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator/>
-                        {/*<Link to="/likes" className="cursor-pointer">*/}
-                        {/*<DropdownMenuItem>*/}
-                        {/*    <Heart className="w-4 h-4 mr-2"/>*/}
-                        {/*    <span>좋아요한 기사 보기</span>*/}
-                        {/*</DropdownMenuItem>*/}
-                        {/*</Link>*/}
+                        <Link to="/profile" className="cursor-pointer">
+                            <DropdownMenuItem>
+                                <User className="w-4 h-4 mr-2"/>
+                                <span>내 정보</span>
+                            </DropdownMenuItem>
+                        </Link>
                         <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                             <LogOut className="w-4 h-4 mr-2"/>
                             로그아웃

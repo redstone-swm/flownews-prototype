@@ -66,8 +66,8 @@ export const EventDetailCard = ({
                     {event.description}
                 </p>
                 {event.articles && event.articles.length > 0 && (
-                    <div className="mt-3 space-y-1">
-                        <div className="text-center text-xs sm:text-sm font-bold text-muted-foreground">관련 기사</div>
+                    <div className="mt-3 space-y-1 px-2">
+                        <div className="text-center text-xs sm:text-sm font-bold ">관련 기사</div>
                         <div className="space-y-2">
                             {event.articles.map((article) => (
                                 <NewsArticleReference key={article.id} article={article} eventId={event.id}/>

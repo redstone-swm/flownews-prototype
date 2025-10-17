@@ -14,10 +14,6 @@ export default function MainPage() {
     const {trackLoginModalShown} = useGATracking();
     const [showLoginModal, setShowLoginModal] = useState(false);
 
-    const {data: topKTopics, isLoading: topKLoading} = useGetTopKTopics(
-        {limit: 5}
-    );
-
     useFirebaseMessaging();
 
     // 메인페이지 진입 시 view_count 체크 및 로그인 모달 표시
@@ -44,19 +40,9 @@ export default function MainPage() {
         }
     }, [isAuthenticated, authLoading]);
 
-    // useEffect(() => {
-    //     if (!authLoading && !isAuthenticated) {
-    //         window.location.href = "/auth/login";
-    //     }
-    // }, [isAuthenticated, authLoading]);
-
-    // if (authLoading || !isAuthenticated) {
-    //     return null;
-    // }
-
     return (
         <>
-            <NavbarLayout topKTopics={topKTopics} topKLoading={topKLoading}>
+            <NavbarLayout>
                 {/*<Tabs defaultValue="feed">*/}
                 {/*    <TabsList variant="outline" className="w-full ">*/}
                 {/*        <TabsTrigger value="feed" variant="outline" className="flex-1">*/}

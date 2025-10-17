@@ -19,6 +19,8 @@ export interface User {
   deviceToken?: string;
   birthDate?: string;
   gender?: UserGender;
+  deletedAt?: string;
+  deleteReason?: string;
   isProfileComplete: boolean;
   createdAt: string;
   modifiedAt: string;

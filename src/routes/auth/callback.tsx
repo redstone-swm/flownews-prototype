@@ -11,10 +11,15 @@ function RouteComponent() {
     const {login} = useAuth()
 
     useEffect(() => {
-        // URL에서 token 파라미터 추출
         const urlParams = new URLSearchParams(window.location.search)
         const token = urlParams.get('token')
-        console.log("asdfdsfA")
+        const error = urlParams.get('error')
+
+        if (error === 'DELETED') {
+            alert('탈퇴된 회원입니다.')
+            navigate({to: '/'})
+            return
+        }
 
         if (token) {
             login(token)

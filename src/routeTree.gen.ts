@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as AuthTopicSelectionImport } from './routes/auth/topic-selection'
 import { Route as AuthProfileCompleteImport } from './routes/auth/profile-complete'
 import { Route as AuthLoginImport } from './routes/auth/login'
@@ -24,6 +25,12 @@ import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topi
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileIndexRoute = ProfileIndexImport.update({
+  id: '/profile/',
+  path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -104,6 +111,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthTopicSelectionImport
       parentRoute: typeof rootRoute
     }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/topics/$topicId/': {
       id: '/topics/$topicId/'
       path: '/topics/$topicId'
@@ -129,6 +143,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
+  '/profile': typeof ProfileIndexRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -139,6 +154,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
+  '/profile': typeof ProfileIndexRoute
   '/topics/$topicId': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -150,6 +166,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
   '/auth/topic-selection': typeof AuthTopicSelectionRoute
+  '/profile/': typeof ProfileIndexRoute
   '/topics/$topicId/': typeof TopicsTopicIdIndexRoute
   '/topics/$topicId/events/$eventId': typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -162,6 +179,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/profile-complete'
     | '/auth/topic-selection'
+    | '/profile'
     | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   fileRoutesByTo: FileRoutesByTo
@@ -171,6 +189,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/profile-complete'
     | '/auth/topic-selection'
+    | '/profile'
     | '/topics/$topicId'
     | '/topics/$topicId/events/$eventId'
   id:
@@ -180,6 +199,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/profile-complete'
     | '/auth/topic-selection'
+    | '/profile/'
     | '/topics/$topicId/'
     | '/topics/$topicId/events/$eventId'
   fileRoutesById: FileRoutesById
@@ -191,6 +211,7 @@ export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthProfileCompleteRoute: typeof AuthProfileCompleteRoute
   AuthTopicSelectionRoute: typeof AuthTopicSelectionRoute
+  ProfileIndexRoute: typeof ProfileIndexRoute
   TopicsTopicIdIndexRoute: typeof TopicsTopicIdIndexRoute
   TopicsTopicIdEventsEventIdRoute: typeof TopicsTopicIdEventsEventIdRoute
 }
@@ -201,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthProfileCompleteRoute: AuthProfileCompleteRoute,
   AuthTopicSelectionRoute: AuthTopicSelectionRoute,
+  ProfileIndexRoute: ProfileIndexRoute,
   TopicsTopicIdIndexRoute: TopicsTopicIdIndexRoute,
   TopicsTopicIdEventsEventIdRoute: TopicsTopicIdEventsEventIdRoute,
 }
@@ -220,6 +242,7 @@ export const routeTree = rootRoute
         "/auth/login",
         "/auth/profile-complete",
         "/auth/topic-selection",
+        "/profile/",
         "/topics/$topicId/",
         "/topics/$topicId/events/$eventId"
       ]
@@ -238,6 +261,9 @@ export const routeTree = rootRoute
     },
     "/auth/topic-selection": {
       "filePath": "auth/topic-selection.tsx"
+    },
+    "/profile/": {
+      "filePath": "profile/index.tsx"
     },
     "/topics/$topicId/": {
       "filePath": "topics/$topicId/index.tsx"

@@ -14,6 +14,6 @@ export interface Topic {
   topicEvents: TopicEvent[];
   createdAt: string;
   modifiedAt: string;
-  events: Event[];
   lastEvent?: Event;
+  events: Event[];
 }
