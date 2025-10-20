@@ -106,7 +106,17 @@ export const Feeds = () => {
                 onRefresh={handleRefresh}
                 canFetchMore={hasMore}
                 onFetchMore={fetchMore}
-
+                pullingContent={
+                    <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">
+                        당겨서 새로고침
+                    </div>
+                }
+                pullDownThreshold={80}
+                // refreshingContent={
+                //     <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">
+                //         새로고침 중...
+                //     </div>
+                // }
             >
                 <div className="flex flex-col gap-4">
                     <CategoryBar
