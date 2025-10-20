@@ -59,21 +59,24 @@ export const EventDetailCard = ({
             <h3 className="text-lg font-bold mb-0.5">
                 {event.title}
             </h3>
-            <EventImage imageUrl={event.imageUrl} title={event.title}/>
             {/* 스크롤 가능한 본문/기사 영역 */}
             <div className="flex-1 min-h-0 overflow-y-auto space-y-2">
+                <EventImage imageUrl={event.imageUrl} title={event.title}/>
                 <p className="text-muted-foreground text-sm leading-relaxed whitespace-pre-wrap break-words">
                     {event.description}
                 </p>
                 {event.articles && event.articles.length > 0 && (
-                    <div className="mt-3 space-y-1 px-2">
-                        <div className="text-center text-xs sm:text-sm font-bold ">관련 기사</div>
-                        <div className="space-y-2">
-                            {event.articles.map((article) => (
-                                <NewsArticleReference key={article.id} article={article} eventId={event.id}/>
-                            ))}
+                    <>
+                        <div className="border-t border-gray-200 dark:border-gray-700"></div>
+                        <div className="mt-3 space-y-1 px-2">
+                            <div className="text-center text-xs sm:text-sm font-bold ">관련 기사</div>
+                            <div className="space-y-2">
+                                {event.articles.map((article) => (
+                                    <NewsArticleReference key={article.id} article={article} eventId={event.id}/>
+                                ))}
+                            </div>
                         </div>
-                    </div>
+                    </>
                 )}
             </div>
             <div className="flex gap-2.5 items-center justify-center">
