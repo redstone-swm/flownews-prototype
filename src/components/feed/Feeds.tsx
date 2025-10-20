@@ -2,11 +2,10 @@ import {getUserEventFeed, useGetUserEventFeed} from "@/api/event-feed/event-feed
 import {useEffect, useState} from "react";
 import React from "react";
 import {useAuth} from "@/contexts/AuthContext.tsx";
-import InfiniteScroll from "react-infinite-scroll-component";
 import {CategoryBar} from "@/components/feed/CategoryBar.tsx";
 import {EventFeed} from "@/components/feed/EventFeed.tsx";
 import {AdFeed} from "@/components/feed/AdFeed.tsx";
-import {Spinner} from "@/components/ui/spinner";
+import PullToRefresh from "react-simple-pull-to-refresh";
 
 export const Feeds = () => {
     const {isAuthenticated} = useAuth();
@@ -101,33 +100,13 @@ export const Feeds = () => {
 
     return (
         <div
-            className="overflow-y-auto overscroll-contain"
+            className="overflow-y-auto overscroll-contain pb-4"
         >
-            <InfiniteScroll
-                dataLength={items.length}
-                next={fetchMore}
-                hasMore={hasMore}
-                loader={<div className="py-4 flex justify-center"><Spinner className="size-5"/></div>}
-                endMessage={
-                    <div className="py-4 text-center text-xs text-muted-foreground">
-                        더 볼 항목이 없어요
-                    </div>
-                }
+            <PullToRefresh
+                onRefresh={handleRefresh}
+                canFetchMore={hasMore}
+                onFetchMore={fetchMore}
 
-                pullDownToRefresh
-                pullDownToRefreshThreshold={100}
-                refreshFunction={handleRefresh}
-                pullDownToRefreshContent={
-                    <div className="py-4 text-center text-sm text-muted-foreground">
-                        ↓ 당겨서 새로고침
-                    </div>
-                }
-                releaseToRefreshContent={
-                    <div className="py-4 text-center text-sm text-muted-foreground">
-                        ↻ 놓으면 새로고침
-                    </div>
-                }
-                scrollableTarget="scrollableDiv"
             >
                 <div className="flex flex-col gap-4">
                     <CategoryBar
@@ -141,7 +120,7 @@ export const Feeds = () => {
                         </React.Fragment>
                     ))}
                 </div>
-            </InfiniteScroll>
+            </PullToRefresh>
         </div>
     )
 }
