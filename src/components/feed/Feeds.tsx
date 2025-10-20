@@ -43,10 +43,6 @@ export const Feeds = () => {
         try {
             setHasMore(true);
             setLoadingMore(false);
-            const fresh = await getUserEventFeed();
-            const freshIds = fresh?.eventIds ?? [];
-            setItems(freshIds);
-            setHasMore(freshIds.length > 0);
             await refetch();
         } catch (e) {
             console.error("Refresh failed", e);
