@@ -98,26 +98,22 @@ export const Feeds = () => {
 
     // if (isLoading && items.length === 0) return null;
 
-    return (
-        <div
-            className="overflow-y-auto overscroll-contain pb-4"
+    return (<PullToRefresh
+            onRefresh={handleRefresh}
+            canFetchMore={hasMore}
+            onFetchMore={fetchMore}
+            pullingContent={
+                <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">
+                    당겨서 새로고침
+                </div>
+            }
+            pullDownThreshold={80}
+            className="overflow-y-auto"
         >
-            <PullToRefresh
-                onRefresh={handleRefresh}
-                canFetchMore={hasMore}
-                onFetchMore={fetchMore}
-                pullingContent={
-                    <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">
-                        당겨서 새로고침
-                    </div>
-                }
-                pullDownThreshold={80}
-                // refreshingContent={
-                //     <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">
-                //         새로고침 중...
-                //     </div>
-                // }
+            <div
+                className="  pb-4"
             >
+
                 <div className="flex flex-col gap-4">
                     <CategoryBar
                         activeCategory={activeCategory}
@@ -130,7 +126,7 @@ export const Feeds = () => {
                         </React.Fragment>
                     ))}
                 </div>
-            </PullToRefresh>
-        </div>
+            </div>
+        </PullToRefresh>
     )
 }
