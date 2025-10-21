@@ -1,5 +1,5 @@
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
-import {useNavigate} from "@tanstack/react-router";
+import {useNavigate, useRouter} from "@tanstack/react-router";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {
     Carousel,
@@ -25,6 +25,7 @@ type TopicDetailsPageProps = {
 
 const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
+    const router = useRouter();
     const eventIdParam = eventId;
     const {data, isLoading, isFetching, isStale} = useGetTopic(topicId, {
         query: {
@@ -176,11 +177,9 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const currentIndex = Math.max(0, current - 1);
 
     const handleBackClick = () => {
-        navigate({to: '/'});
+        router.history.back();
     };
 
-    // stale 상태에서 재요청 중이면 기존 캐시 UI 대신 로딩을 보여줍니다.
-    const showBlockingLoader = (isFetching && isStale);
 
     if (isLoading || !data) {
         return (
