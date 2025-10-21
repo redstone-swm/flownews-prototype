@@ -13,36 +13,24 @@ export const Feeds = () => {
 
     const params = activeCategory === 'MY' ? undefined : {category: activeCategory};
     const {data, refetch} = useGetUserEventFeed(
-        params, {
-            // query: {enabled: isAuthenticated}
-        });
+        params, {});
 
-    // 누적 아이템, 추가 로딩 여부, 더 불러올 수 있는지 여부
     const [items, setItems] = useState<number[]>([]);
-    const [loadingMore, setLoadingMore] = useState(false);
-    const [hasMore, setHasMore] = useState(true);
-
 
     // 카테고리 변경 시 items 리셋
     useEffect(() => {
         setItems([]);
-        setHasMore(true);
     }, [activeCategory]);
 
     // 최초 로드 시 쿼리 데이터로 초기화 (1회)
     useEffect(() => {
         if (data?.eventIds) {
             setItems(data.eventIds);
-            // 데이터가 없거나 적으면 더 이상 로드할 게 없다고 가정
-            const eventIds = data.eventIds ?? [];
-            setHasMore(eventIds.length > 0);
         }
     }, [data?.eventIds]);
 
     const handleRefresh = async () => {
         try {
-            setHasMore(true);
-            setLoadingMore(false);
             await refetch();
         } catch (e) {
             console.error("Refresh failed", e);
@@ -51,23 +39,18 @@ export const Feeds = () => {
 
     const fetchMore = async () => {
         if (!isAuthenticated) return;
-        setLoadingMore(true);
         try {
             const next = await getUserEventFeed(params);
             const nextIds = next?.eventIds ?? [];
 
             // 새로운 데이터가 없으면 무한 스크롤 중지
             if (nextIds.length === 0) {
-                setHasMore(false);
                 return;
             }
 
             setItems(prev => {
                 if (prev.length === 0) {
                     // 첫 번째 로드인 경우
-                    if (nextIds.length === 0) {
-                        setHasMore(false);
-                    }
                     return nextIds;
                 }
 
@@ -76,7 +59,6 @@ export const Feeds = () => {
 
                 // 새로운 아이템이 없으면 무한 스크롤 중지
                 if (append.length === 0) {
-                    setHasMore(false);
                     return prev;
                 }
 
@@ -85,14 +67,9 @@ export const Feeds = () => {
         } catch (e) {
             console.error("Fetch more failed", e);
             // 에러 발생 시에도 무한 스크롤 중지
-            setHasMore(false);
-        } finally {
-            setLoadingMore(false);
         }
     };
 
-
-    // if (isLoading && items.length === 0) return null;
 
     return (<PullToRefresh
             onRefresh={handleRefresh}

@@ -12,16 +12,26 @@ import {EventImage} from "./EventImage";
 const EventFeed = ({
                        eventId,
                        className,
+                       onLoaded,
                        ...props
-                   }: { eventId: number, className?: string }) => {
-    const {data: eventSummary, isLoading, refetch} = useGetEvent(eventId);
+                   }: { eventId: number, className?: string, onLoaded?: () => void; }) => {
+    const {data: eventSummary, isLoading, refetch} = useGetEvent(eventId, {
+        query: {
+            staleTime: 0,
+            gcTime: 0,
+            refetchOnMount: 'always',
+            refetchOnWindowFocus: true,
+            refetchOnReconnect: true,
+        },
+    });
     const {trackViewed, trackTopicViewed} = useInteractionTracking();
 
     React.useEffect(() => {
         if (eventSummary) {
             trackViewed(eventSummary.id);
+            onLoaded?.();
         }
-    }, [eventSummary, trackViewed]);
+    }, [eventSummary, trackViewed, onLoaded]);
 
     if (isLoading || !eventSummary) {
         return null;
