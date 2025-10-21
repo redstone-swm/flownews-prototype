@@ -115,12 +115,11 @@ export function useSearchTopics<TData = Awaited<ReturnType<typeof searchTopics>>
     queryClient?: QueryClient,
 ) {
     const queryOptions = getSearchTopicsQueryOptions(query, options);
-    const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    const queryResult = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
         queryKey: DataTag<QueryKey, TData, TError>;
     };
 
-    query.queryKey = queryOptions.queryKey;
+    queryResult.queryKey = queryOptions.queryKey;
 
-    return query;
+    return queryResult;
 }
-
