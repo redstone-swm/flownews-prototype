@@ -1,5 +1,5 @@
 import {NavbarBadge} from "@/components/layout/NavbarBadge.tsx";
-import {useNavigate} from "@tanstack/react-router";
+import {useNavigate, useRouter} from "@tanstack/react-router";
 import {ChevronLeft, ChevronRight} from "lucide-react";
 import {
     Carousel,
@@ -25,6 +25,7 @@ type TopicDetailsPageProps = {
 
 const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
+    const router = useRouter();
     const eventIdParam = eventId;
     const {data, isLoading} = useGetTopic(topicId, {query: {enabled: topicId !== undefined && topicId !== null}});
     const {isAuthenticated} = useAuth();
@@ -168,8 +169,9 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const currentIndex = Math.max(0, current - 1);
 
     const handleBackClick = () => {
-        navigate({to: '/'});
+        router.history.back();
     };
+
 
     if (isLoading || !data) {
         return (
