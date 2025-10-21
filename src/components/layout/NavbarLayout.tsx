@@ -1,13 +1,16 @@
 import Navbar from "@/components/layout/Navbar.tsx";
 import type {TopicTopKQueryResponse} from "@/api/models";
+import {useGetTopKTopics} from "@/api/topic-list-query-api/topic-list-query-api.ts";
 
 interface NavbarLayoutProps {
     children: React.ReactNode;
-    topKTopics?: TopicTopKQueryResponse[];
-    topKLoading?: boolean;
 }
 
-export default function NavbarLayout({children, topKTopics, topKLoading}: NavbarLayoutProps) {
+export default function NavbarLayout({children}: NavbarLayoutProps) {
+    const {data: topKTopics, isLoading: topKLoading} = useGetTopKTopics(
+        {limit: 5}
+    );
+
     return (
         <div className="flex flex-col items-center min-h-svh">
             <Navbar topKTopics={topKTopics} topKLoading={topKLoading}/>

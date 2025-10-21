@@ -2,11 +2,10 @@ import {getUserEventFeed, useGetUserEventFeed} from "@/api/event-feed/event-feed
 import {useEffect, useState} from "react";
 import React from "react";
 import {useAuth} from "@/contexts/AuthContext.tsx";
-import InfiniteScroll from "react-infinite-scroll-component";
 import {CategoryBar} from "@/components/feed/CategoryBar.tsx";
 import {EventFeed} from "@/components/feed/EventFeed.tsx";
 import {AdFeed} from "@/components/feed/AdFeed.tsx";
-import {Spinner} from "@/components/ui/spinner";
+import PullToRefresh from "react-simple-pull-to-refresh";
 
 export const Feeds = () => {
     const {isAuthenticated} = useAuth();
@@ -44,10 +43,6 @@ export const Feeds = () => {
         try {
             setHasMore(true);
             setLoadingMore(false);
-            const fresh = await getUserEventFeed();
-            const freshIds = fresh?.eventIds ?? [];
-            setItems(freshIds);
-            setHasMore(freshIds.length > 0);
             await refetch();
         } catch (e) {
             console.error("Refresh failed", e);
@@ -55,7 +50,7 @@ export const Feeds = () => {
     };
 
     const fetchMore = async () => {
-        if (!isAuthenticated || loadingMore || !hasMore) return;
+        if (!isAuthenticated) return;
         setLoadingMore(true);
         try {
             const next = await getUserEventFeed(params);
@@ -99,36 +94,22 @@ export const Feeds = () => {
 
     // if (isLoading && items.length === 0) return null;
 
-    return (
-        <div
-            className="overflow-y-auto overscroll-contain"
+    return (<PullToRefresh
+            onRefresh={handleRefresh}
+            canFetchMore={true}
+            onFetchMore={fetchMore}
+            pullingContent={
+                <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">
+                    당겨서 새로고침
+                </div>
+            }
+            pullDownThreshold={80}
+            className="overflow-y-auto"
         >
-            <InfiniteScroll
-                dataLength={items.length}
-                next={fetchMore}
-                hasMore={hasMore}
-                loader={<div className="py-4 flex justify-center"><Spinner className="size-5"/></div>}
-                endMessage={
-                    <div className="py-4 text-center text-xs text-muted-foreground">
-                        더 볼 항목이 없어요
-                    </div>
-                }
-
-                pullDownToRefresh
-                pullDownToRefreshThreshold={100}
-                refreshFunction={handleRefresh}
-                pullDownToRefreshContent={
-                    <div className="py-4 text-center text-sm text-muted-foreground">
-                        ↓ 당겨서 새로고침
-                    </div>
-                }
-                releaseToRefreshContent={
-                    <div className="py-4 text-center text-sm text-muted-foreground">
-                        ↻ 놓으면 새로고침
-                    </div>
-                }
-                scrollableTarget="scrollableDiv"
+            <div
+                className="  pb-4"
             >
+
                 <div className="flex flex-col gap-4">
                     <CategoryBar
                         activeCategory={activeCategory}
@@ -141,7 +122,7 @@ export const Feeds = () => {
                         </React.Fragment>
                     ))}
                 </div>
-            </InfiniteScroll>
-        </div>
+            </div>
+        </PullToRefresh>
     )
 }

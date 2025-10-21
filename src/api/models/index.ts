@@ -56,3 +56,4 @@ export * from './userProfileUpdateResponse';
 export * from './userProfileUpdateResponseGender';
 export * from './userQueryResponse';
 export * from './userRole';
+export * from './userWithdrawRequest';

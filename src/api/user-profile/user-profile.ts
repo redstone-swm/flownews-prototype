@@ -16,7 +16,8 @@ import type {
 
 import type {
   UserDeviceTokenUpdateRequest,
-  UserProfileUpdateRequest
+  UserProfileUpdateRequest,
+  UserWithdrawRequest
 } from '.././models';
 
 import { axiosInstance } from '.././axiosInstance';
@@ -27,6 +28,71 @@ type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 /**
+ * 탈퇴 사유를 입력하여 탈퇴합니다.
+ * @summary 사용자 탈퇴
+ */
+export const withdraw = (
+    userWithdrawRequest: UserWithdrawRequest,
+ options?: SecondParameter<typeof axiosInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return axiosInstance<null>(
+      {url: `/api/users/withdraw`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: userWithdrawRequest, signal
+    },
+      options);
+    }
+  
+
+
+export const getWithdrawMutationOptions = <TError = string,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,{data: UserWithdrawRequest}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,{data: UserWithdrawRequest}, TContext> => {
+
+const mutationKey = ['withdraw'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+      
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof withdraw>>, {data: UserWithdrawRequest}> = (props) => {
+          const {data} = props ?? {};
+
+          return  withdraw(data,requestOptions)
+        }
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type WithdrawMutationResult = NonNullable<Awaited<ReturnType<typeof withdraw>>>
+    export type WithdrawMutationBody = UserWithdrawRequest
+    export type WithdrawMutationError = string
+
+    /**
+ * @summary 사용자 탈퇴
+ */
+export const useWithdraw = <TError = string,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof withdraw>>, TError,{data: UserWithdrawRequest}, TContext>, request?: SecondParameter<typeof axiosInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof withdraw>>,
+        TError,
+        {data: UserWithdrawRequest},
+        TContext
+      > => {
+
+      const mutationOptions = getWithdrawMutationOptions(options);
+
+      return useMutation(mutationOptions , queryClient);
+    }
+    /**
  * 생일과 성별을 입력하여 프로필을 완성합니다.
  * @summary 사용자 프로필 완성
  */
