@@ -50,7 +50,7 @@ export const Feeds = () => {
     };
 
     const fetchMore = async () => {
-        if (!isAuthenticated || loadingMore || !hasMore) return;
+        if (!isAuthenticated) return;
         setLoadingMore(true);
         try {
             const next = await getUserEventFeed(params);
@@ -96,7 +96,7 @@ export const Feeds = () => {
 
     return (<PullToRefresh
             onRefresh={handleRefresh}
-            canFetchMore={hasMore}
+            canFetchMore={true}
             onFetchMore={fetchMore}
             pullingContent={
                 <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">
