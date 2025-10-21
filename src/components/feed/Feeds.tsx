@@ -43,6 +43,10 @@ export const Feeds = () => {
         try {
             setHasMore(true);
             setLoadingMore(false);
+            const fresh = await getUserEventFeed();
+            const freshIds = fresh?.eventIds ?? [];
+            setItems(freshIds);
+            setHasMore(freshIds.length > 0);
             await refetch();
         } catch (e) {
             console.error("Refresh failed", e);
@@ -50,7 +54,7 @@ export const Feeds = () => {
     };
 
     const fetchMore = async () => {
-        if (!isAuthenticated) return;
+        if (!isAuthenticated || loadingMore || !hasMore) return;
         setLoadingMore(true);
         try {
             const next = await getUserEventFeed(params);
@@ -96,7 +100,7 @@ export const Feeds = () => {
 
     return (<PullToRefresh
             onRefresh={handleRefresh}
-            canFetchMore={true}
+            canFetchMore={hasMore}
             onFetchMore={fetchMore}
             pullingContent={
                 <div className="w-full h-10 flex items-center justify-center text-sm text-gray-500 select-none">

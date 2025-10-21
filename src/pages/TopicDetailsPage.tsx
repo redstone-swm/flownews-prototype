@@ -27,7 +27,16 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
     const router = useRouter();
     const eventIdParam = eventId;
-    const {data, isLoading} = useGetTopic(topicId, {query: {enabled: topicId !== undefined && topicId !== null}});
+    const {data, isLoading, isFetching, isStale} = useGetTopic(topicId, {
+        query: {
+            enabled: topicId !== undefined && topicId !== null,
+            staleTime: 0,
+            gcTime: 0,
+            refetchOnMount: 'always',
+            refetchOnWindowFocus: true,
+            refetchOnReconnect: true,
+        },
+    });
     const {isAuthenticated} = useAuth();
     const {open: openLoginModal} = useLoginModal();
 
@@ -96,7 +105,6 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
         return () => {
             api.off("select", onSelect);
         };
-        // data?.events와 eventIdParam을 의존성에 넣어 URL 동기화의 최신값을 참조
     }, [api, data?.events, navigate, eventIdParam, topicId]);
 
     // eventId가 없는 경로로 진입한 경우, 데이터 로드 후 첫 이벤트로 URL 보정
