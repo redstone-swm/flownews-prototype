@@ -174,14 +174,16 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     if (isLoading || !data) {
         return (
             <div
-                className="min-h-screen w-full overflow-x-hidden bg-gradient-to-r from-[#323b86] to-[#3f1f76] flex items-center justify-center">
+                className="h-screen w-full overflow-x-hidden flex items-center justify-center">
+                <div className="fixed inset-0 -z-10 bg-gradient-to-r from-[#323b86] to-[#3f1f76]"/>
                 <Spinner className="size-8 text-white"/>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen w-full overflow-x-hidden bg-gradient-to-r from-[#323b86] to-[#3f1f76]">
+        <div className="min-h-screen w-full overflow-x-hidden">
+            <div className="fixed inset-0 -z-10 bg-gradient-to-r from-[#323b86] to-[#3f1f76]"/>
             <div className="h-[52px] flex items-center justify-between sticky py-2 pl-3 pr-4">
                 <div className="flex items-center">
                     <ChevronLeft
