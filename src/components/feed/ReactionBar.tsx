@@ -57,6 +57,7 @@ export const ReactionBar: React.FC<ReactionBarProps> = ({
             <div className="flex-grow min-w-0">
                 <TopicFollowButton 
                     variant="ghost"
+                    showTooltip={false}
                     onFollowStateChange={onReactionChange} 
                     topicId={topicId} 
                     isFollowing={isFollowing}
