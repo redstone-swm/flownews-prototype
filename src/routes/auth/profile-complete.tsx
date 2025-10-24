@@ -61,7 +61,7 @@ function ProfileCompleteComponent() {
             return
         }
 
-        updateProfileMutation.mutate()
+        updateProfileMutation.mutate(profileData)
     }
 
     return (

@@ -40,14 +40,14 @@ function TopicSelectionComponent() {
 
             const deviceToken = localStorage.getItem('fcm-device-token') || ''
             const subscribeData: UserDeviceTokenUpdateRequest = {
+                userId: 0, // userId will be set by the backend
                 deviceToken
             }
 
             // Subscribe to all selected topics
             for (const topicId of selectedTopics) {
                 await subscribeTopicMutation.mutateAsync({
-                    topicId,
-                    data: subscribeData
+                    topicId
                 })
             }
 
@@ -115,13 +115,6 @@ function TopicSelectionComponent() {
                                 onClick={() => handleTopicToggle(topic.id)}
                             >
                                 <div className="flex items-start space-x-3">
-                                    {topic.imageUrl && (
-                                        <img
-                                            src={topic.imageUrl}
-                                            alt={topic.title}
-                                            className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-                                        />
-                                    )}
                                     <div className="flex-1 min-w-0">
                                         <h3 className="font-medium text-foreground truncate">
                                             {topic.title}
