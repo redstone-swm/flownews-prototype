@@ -44,3 +44,5 @@ android/capacitor.settings.gradle
 storybook-static
 
 openapi.yaml
+.claude/settings.local.json
+android/app/src/google-services.json
