@@ -61,7 +61,12 @@ function ProfileCompleteComponent() {
             return
         }
 
-        updateProfileMutation.mutate(profileData)
+        updateProfileMutation.mutate({
+            data: {
+                ...profileData,
+                gender: profileData.gender || undefined
+            }
+        })
     }
 
     return (

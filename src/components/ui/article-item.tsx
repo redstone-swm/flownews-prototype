@@ -50,10 +50,10 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                                 <NewsArticleReference 
                                     key={index}
                                     article={{
+                                        id: index,
                                         title: a.title,
                                         source: a.source,
-                                        url: a.link,
-                                        publishedAt: a.date
+                                        url: a.link
                                     }} 
                                     eventId={eventId}
                                 />

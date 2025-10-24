@@ -4,7 +4,7 @@ import {Button} from '@/components/ui/button'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
 import {useGetAllTopics} from '@/api/topic-list-query-api/topic-list-query-api'
 import {useAuth} from '@/contexts/AuthContext'
-import type {TopicSummaryResponse, UserDeviceTokenUpdateRequest} from "@/api/models";
+import type {TopicSummaryResponse} from "@/api/models";
 import {useToggleSubscription} from "@/api/topic-subscriptions/topic-subscriptions.ts";
 import {useGATracking} from "@/hooks/useGATracking.ts";
 
@@ -38,11 +38,6 @@ function TopicSelectionComponent() {
             // GA4 이벤트 트래킹
             trackInterestedTopicClick(selectedTopics)
 
-            const deviceToken = localStorage.getItem('fcm-device-token') || ''
-            const subscribeData: UserDeviceTokenUpdateRequest = {
-                userId: 0, // userId will be set by the backend
-                deviceToken
-            }
 
             // Subscribe to all selected topics
             for (const topicId of selectedTopics) {
