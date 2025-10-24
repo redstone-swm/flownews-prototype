@@ -1,5 +1,5 @@
-import {FormEvent, Fragment, useCallback, useEffect, useId, useMemo, useState} from "react";
-import {Link, useNavigate, useRouterState, useRouter} from "@tanstack/react-router";
+import {type FormEvent, Fragment, useCallback, useEffect, useId, useMemo, useState} from "react";
+import {Link, useNavigate, useRouterState} from "@tanstack/react-router";
 import {ArrowLeft, Loader2, X} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {cn} from "@/lib/utils.ts";
@@ -56,7 +56,6 @@ const GradientSearchIcon = ({className}: { className?: string }) => {
 
 const SearchPage = () => {
     const navigate = useNavigate();
-    const router = useRouter();
     const routerQuery = useRouterState({
         select: (state) => {
             const search = state.location.search as { query?: string } | undefined;
