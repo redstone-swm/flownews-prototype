@@ -1,4 +1,4 @@
-import {Button, DialogClose, DialogFooter as DialogActionFooter} from "@/components/ui";
+import {ScrollArea} from "@/components/ui/scroll-area";
 
 export const TermsOfServiceContent = () => (
     <ScrollArea className="max-h-[60vh] pr-4">

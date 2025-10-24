@@ -1,6 +1,5 @@
 import {cn} from "@/lib/utils.ts";
 import {Badge, Button, Card, CardContent, CardFooter} from "@/components/ui";
-import {Link} from "@tanstack/react-router";
 
 export const AdFeed = ({className, ...props}: { className?: String }) => {
 

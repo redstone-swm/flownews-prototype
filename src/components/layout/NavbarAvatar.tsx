@@ -1,4 +1,4 @@
-import {Heart, LogOut, User} from "lucide-react";
+import {LogOut, User} from "lucide-react";
 import {Button} from "@/components/ui/button.tsx";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";

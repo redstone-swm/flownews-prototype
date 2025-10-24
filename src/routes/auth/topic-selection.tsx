@@ -3,7 +3,6 @@ import {useState} from 'react'
 import {Button} from '@/components/ui/button'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
 import {useGetAllTopics} from '@/api/topic-list-query-api/topic-list-query-api'
-import {useSubscribeTopic} from '@/api/topic-subscribe-api/topic-subscribe-api'
 import {useAuth} from '@/contexts/AuthContext'
 import type {TopicSummaryResponse, UserDeviceTokenUpdateRequest} from "@/api/models";
 import {useToggleSubscription} from "@/api/topic-subscriptions/topic-subscriptions.ts";
