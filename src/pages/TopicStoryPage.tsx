@@ -120,7 +120,7 @@ const TopicStoryPage: React.FC<TopicStoryPageProps> = ({
       {/* 스토리 인디케이터 */}
       <div className="absolute top-16 sm:top-20 md:top-24 left-1/2 -translate-x-1/2 z-10">
         <div className="flex gap-1.5" role="tablist" aria-label="스토리 진행 상황">
-          {stories.map((_, index) => (
+          {stories.map((_story, index) => (
             <div
               key={index}
               className={`h-0.5 rounded-full transition-all duration-300 ${
