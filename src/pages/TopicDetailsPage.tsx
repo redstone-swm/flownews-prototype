@@ -27,7 +27,7 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const navigate = useNavigate();
     const router = useRouter();
     const eventIdParam = eventId;
-    const {data, isLoading, isFetching, isStale} = useGetTopic(topicId, {
+    const {data, isLoading} = useGetTopic(topicId, {
         query: {
             enabled: topicId !== undefined && topicId !== null,
             staleTime: 0,

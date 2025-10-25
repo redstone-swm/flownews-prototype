@@ -3,9 +3,8 @@ import {useState} from 'react'
 import {Button} from '@/components/ui/button'
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
 import {useGetAllTopics} from '@/api/topic-list-query-api/topic-list-query-api'
-import {useSubscribeTopic} from '@/api/topic-subscribe-api/topic-subscribe-api'
 import {useAuth} from '@/contexts/AuthContext'
-import type {TopicSummaryResponse, UserDeviceTokenUpdateRequest} from "@/api/models";
+import type {TopicSummaryResponse} from "@/api/models";
 import {useToggleSubscription} from "@/api/topic-subscriptions/topic-subscriptions.ts";
 import {useGATracking} from "@/hooks/useGATracking.ts";
 
@@ -39,16 +38,11 @@ function TopicSelectionComponent() {
             // GA4 이벤트 트래킹
             trackInterestedTopicClick(selectedTopics)
 
-            const deviceToken = localStorage.getItem('fcm-device-token') || ''
-            const subscribeData: UserDeviceTokenUpdateRequest = {
-                deviceToken
-            }
 
             // Subscribe to all selected topics
             for (const topicId of selectedTopics) {
                 await subscribeTopicMutation.mutateAsync({
-                    topicId,
-                    data: subscribeData
+                    topicId
                 })
             }
 
@@ -116,13 +110,6 @@ function TopicSelectionComponent() {
                                 onClick={() => handleTopicToggle(topic.id)}
                             >
                                 <div className="flex items-start space-x-3">
-                                    {topic.imageUrl && (
-                                        <img
-                                            src={topic.imageUrl}
-                                            alt={topic.title}
-                                            className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
-                                        />
-                                    )}
                                     <div className="flex-1 min-w-0">
                                         <h3 className="font-medium text-foreground truncate">
                                             {topic.title}

@@ -1,5 +1,4 @@
 import Navbar from "@/components/layout/Navbar.tsx";
-import type {TopicTopKQueryResponse} from "@/api/models";
 import {useGetTopKTopics} from "@/api/topic-list-query-api/topic-list-query-api.ts";
 
 interface NavbarLayoutProps {

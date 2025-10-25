@@ -1,8 +1,6 @@
 import NavbarLayout from "@/components/layout/NavbarLayout.tsx";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 import {useAuth} from "@/contexts/AuthContext.tsx";
 import {useEffect} from "react";
-import {useGetTopKTopics} from "@/api/topic-list-query-api/topic-list-query-api.ts";
 import {useFirebaseMessaging} from "@/hooks/useFirebaseMessaging.ts";
 import {Feeds} from "@/components/feed/Feeds.tsx";
 import {storage} from "@/lib/stoarge.ts";

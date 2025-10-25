@@ -1,5 +1,5 @@
 import {Badge} from "@/components/ui";
-import {Landmark, UserSquare2, DollarSign, Factory, Trophy, Music, User} from "lucide-react";
+import {Landmark, UserSquare2, DollarSign, Factory, Trophy, Music} from "lucide-react";
 import {cn} from "@/lib/utils";
 
 interface CategoryBarProps {

@@ -46,8 +46,17 @@ const ArticleItem: React.FC<ArticleItemProps> = ({
                 {hasArticles && (
                     <section className="mb-4">
                         <ul className="space-y-2">
-                            {articles.map((a) => (
-                                <NewsArticleReference {...a} className="max-w-none"/>
+                            {articles.map((a, index) => (
+                                <NewsArticleReference 
+                                    key={index}
+                                    article={{
+                                        id: index,
+                                        title: a.title,
+                                        source: a.source,
+                                        url: a.link
+                                    }} 
+                                    eventId={eventId}
+                                />
                             ))}
                         </ul>
                     </section>

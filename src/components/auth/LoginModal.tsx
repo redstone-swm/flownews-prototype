@@ -27,11 +27,6 @@ export default function LoginModal({open, onOpenChange}: LoginModalProps) {
         else window.location.href = `${apiBaseUrl}/oauth2/authorization/google-mobile`;
     };
 
-    const handleAppleLogin = () => {
-        // const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-        // const appleOAuthUrl = `${apiBaseUrl}/oauth2/authorization/apple`;
-        // TODO: 애플 로그인은 현재 개발 중입니다.
-    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
