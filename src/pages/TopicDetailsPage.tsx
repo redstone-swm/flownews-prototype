@@ -97,6 +97,7 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
                 navigate({
                     to: '/topics/$topicId/events/$eventId',
                     params: {topicId: String(topicId), eventId: String(currentEvent.id)},
+                    replace: true,
                 });
             }
         };
