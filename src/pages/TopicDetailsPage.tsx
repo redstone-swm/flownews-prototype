@@ -178,6 +178,9 @@ const TopicDetailsPage = ({topicId, eventId}: TopicDetailsPageProps) => {
     const currentIndex = Math.max(0, current - 1);
 
     const handleBackClick = () => {
+        if ('scrollRestoration' in window.history) {
+            window.history.scrollRestoration = 'manual';
+        }
         router.history.back();
     };
 

@@ -17,11 +17,11 @@ const EventFeed = ({
                    }: { eventId: number, className?: string, onLoaded?: () => void; }) => {
     const {data: eventSummary, isLoading, refetch} = useGetEvent(eventId, {
         query: {
-            staleTime: 0,
-            gcTime: 0,
-            refetchOnMount: 'always',
-            refetchOnWindowFocus: true,
-            refetchOnReconnect: true,
+            // staleTime: 0,
+            // gcTime: 0,
+            // refetchOnMount: 'always',
+            // refetchOnWindowFocus: true,
+            // refetchOnReconnect: true,
         },
     });
     const {trackViewed, trackTopicViewed} = useInteractionTracking();
@@ -47,6 +47,7 @@ const EventFeed = ({
                             topicId: eventSummary.topics[0].id.toString(),
                             eventId: eventSummary.id.toString()
                         }}
+                        resetScroll={false}
                         onClick={() => trackTopicViewed(eventSummary.id)}
                     >
                         <div className="flex flex-col gap-3">
