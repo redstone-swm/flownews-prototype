@@ -15,6 +15,12 @@ export default defineConfig({
   plugins: [TanStackRouterVite({
     autoCodeSplitting: true
   }), viteReact()],
+  build: {
+    target: 'esnext'
+  },
+  esbuild: {
+    target: 'esnext'
+  },
   test: {
     globals: true,
     environment: "jsdom",
