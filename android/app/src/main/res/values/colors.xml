@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 웹앱과 동일한 색상 적용 -->
+    <color name="colorPrimary">#2e51bf</color>
+    <color name="colorPrimaryDark">#1e3a99</color>
+    <color name="colorAccent">#2e51bf</color>
+</resources>

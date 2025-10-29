@@ -13,6 +13,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- 상태바 색상 설정 (투명/색상/다크모드 대응) -->
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- 상태바 아이콘 색상 (라이트/다크) -->
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
 
