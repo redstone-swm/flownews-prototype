@@ -7,13 +7,6 @@ const config: CapacitorConfig = {
         url: 'https://sijeom.kr',
         cleartext: false
     },
-    plugins: {
-        StatusBar: {
-            overlaysWebView: false,
-            style: 'LIGHT',
-            backgroundColor: '#0B1021'
-        }
-    }
 };
 
 
