@@ -10,6 +10,8 @@ import {AdFeed} from "@/components/feed/AdFeed.tsx";
 import PullToRefresh from "react-simple-pull-to-refresh";
 import {getUserEventFeed, useGetUserEventFeed} from "@/api/event-feed/event-feed.ts";
 import {Spinner} from "@/components/ui/spinner.tsx";
+import {Button} from "@/components/ui";
+import GoogleLoginButton from "@/components/auth/GoogleLoginButton.tsx";
 
 export default function MainPage() {
     const {isAuthenticated, isLoading: authLoading} = useAuth();
@@ -203,6 +205,24 @@ export default function MainPage() {
                         </div>
                     </div>
                 </PullToRefresh>
+                {
+                    !isAuthenticated && (
+                        <div className="flex flex-col items-center justify-center ">
+                            <div className="text-sm ">
+                                로그인하고, 다양한 토픽들을 팔로우하세요!
+                                <br/>
+                                <strong className="font-semibold text-blue-600">
+                                    팔로우한 토픽의 후속 기사
+                                </strong>
+                                를 가장 먼저 받아볼 수 있습니다.
+                            </div>
+                            <div className="mx-5 my-2">
+                                <GoogleLoginButton className=""/>
+                            </div>
+                        </div>
+
+                    )
+                }
             </NavbarLayout>
         </>
     );

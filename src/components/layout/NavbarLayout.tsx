@@ -11,7 +11,7 @@ export default function NavbarLayout({children}: NavbarLayoutProps) {
     );
 
     return (
-        <div className="flex flex-col items-center min-h-svh">
+        <div className="flex flex-col items-center min-h-svh mb-4">
             <Navbar topKTopics={topKTopics} topKLoading={topKLoading}/>
             <main className=" flex-1  overflow-y-auto w-full max-w-screen-lg">
                 {children}
