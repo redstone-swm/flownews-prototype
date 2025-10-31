@@ -207,7 +207,7 @@ export default function MainPage() {
                 </PullToRefresh>
                 {
                     !isAuthenticated && (
-                        <div className="flex flex-col items-center justify-center ">
+                        <div className="text-muted-foreground flex flex-col items-center justify-center ">
                             <div className="text-sm ">
                                 로그인하고, 다양한 토픽들을 팔로우하세요!
                                 <br/>
