@@ -18,6 +18,7 @@ import { Route as AuthTopicSelectionImport } from './routes/auth/topic-selection
 import { Route as AuthProfileCompleteImport } from './routes/auth/profile-complete'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthCallbackImport } from './routes/auth/callback'
+import { Route as ArticleArticleUrlImport } from './routes/article/$articleUrl'
 import { Route as TopicsTopicIdIndexImport } from './routes/topics/$topicId/index'
 import { Route as TopicsTopicIdEventsEventIdImport } from './routes/topics/$topicId/events/$eventId'
 
@@ -65,6 +66,12 @@ const AuthCallbackRoute = AuthCallbackImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ArticleArticleUrlRoute = ArticleArticleUrlImport.update({
+  id: '/article/$articleUrl',
+  path: '/article/$articleUrl',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const TopicsTopicIdIndexRoute = TopicsTopicIdIndexImport.update({
   id: '/topics/$topicId/',
   path: '/topics/$topicId/',
@@ -95,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/search'
       fullPath: '/search'
       preLoaderRoute: typeof SearchImport
+      parentRoute: typeof rootRoute
+    }
+    '/article/$articleUrl': {
+      id: '/article/$articleUrl'
+      path: '/article/$articleUrl'
+      fullPath: '/article/$articleUrl'
+      preLoaderRoute: typeof ArticleArticleUrlImport
       parentRoute: typeof rootRoute
     }
     '/auth/callback': {
@@ -154,6 +168,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/search': typeof SearchRoute
+  '/article/$articleUrl': typeof ArticleArticleUrlRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
@@ -166,6 +181,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/search': typeof SearchRoute
+  '/article/$articleUrl': typeof ArticleArticleUrlRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
@@ -179,6 +195,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/search': typeof SearchRoute
+  '/article/$articleUrl': typeof ArticleArticleUrlRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/profile-complete': typeof AuthProfileCompleteRoute
@@ -193,6 +210,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/search'
+    | '/article/$articleUrl'
     | '/auth/callback'
     | '/auth/login'
     | '/auth/profile-complete'
@@ -204,6 +222,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/search'
+    | '/article/$articleUrl'
     | '/auth/callback'
     | '/auth/login'
     | '/auth/profile-complete'
@@ -215,6 +234,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/search'
+    | '/article/$articleUrl'
     | '/auth/callback'
     | '/auth/login'
     | '/auth/profile-complete'
@@ -228,6 +248,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SearchRoute: typeof SearchRoute
+  ArticleArticleUrlRoute: typeof ArticleArticleUrlRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthProfileCompleteRoute: typeof AuthProfileCompleteRoute
@@ -240,6 +261,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SearchRoute: SearchRoute,
+  ArticleArticleUrlRoute: ArticleArticleUrlRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthProfileCompleteRoute: AuthProfileCompleteRoute,
@@ -261,6 +283,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/search",
+        "/article/$articleUrl",
         "/auth/callback",
         "/auth/login",
         "/auth/profile-complete",
@@ -275,6 +298,9 @@ export const routeTree = rootRoute
     },
     "/search": {
       "filePath": "search.tsx"
+    },
+    "/article/$articleUrl": {
+      "filePath": "article/$articleUrl.tsx"
     },
     "/auth/callback": {
       "filePath": "auth/callback.tsx"

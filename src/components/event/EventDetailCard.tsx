@@ -72,7 +72,7 @@ export const EventDetailCard = ({
                             <div className="text-center text-xs sm:text-sm font-bold ">관련 기사</div>
                             <div className="space-y-2">
                                 {event.articles.map((article) => (
-                                    <NewsArticleReference key={article.id} article={article} eventId={event.id}/>
+                                    <NewsArticleReference key={article.id} article={article} eventId={event.id} eventTitle={event.title}/>
                                 ))}
                             </div>
                         </div>

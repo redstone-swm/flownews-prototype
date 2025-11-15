@@ -3,19 +3,25 @@ import {cn} from "@/lib/utils.ts";
 import type {ArticleResponse} from "@/api/models";
 import {Badge} from "@/components/ui/badge.tsx";
 import {useInteractionTracking} from "@/hooks/useInteractionTracking.ts";
+import {useNavigate} from "@tanstack/react-router";
 
 export interface NewsArticleReferenceProps {
     article: ArticleResponse;
     eventId?: number;
+    eventTitle?: string;
 }
 
 export function NewsArticleReference({
                                          article,
                                          eventId,
+                                         eventTitle,
                                      }: NewsArticleReferenceProps) {
     const {trackArticleClicked} = useInteractionTracking();
+    const navigate = useNavigate();
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        
         if (eventId) {
             trackArticleClicked(eventId, JSON.stringify({
                 articleUrl: article.url,
@@ -23,13 +29,23 @@ export function NewsArticleReference({
                 source: article.source
             }));
         }
+
+        // URL을 인코딩해서 라우트 파라미터로 전달
+        const encodedUrl = encodeURIComponent(article.url);
+        navigate({
+            to: '/article/$articleUrl',
+            params: { articleUrl: encodedUrl },
+            search: {
+                title: article.title,
+                source: article.source,
+                eventTitle: eventTitle
+            }
+        });
     };
 
     return (
         <a
             href={article.url}
-            target="_blank"
-            rel="noopener noreferrer"
             onClick={handleClick}
             className={cn(
                 "block w-full",
